@@ -1,0 +1,1546 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="套接字实现信息交流C++, Louis Nicolas Davout">
+    <meta name="description" content="在c++中利用套接字实现计算机通信">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>套接字实现信息交流C++ | Louis Nicolas Davout</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+
+
+
+   <style>
+    body{
+       background-image: url(/medias/featureimages/0.jpg);
+       background-repeat:no-repeat;
+       background-size: 100% 100%;
+       background-attachment:fixed;
+    }
+</style>
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Louis Nicolas Davout</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Louis Nicolas Davout</div>
+        <div class="logo-desc">
+            
+            杂七杂八的东西都会出现在这里哦
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">套接字实现信息交流C++</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+    height: calc(100vh - 250px);
+    overflow: scroll;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E5%AD%A6%E4%B9%A0/">
+                                <span class="chip bg-color">学习</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2022-07-13
+                </div>
+                
+
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2022-07-15
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    3.2k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    12 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1 id="套接字"><a href="#套接字" class="headerlink" title="套接字"></a>套接字</h1><p>在学习之前需注意一下几点：</p>
+<ul>
+<li>若不了解自行了解套接字相关概念及理论</li>
+<li>此内容均基于windows系统</li>
+<li>标题带*号的表示这部分内容不太重要，可以跳过，代码直接照抄</li>
+</ul>
+<p>C++中使用套接字的流程如下：</p>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAeUAAAHjCAIAAACSC5AoAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAP+lSURBVHhe7P13vG1PVe95P97bwTZHFEkqWaKA5KRkBAQBlSA5S5AkOeeo5CxREFCCBBFBQSUHQXJGVOSKqNfrvd23+3b384YPXSz3OWeftddea+919q/mH/s191w1K4xZ9a1R3zFq1Lf9v//v//v/m9eUwJTAlMCUwNZL4D9sfQ1nBacEpgSmBKYEvi6Bb5v69QF3hK997Ws/+IM/+MpXvvLHfuzH3P/v//v/fo5znONTn/rU+c9//v/lf/lfXvOa11zrWtfy5L/9t//2Hd/xHf/P//P//If/8B/8vd/97vflL3/5hS984f/4H//jf/qf/qe///u/P/3pT6/m/8f/8X/8r//r//pf/+t/ffvb337xi1/8r//6r//t3/7tohe96Gc/+9nv/d7v/e7v/u6PfOQjF7rQhb7zO7+zD/1t3/ZttVee/sr8gJs/i5sSmBJYWQL/8cEPfvDKL88X9yqB//7f/zsM/cIXvnC1q13tile84u/8zu/86Z/+6bnOda5HPOIRl770pf/2b//2ec97Hux2D20Da0X88z//8z3veU/w7eZf/uVfnvGMZ/j3Epe4xPd8z/f8z//z/wy+vXj1q1/9R37kR570pCe9613vuu51r3uNa1wDQH/6059+wAMe4MWLXOQikHqAddU+9slemzPTTwlMCRykBKZ6dZDS/v/RhZX3/d///d/3fd9Hj4bL5z73uf/zf/7PP/zDP3zhC1/4F37hF0DwxS52MQmG8vtP//RPT3va085+9rM/+9nP/tVf/dWznOUsv/mbvwms6degn0pOE4fabm5wgxuc73zno6f/x//4H4G1NLe4xS1A/KUudaljG7kDuw9UCrOwKYEpgZUkMPF6JbHt4yXwCkxB6stf/vJPfOITABp2Q9s///M/v/Od7/y2t70NXlOrgfj//X//31J+9atf/cxnPkMB/+hHP4rlsB660pWu9NSnPvVMZzoTLkVF/s//8/+ktsPfF7/4xV/84hcp4J/85Cfp1DJ/wQteIGeTxCLrNe4nZO/jM85XpwQOQQITrw9U6BAWkuKgXRX8la98Be8BcLHMIPiBD3wg+PYcHwLTEdOvf/3rn/KUp1DD/+qv/gqL8upXv/olL3kJPloaWCxD6c92trMhvu90pzv5+yd/8icve9nLJHv/+9/v+ate9ap/+Id/gOmjnQOvp+niQL/9LGxKYN8SmPbGfYtwLxmASFotIyGO4q1vfesrXvEKuvAFL3jBRz/60be97W3RIM961rPQ2Y985COR0f/6r/9K+6Yvu1772tfCYoZE3PcHP/jBK1zhCt/+7d9+zWte85znPCfof8c73gG7/6//6//6oz/6oz/8wz+8+93vLqu//Mu/RJhQrt/3vvcxb4J4E4DKDlp83OylBTPtlMCUwKFJYOrXByp6YE0jxikjN2i+b3jDG9DTIBWwcvm4znWu813f9V3gm3Id0SHNm970Jm4h3kKScCx50YtehBuhdL/5zW/+2Mc+BqZ/4id+4qpXveolL3nJ//Jf/ssHPvCBl770paDflCC9m3vd6150bf8OjX7QIFO/PtBvPwubEti3BCZe71uEe8zgf/vf/jd6LpD9qZ/6qfOc5zzQE15jQvAkD3nIQ+Dy9a53Pboz5ffjH/84o6LEfpXyL/7iLyjXEJw3yFnPelb0913ucpeQ/Yd+6If8SmG/973vfcYznhEQX+UqV6FQ3/Wud8V3I0aANTZ8R00nXu/x083kUwKHLIGJ1wf9AWjNYJemzK7oLwXZE/rvz/7szz7nOc/hMZJzCLy+7GUvy8cD9cFXD6aD5lve8pYSeEt6riCSQXZ0x4Me9CA/8drmzMeT72/+5m84nyDEIfITn/hEKjZDJe27pg7gnvbGg/72s7wpgf1JYOL1/uS3x7dRzAAaj0Fldg95//Ef/xEZAkwBNMsh0pkF0r/5ftj8AqZdCGgOf9yoz3CGM/De8zq0lYMdNzhunnzg/vrXv77ntuH4CRmCXcGH3OQmN8GQXOACF0CI77GyM/mUwJTAdklg4vWBfg9QC4sZDKnDGIzHPvaxZz7zmWEu5H3uc5/7+7//+1RjevFv//ZvRzejs/Ehz3/+8xkSsSXQfLxFd5YbxEetcMq2j1EatDi2hLcJr8HXve51mGv8uATRJi5vjT2Nc3PjgX77WdiUwL4lMPF63yLcYwbcom1p4UPNw5pvNa4DIuM3eE9z9njjG9/4hCc84XKXuxykhuzvfe9773jHOzJFgnjOIdz7Hve4x1HJr33taw9KmsIOeeUJtSnX+BAEC4x2/fiP/3ief66cCFO9A+7JX+/x083kUwKHLIHpz3fQHwDd8aM/+qOV+vnPfx6kIj147MVjwG66NsXZr/RuO2VsfWRd5EN9utOdzkNbzBHQ3LHd40xYL/3rLZr1ec97XrjvFTef+9znOF/zCATxRRpZvHAv3gLcefjNa0pgSuCUkMDE6wP9TFRmFkJwPAI2wdOhAi/iLyWa10eV4//HCElrpkrnwb1YaRidii2BWCKLLAdQ9uvIv7eAdazItDce6LefhU0J7FsCkw/Ztwj3kgHTIrCGoXRe7ASWOTDNZ4OyzJEjFTuwdgOFgfWXvvQloOyVv/u7v/M8KqO/Hg6MhsW0dYq550qRlfxNA/J3yQ21LY3nE6z38t1m2imBrZDA1K8P9DNATLhJxS4sakidtusJRPYkPbqb9GVMdwbDdjxCZOw22KWbmwBKD4gLJtWVGi5Pycpt8Xn3qfMH2v5Z2JTAlMA+JDDxeh/CO5BXB3wrLVAeBPeBlD8LmRKYEtgWCUw+ZFu+xInqQTumg4sf8qhHPao0WSPnNSUwJXBak8DE663+4sXVQzfbEgmyi4w6/fC2+pvNyk0JbEwCE683Jtp1ZAypg2zOfBkVF2OxrqOEmceUwJTAKSOBiddb/angda4jbtgY8dfIkOk0vdXfbFZuSmBjEph4vTHRrinjfK75cvAVgddyXTx8YE2FzGymBKYETgEJTLze6o/UDvI2kfvLEVB1p+v0Vn+zWbkpgY1JYOL1xkS7jozp1Byo5UTFtrkGatsFs+hnvY5CZh5TAlMCp4YEJl5v+3dqWw28Roxgrqcz37Z/sFm/KYGNSWDi9cZEOzOeEpgSmBJYqwQmXq9VnDOzKYEpgSmBjUlg4vXGRDsznhKYEpgSWKsEJl6vVZwzsymBKYEpgY1JYOL1xkQ7M54SmBKYElirBCZer1WcM7MpgSmBKYGNSWDi9cZEOzOeEpgSmBJYqwQmXq9VnOvObEcovnY22jKz7nJmflMCUwKngAQmXm/1RwLQA51tlnEsb8fTbHWlZ+WmBKYENiOBidebkeuacoXOnebVuYvuFw/3WlMhM5spgSmBU0MCE6+3+jvRqQt7bRu6jenf8R3fEXZvdaVn5aYEpgQ2I4GJ15uR6/pypWKjRCB1gZ8EVp3xntYn3ZnTlMCpJIGJ11v9tYS6pmIjrMF0RPY80XyrP9is3JTAJiUw8XqT0t133tjqr371qw5Eh9enP/3p/+mf/unf/u3f/vVf/3XfGc8MpgSmBE49CXzbPLx1mz/a85///Ec84hFnOMMZPvnJT/7zP//zBS94QazIWc961pe//OXbXO1ZtymBKYFNSGDq10tJdcep5EATrdzJihu9zn/+8//jP/7je97znn/4h3+gZb/vfe/7yEc+8uM//uMbLXRmPiUwJbCdEph4vcp34bOBVj6Ac28vfOELX+UqV+EQ8gM/8AMKRY/gr292s5utUun9vbNjxtpfZvPtKYEpgVUkMPF6Kal1iKKkBw9bt7rVrZSLs6bUMz9e5jKXOfe5z71UpdeaaEhgrbnOzKYEpgT2IIGJ13sQVmA9yJAD4ENo1le60pUue9nLOniXiq2ud7rTnfZQ41WTxvZoqWtaOFaV4nxvSmDNEph4vQeBjqPKURNRIiH45q5cra93vev5q/QznvGMl770pcPQjV41cOrUe+gcM+mUwOYlMPF6KRmnbAaa49rx7+JP67pXBDPjda5zne/7vu/72te+dvvb376NM+vKf8l8xtywlLBmoimBKYHNSGD68y0lV3gN2toa3uUJFFt8slRGe0ykiMq96U1v+gd/8Acf+9jHfuzHfgw3sulymxKakMa0tMe6z+RTAlMCa5bAxOulBAq/BkRCajov018gvtT7qyaKR/7+7//+V73qVS996Uuf+9zn+peLyAFwylEigpagffzddEtXldB8b0rgNCSBiddLfey0abAFpjnV/d7v/d7d7nY3N54s9f6qiSJhjr02rV+bkM50pjN96EMfeuhDH3rnO9+5CthjOXfDr/ol53tTAmuQwMTrpYQIrLEQguRJ/V/+y3951rOe9cd//Mf3v//9Nx3d9EQu3pt2TTEtgexHP/rRV73qVe9whzuoRm2f15TAlMAhSmDi9bLCT7OWms77mMc85oMf/OArX/nKZV9eNZ1J4rivblqvr9Cb3OQm5zrXue5+97tzU4lJX7Ud870pgSmBNUhg+ocsJcTOCigpLuJ7v/d7Rcv7b//tv8HTjV5w+bjXRguVOeqDfl0b8ykcHjJLyWsmmhKYEtiABCZeLyVU4FW6gppCNBQB17oT4em6nrdj5dhrXfmfKB8YjQBxaWnci7+bJs2X+hIz0ZTAaVgCE6+X+vjpmCiROAEolodG/hubu3LSOPbaXInlPA612TRBv5T0Z6IpgSmBFvdTDktKICCLOPaXzos0KOrT5q4TbWLcXInlbB98Jkd4HXZP5XrJfjKTTQlsTgITr5eSLaSGYjk+d/Ttd33Xdx2A7nmi/YdLVXofiawnck0B0yeyee4j+/nqlMCUwCoSmHi9lNSGX52buBGofQDxVJeq3EKiFgE7gjStsLnGK1oXb96SYvrz7fVbzPRTAmuXwMTrtYv0MDMcTPei7930wzvMTzLLnhJYnwQmXq9PljOnKYEpgSmBTUpg4vUmpXsYeRehe4SuPvgDFg6j0bPMKYHThAQmXh+pz1wwvx1kyORDjtQ3no05DUtg4vUR/PgDtSdSH8GvO5t0GpbAxOsj+PFxIHmJFFbwCLZwNmlK4DQpgYnXR+qzh9H2uXCaXvx7pBo5GzMlcFqVwJrxunjNgmx0M7Q89//8z//s7wjEUYK0P0GFSrzjKxSsw1Xi//pf/6u/9t1JXz7tXinB2NYxHJDd2II4cu7e1St+rdyRQwA3aqW4/hVAda/dY1SszKttu9g76GDUv0apf0+q0tve9ranPOUpO2SymCaBBMrdVJDM+U3/0R/90bve9a5v//Zv5you7qs4gsl5iKhS5jUlMCVwaklgzXjN2AUWIUVuCbADoPj7zGc+UzDl//yf//MAL5j11a9+9Ra3uMWf/MmfCJzkuWTAKwCSySMe8Ygwa6zobS+UwK5C6W3fADqQFCS5abe0X//t3/5NPnjbQjIVXz8Eb3fi3//939sA8p/+038qYJMnI1ioPCN8Q/bv/M7v9O+//Mu/fPd3f/deP+o4PKxtJv7+4z/+4zilpXDSX/nKVyqleB0FV/LiP/3TP73hDW/4nd/5HdNVW3LUQUtL41/Vrr0yNAvCaDdaIQ3Jv+Y1r/HiJS5xCf/+67/+68///M9L4ICFBFJDOgRyUiV7/awz/ZTA4UpgzXg9GgN3gEVQBYJf+MIXPvnJT/6zP/uzobR6/gM/8AN/+Id/6C/0lACmXOEKV3jCE57wpS99ibb4iU984j3veY8w029961v/4RsXkALW0Kdon0Dne77ne/zrpsgesM82cWil9OAPfKtDQTDA+vOe97yrXOUq6vAjP/IjfvVknE/o3/DRQ+/CMvX3r4NuV9NG5QwxVSwN+od+6IcSTij5N3/zNz/6oz9a6SN4k7aYVAjkghe84I//+I9rUUWrQ22Ulb+Sefi3f/u3r3vd6xwBM1Yh5pUvfvGLf/EXf/GzP/uz4Fvm5COlMwfe8Y53fOpTn2oaqxpJ6XA73yx9SmBKYE8SWDNeAyOIA0zD1k6ktbr/yEc+8ud//ufw5cIXvvDnPve597///b/1W7/1d3/3d351gCz0vMxlLuMAKqrlWc5yFnhESfz0pz8tB0v7G9/4xp/97GdPd7rThf4eKsJNBEvuxkMP9YSOCebo8vAOfHtCkfcXhP3Mz/wM3JeDBH6Vj3dpvuXsRW9BRvV/97vfHdi5Uv/3emkFAPXXObkvfvGLH/vYxwLTyBy6Mw365S9/uX/p++rz4Q9/WBrH1hCUh6rUfndzxote9CIzVmGYkBuPe9zjXvayl4FdDXEm2dOf/nSH8JqWyEHlX/GKV1zqUpdqQaDt8F0DifcnfuInrGMSV6uHGb9prx90pp8SOHQJrBmvBzWsYdCQBgcygIgzSi5ykYs8+9nPpt6CG1ohzAIZcAQWw8ef/MmfpF9f4xrXuPSlL/1Xf/VXF73oRSmYkIuy6XAAie94xzumV8owQhlLQAd37/XK9fed73xnCOutlFNwJmXwl3ZJtQSRgJIirw40Xwr+Bz7wATOEt2TooC/Q+fnPfx7YDe11T59KcQHiS17yko9+9KM0XJVUnHJvf/vbq8llL3vZhz/84Y985CNPf/rTa/irX/3q61//+p/5zGf8lea85z3vF77wBdL70z/9Uyj/0z/904Ab4p/vfOe71a1u9dSnPvXBD37wWc96Vu+e+9zn9hc0S+yvJpjYRpAmCw73JPZzP/dzQL9pKe67KCjzmhKYEjiFJLBmvI79oKgOEbzlLW954xvfCHGgFWCi/d3mNrcB5Wc/+9nTLml83qJrv/3tb//lX/5l631ITVV041zwAtT90i/90k1vetMMbv7SH2nr9FNrf6fBAkTow8KGJYduwE5BKiCHZzzjGRCcinrzm98cWMPxH/7hH4ZrAJqCT5mlmZoe5AYf73nPe1oBmD+gpPq8733vU7S2NE/s6YK5XrQCUBBV3c297nWvC1zgAiYeBf3Kr/zKOc95zt/4jd94znOeg/AxgaGbYSsE90S1VcyyQ61+6qd+6oEPfKBJ673vfS9Cgxr+2te+ljBNQvI302gsccUyqa1ytaivkLVAboQjc8+briLBJV6hXXsSwkw8JTAlsF4JrBmvW7ZXRXAArSCy+ze96U2UR1rkgx70oJhTaAKOIS8VG9wwLQIUwPqABzwA1njRXzwGvRJmYUvOf/7zQyhYE8UBkb/85S/f+ta3/tVf/VXEhdxuectbXu1qV4P4973vfSnj6F3keGludKMbYRiQMHRnr3tIwafIU+chOOoc8LHLIWRgKDS89rWv7dxCSrGCvva1r60QNzVqWAN/7dd+TRuvdKUrOfLRLGVSyQRKSuBbA9VEVc985jN7CJfPc57zkIN/sRZ07fh3cK+BMNcrJjyW2xe84AVQWKPw4BL4Cb0DjrFJautGKdYKOBMF+cmcob0jRGofaPLX6x1LM7cpgU1LYM14DSkswGOEAQdkRHRgjemPl7zkJQHQGc94RqolrIHjwBcqwSxwAxwxEtDTT3AZdIJ7MAo9oZ5sPY+aAGHYhutd73ovfelLYTSaBeKjyOnpQBYkXf7yl1cBdC1M96Tnb37zmy9+8YuDMOz5b/7mb8r5mte8pqxo/ZRZ1Mfv//7vX+xiF6P5KsL8oVYSK+gHf/AHI1v2ekUTm0tw8RgMbIbZiOWQ5q5cbYGtWqqB7i1BJM7hj9w8AbImnjvd6U70fRLA7VhM4Dq0hShUD8lDkmFukvGKGcgslT+MJ4qrGuaJK1/5ytkb+8nfGSJ1r990pp8SOFwJrBmvQQaAgIb5853jHOfg8gFN0qlhZawurTlrJKTOfQKu/eVf/qV3L3e5y9ElGR5zhKB7SglSpeld6iqsoXHDOGo4AhfmesV9dDMQBGq85cCi15Ubkd2BKaYEmT/kIQ/xhBIK+GjQ3Aqvc53rMGxS/2MJqLr+5suxGtUbhr7qVa/Ct5gb8M5UaSeOm0twGn5CbcNQeI3Tx4QgYTAwCBxCsAhQZ1SPqc4Cgoik8fwOd7gDTRnDgypRedBv2tNM7VJVLaWek/nrX/96r5hmiE7ln/vc51qjIKDqamO5MP35DnfszdKnBPYqgTXjdSAY0kFP4FiAf/8CKTpmJABkSQumJPJegDsXutCFONthaf1k+Q9SQT8w4vQmB6q0NAENbFIEAhc2ASb4zlP7bGc7m6zgXZyJ+eCGN7wh1OZ0ITfVQMiASzlQOZ/4xCfCd2goZy+6f9KTnpS3NX4ZLKqwlUFt8WsK6V4vSrFW//Vf/zUXjsc//vHKve1tbws0VYkBljRUjPMihZd5k15shaEhqBhN0Dr8tSbf5S53gd0kYz5jYwT9UiLurRVUUmILC46SgbWau7nBDW5gstFYCRTBEcWaBk2EuNeEsWlIoyYfstdvOtNPCRyyBFKE13UVsMJFv6OouqHlUbEhjnv+1+Dv+c9//sc//nH/Skzv4+PRKw972MMADVYkfZm2S+2l/NKUqckQXBpgLWc3EPB+97sf/EIQU1Q9uc997pNvydOe9jQ2OlCF20UEs8jBbshID+UjAcXkKUMgzjeOFiyxb8BhA80Nr2UlB+gGWKWsuHG1zQSjQh/fRWjjLYx5zuPUf+n9668GphcTTo3qYYCb8VBBeVtriKufXPKJNlFzf9lXk3kcSNUjMUsZN/6VbQ9dvkhvVcou9e8V7JCPMl7fJf38aUpgSuAAJPAfaW1rnDFS2cKgvEQgL+KCskzLw5NwcuCGgYcFWByT+WOgaIERXRt1AF49/OQnP+l1HAiXNc4PkAi2Al8PKa05P7QbBehY/vMeUeIVr3hF6jDvC6APxJVOm6aB0nDZKjHdNGj4aC8JXVVKswhQ9iJWHb0OBJnyrn71q/uJh5wK49BVAP3irc7E6lI0UkK2lNYTia7dOuppeoiUwIYPLkKeuUhL0F4eEkCUQ0aQ2m6d9kC6UR9tyZxo3eBfr6hDW4Rk6zlReO6Jt/KfifKWgF6f6p2nTWuUPG12t6NKjNP3pcxkUxNf4xiZWU0JrCyBb4MIK7+8zIvAjgMGR+PwAhnCQsgSSK02VUAN0S1gjXtwea1rXQtMF/4CpqAFYBnE547NH85eG5irUEg09rAUdQROUSqRJ2FWC/+YmS7qORxXHAgL6drLDrPUEDLmlN0Ob2DXW+XmrWGaIy6t4AtorWCC2UUCYHQR5WWVD7isVGZsdwxJQ+0duZnSIG/+MIuXOpjemmwC7tFkmcS2JxZXc/6o/1CWOznsRPUvZ9QK0sk6ZuL1Ml19ppkS2LQE1ozX4GCggDEPsyAFZASvuAX4BfvaCy6l55RK4Esp9q/NIAN6ajbAsvynVJ7hDGeg6noSgUDfbPmfri1bD0e5pgTQnKbpIUWYJ8aiHOmw8LEcgrNFiyKdXf4hoDSgahHXlsdr7ZJP8UyaZhYvDVGoXwccawjslrJ9PYtYD99lRYaxImOuqgiJNceslq7dhHQi94+iiIS/O0rZMSVMvN702Jv5TwnsVQJrtjeO8BTBQco7JREwWVmD0YFcIKZYH9AHiw2sUwb9BdDAC+eLl0BlYKWBdaxuGrE0Kaoh+IBUJkdPKJ6e5Fno3zTZqFvZpkd7Avva3S7PXvQKBAwx/Qry3Iy9gnuSbHtzvIt7Aalyy0cl7kIdFCr/wFoT2uQicXpxkUMkyP+a3GqsFUP1yalGEYG1+xiYaJOEo9B8Xdyk3bewGMry4sfaU+tm4imBKYFDkcCa8TrsCCZCw/Bi7A6HUKFGmAvLclQIp4ISsOVd+N6u7ujd/DfGPu/S+xvkjbhIEB+WeSXFGUA3Q3iS60isehtn1JPq6l8kr2qoVYHrlBIyrhxqowa2wzD0TCn23OxVhBP5K0ga2K0yblQ4xT8s9tfzahj+uonLrlHq35xkvpG+Qkmpaa8oKzHgTTwtGhRaIKrFbaiH0vlmoVMCUwJ7ksCa8bqydxiy4pHHKn5sgAxfQpwejp/KZ9AUY0/geLIj/cgcWoVloMr94G0X6QW/Zu5Tz/ysRzW62VHuLjzv7rLOxujaUfqQxrBDeiJx09UQQuWOGi7S8UPO5Wy+GTUZdIcn2Qz6aYhCoZq/Q9S7N2T+OiUwJbANEtgIXm9Dw2YdpgSmBKYEjpgEJl4fsQ86mzMlMCVwZCUw8frIftrZsCmBKYEjJoGJ10fsg87mTAlMCRxZCUy8PrKfdjZsSmBK4IhJYOL1EfugszlTAlMCR1YCE6+P7KedDZsSmBI4YhKYeL3sB21rYu7MNpuMAB3Lvr9SunFUgt38MjjgHYlcttsPWbmrHWW5UrvnS1MCUwLHkcCa44ccVRmPwCZFthNw1WmTDhk4NhjT2iUAK+2UsU1RWWJRAU37P9Vh7QUtZmhDjbLucY97XPCCF7z3ve+tDp7sEm9ko5WZmU8JTAkkgYnXS/UEeG234dgrKIT3Qx/6UOrnakeFLVXkNxLZt2mfui2OAvIJfeW4A8FVBMkqrsjmLmAt2KFN87/+678OtSuoWFebK3TmPCUwJbC7BCZe762HFKaVkium4Nhuvrcs9pKaSqtEqC0suAPDHNBj5hiBWfaS097StlvdVAG1U+dnvJG9SXCmnhLYgAQmXi8l1AjcxTAgKZub5iVG0I9nPetZL3vZy5z+VXU3Xa5IUiOobJp1oXGXEtZMNCUwJbAZCUy8XlauILJY2yOM1I4jEZbNaI/pYo2d+eBy6Hux9w6Ml9DGxTMQZpSoPX69mXxKYJ0SmP4hS0kTAQKq8BJC+kFtjiJe6wiujV5K6bTfwoV3zoN/N1pomZsY/C0+eDI6YO+UpT7MTDQlcFqSwMTrpb42cmAcXAC1C8cq0DYQ3+gVUvtrhsBR5KZCud5ooWWulHGGuqLdL57Cs5TUZqIpgSmBtUpg4vUexLkjjPWxp3ztIa89JoXai6cZ7PHtFZMjrIvBfdzjJVfMdL42JTAlsKoEJl6vKrn53pTAlMCUwMFKYOL1wcp7ljYlMCUwJbCqBCZeryq5+d6UwJTAlMDBSmDi9cHKe5Y2JTAlMCWwqgQmXq8qufnelMCUwJTAwUpg4vXBynuWNiUwJTAlsKoEJl6vKrn53pTAlMCUwMFKYOL1wcp71dLsXulaNYP53pTAlMApL4GJ11v9Ce2RsbHQZS9428TdF0JkXlMCUwKnNQlMvN7qL06htsOw0Ntdi2G4t7rqs3JTAlMC65bAxOt1S3Qz+cWETEpkM9KduU4JnBoSmHi97d8J+zGuuJFtr/Gs35TAlMBmJDDxejNyXV+u6dRCTbmEzSsA07ymBKYEToMSmIN/qz/6DutiMakP5mj2rZbLrNyUwGlSAhOvt/qzC7HtclqCc1766wxcT7a60rNyUwJTApuRwDwPbDNyXVOuL3jBCx7zmMc4rABSd0zBD//wD5/xjGd805vetKYSZjbbKAFnGHVaZseE5s3pvIjFI+gWj6vv0LgdLfGwPjOeH/Bhctso2VO8TlO/3uoP+NM//dN/93d/95/+03/6p3/6p3/+53/+h3/4h4997GOXv/zlt7rSs3L7lkBg7VifDlaGxR3u4wi68obF/Ro/NsDafQ9BcwaPQD9LdTfzXLd9f59Dy2Dq14cm+iULvta1rvW6171O4hyxjcBPfvKTP/7jP77k6zPZqSiBYDrU7tBO9+FymJsn/nGbFjR3olsJQuqhaC8q5qeicE7LdZ769bZ//Xvc4x5GqRO50oyuf/3rn/nMZ972Ss/67U8C0DmwTrl2H/iC7FiOHWANgj2P7vBTsN7r4+Go0YxqsL+Pc5hvT7w+TOmftOx//dd/vexlL3uxi13M4ldiKtJNb3rT6YJ9UrkdgQSgmYW5Q5ZD2La2wuIB1jA6csNzuNyxyAOmY73Hi2H3DGZwSveNiddb/fm+67u+S/1udrOb+YvBvOAFL3jRi170WMvSVrdhVm7vEvjv//2/m5u//du/3brKDXqEX9AISyC/KI688sueDi7xQHBvxV8vatP58k/I3vsH2ZY3Jl5vy5c4bj0MUc4hP/uzP3uOc5zDoEWGsDhN/Xqrv9k6KhcK047BdFgc7I5PH4VdUf/5G1da9mBRRi2gs0w4lownkw9Zxyc6nDwmXh+O3Jcv9bu/+7t/8id/8hrXuIZhdoMb3GAM3eVzmClPOQnQi/kCveIVr/j93//9gcXHnaf5Dn34wx/+/Oc/P5KNxlLS3f/Lv/yLrL72ta8NyJ77rU65/vCtuXYujpb8eMhE69NhW//qV7/q39SfzV3GrVGq6A9+8IO/8zu/86xnPcsgbNm7uULT49AvhvpZznIWdTDU/VXuRgs9DWYeBA/njVw7eHD+6I/+KPn/3u/93i//8i+/9KUv9Rc3/bnPfQ7Unvvc57bS0ve8GEPNxfNKV7rS8573vGtf+9r/9m//FoWSTVJvMcGzf9zoRjf69V//dZn/2q/92tWvfnWvvP/973/84x+fo1G89gx1sP09cJJZe/hGxkwj4TnPec6DH/xgb37Hd3zHHt7fe1KDlt50utOdTtEf//jHkdd0JXXY9CxrnP/AD/wAa+etb33ru9/97qHDvDYkASCrU2G6IOYnPvGJRzziEZe73OXMkXrXK1/5Sksr3+I7v/M773e/+9na+uY3vxk5hiX70Ic+ZNsUjPbrrW51q6te9apw2RT7nve851d/9VfPec5zDgc+fNqd73xnhmsT/3nPe96nPOUpf/7nf/5Xf/VXz3zmM89znvPMIL0b+qybyHbi9VJStZz8wR/8wZH0N3/zN//wD/+QerK4eWypjPaYCI9pwWtPo8GcKcmINao3reoqzgICcFz84he/733vW63NHN/7vd+7xxbM5LtJAICaerNJ+KzveMc7HvjAB4LdhzzkIYD4y1/+MuVagne/+93f933f94xnPOMqV7kK47OuCGRf/epX+zS/9Vu/pXOe4QxnAPpmd9P5jW984ze+8Y02VckTdttmdZ/73OeXfumX/uIv/uK6170uguVJT3rSn/7pn37gAx+A10PhoKfP0OqnQGdtKTSvZSRQ+A4pH/nIR9J6lnllLWly7ZJVXgEHcynUMvxhD3uY4vLtndcmJGARI1v6MsB97nOfSws2L8JTvIdl3J/92Z+ZNeEIRRhPvVgBbMm5znWu8aQe4i9k/9KXvuTeIuld73rXa1/7Wjj+2Mc+FqUGoy9ykYt85StfAf1wv8+qU41zizbRwJnnGiUw7Y3LzqkUW3JvQ/AP/dAPGQPGRoTj5q74cXxlDgOLO9Y2V6ic0+LH6kFLYzmXFdZMt5wEQCp7MrjkuInxuOUtb/n2t7/dV4bRSIxf/MVfZGr+kz/5k0tc4hLQ+fznP7+wBGWM97DG+p7v+Z4vfvGLYBfc6yG+GizOyU+fkY/lkW+nFB3p9Kc//VnPelZQ/o//+I9Smh7kg2drA85y9Z2pDlkCRxyvd0DMfjzhDI/AmkJk1ZnNpz3iG72UaEQFneqflX+jJcocdgTQjerG8xzVax+sRQUZH9f93/zN37Aqo6oZBl2WONAW3Xy2s50N5qKqm8Ip0T4Teup973vf85//fJ4krhe+8IX47h/5kR9Jk2Bp9O5Tn/pUHw5ncslLXhL0ywcHYnrwNxtyHke+dXuy5rXNEjjieL3oujTOq93P9zAMKDXM98MfdqN6boa+/sYw5mC70UJlbugawMqq6FjO6Qe2n55zonepxum5uWfQfPlyXPrSl+YlwiEEzgrHyEJIoQavfi29iw8flZmzBy/PG97whpTxW9ziFre73e34Ef3ET/yEbwfZ3/ve937/938/jGaNvNOd7gTuIThziExS1eU/9kBu2iiyCemd1vI84ngdrqUqDoxb7RsHlI0WnT53103ruZXVDrfGlaWuJ5suV2OJS7nKap5TgU0bV1f7Lqf6WzFdsNLKicxRFh/5yEc4eKBEHvWoRzEqAl/OSED27Gc/OzcPKFz3s85jeDShUpazWHZ/gQtcQAL6BOWddRFPjea2RIPXMvmxH/sxyZAwyvVZWSNlNewip7owj3z9v4XXUVq/+7u/67sGE+5FqzBQgVRrpRbjg1XIC9jMH+3g35bPXbHsbgKa7mWFPnMzUsaNDmJueBbn7e8ay7QRHuHmN7+5wNCjIK/odv7Vlatbmb/+9a9nFUxt4WVhAPzGb/xGw6OQ/1wgLCeH2uh1T25zm9u87GUv86uGV3TB0roo11WJ2jIebvSmJXO7jSuoJ5u+crtGjERkH7txbtMVOC3kb1CMDeW6H74Cp0Fx5rvJMKg3UpDxGNRnUKtn3u1udwPfOoDvwnjIODkmUZAttzqzBND8M5/5zK/8yq9c5zrXoUQbFwpie+RJIpnxogN7l9NIc79RPPmu7e9y38JrPcBM+8d//MdMFhDKJ+Qq5Ks37etMHuoToFCf0AO0ra5muvalJfD5Te8SgNri63sFHA9/Yb2ELxFKzkMppQG1XpfMSg2OZ1gLbQdwexgKAyy1grw6tD6nbnBTVl7R+SB+y3Y18ZB3Kj3F9MCAY2mpDpyl1J+3EyVFY+UPg574xCfmEeWVK1zhCgWbJgEeVBaYf/3Xf71Yk+3/nLOGp5YEjJG2RKk2SvpnfuZnICxOg0Zsp5LwAze5yU3oHOLG8Mi+//3vz/M6deHv//7vdVQ+f9HZI+rTwFzjC5HN3mg0GRdpYx/96Edx4s39hgYXbINCPkb0gekfp9YH2rbafhOv3/rWt0JAPcaH9Jl9Ub6ZviLM4pOvx7BWm/PVPgrVQmwoyAFuoWQkAIWm97HKS03uJ8rphS50obizfC1SfmX4t3/7t5wuUuJ0tS984QueJKzWekML9qv8dS+WGYivt33605/mDS20/9Oe9rR8k3VEF1j3lnryZKJHSwyFEXm2EqiAGqqPIZGNXr+XGFJTaqgwKvOpT32KMmIOG0Hit+3jzfocAQnk9VwP17HrbBCZnvGSl7yE/zWNm1seX+xGSp4hz372s+95z3umLfm7aFdvpJgGgmCvUDv8xWtf73rXs19Ghzd+OZzYfsWD0AhKSd/0Zt0j8LEOvQnfxGsWCVYOX45xw1ztA//2b/+2ldQ1r3lNX9qiSRRmvJjqmqtjMHQsW1o55PMQkqZ+BkPf8IY30KPTqaVkwramA6kZTCC7/JFoeqTigCMYhZ6mCus7m7tkonSqBBdROnJc7Qgz5l9qNUdUbkwmEnu9YLFqyPYXfuEXTBU6KyCmVlBMfv7nf15u5aCLK0J/pV9TMajzVGlm91yp7OIzANSEhccOXQcC+FejNFb9p9380LvpUa1Ai9d2GOqiwLeBw43PORW2t+jVP/dzP0dhMhL1VWNHN9ZLKdp+Gpr1YEXkNsKohuMuCrvOTKExoj00K+A5zQfOwTDEDBYPU8OPqpyPTLu+idc6CuQFtdZN+hDoNP2+5S1vMSfbjvyEJzwBmmtzXHZxM6Th1Q9b9YZ4AxEM6AJeR7f95V/+ZR779mt99rOffdCDHoR6yxjdRsF3vvOd2GR6NKCHj4oD1kIcUCWAPkTWKUfPy9+orubGpHLHO95RxfQ/oGwRoM89+clP1gszjqlhpI1hYCFpprH7oAgMKS+6da5R1I0znelMpg05PPShD7UIhd32hhkPCESUd3vQj8z3ng3ZKgmMJWb9trrp7Y9+9KMpHDmM6p+A+653vat+2LLVDYNkKjmUL9TqeLcA2XHZsjKIDD2dmTZtPGbpoUhd5jKX0c8Njda+AD09bF7bLIFvfmYcCLSle9KCUQGmbjM8NoCWzVcfgGoDpPZRUQf1GD9JjEGzBc6cD3NpxDoZhoGN+4pXvCKko6XKBHzbEMhnGVJTZmnTLr/e6173Apfw3aIPd3y1q13NySk2znJmUijm5HznO19z/uBDdD5WFMgOnbmdWjAyilITVEZNkO+6b9qK/KnbSBVUj+25lggU88JJS6PjGipuzEAoPEp0CG7iwWhbe+rHeHZiiZff5k8463YEJJBerNNmkhmx9PRSfdXYGUZmCQrSlPdO/dnfPKA8bDHa5WEjCOhnlJLYw9IYzjGZSpT/jBKz/R3pm3itrzBDv+1tbwNYOgdWC2lg+qVZW5dhrk3vFHDftSgWvi5VlH5929ve1g28g5vwkWOyXz0sVA0ktSmLnosR9i8KQneB8ne4wx0wMD/1Uz8FQNmsqbd/8Ad/8JrXvMaij4qdKl3fGvR3ndJDb6mV2lIQzA1MNOopf5VhQ5emV3R09DSOz5QgGoMphFeJ9JrAtyT2BkA/4AEPUGHzk7fMBFhv0xLFhOKPbzEwZife/k586tawzYftbTGmdPJYEV3XKIhQ9lzArxA58to95cNfo4x9Zex9HVp2AvGvnHvYJkalGKTeTZvuFHavy9M0MPnr7e9I38TrP/qjP7rLXe6C0op0bvdqRkV4Sr8GbexvbXXNc1MQGTjIQGeplRcnIrvpHV+Ru76HVGn56Df6VuY7/+o9dnD5K039D4Lz9uf8j+WQecEQ9LDRFweI68oYGPQFCPauuskQsF74whe2JmhdKfDCi170Iv3SrODeDapHEyTGzDzucY8zPSiUOo9b9xBev+pVrxKrwXigWVsW4PU4V5moFDH8F7f/c84anloSAM1RfFU7Zah7Q284j44eaCGbRtJPEh8bgUtug0gsZ3+hdkOpoF0FB868H22on0/+evs7zzfxurA+/POhla5Am8Z2oRHQGjAU+QudEbt98tZTDH2i7nLMwJ+8+MUvdk9N5jAEZGmpegPPJDCKuMgFkDc0QJc53RaGUuQVp7PCWZnYTZszH4qDhtsWO2UpSLZu5IBMx5xwjqYgK9GFUaGP27/Ldc+7OmKewpe61KUsCwQzQ4Zw12Mo99CcxDMEXvMV8WtMuogNMofa6mwCkAmIp6cDdz5VJgBdeQyh/X9O8xNmP+/v4WBj+FnZdOZTAywmsUVxpfeXyyNjQFt11L98XCyu+CjTkiemIouDni8e6Lf/ys8cNiSBQbilDFVKxKMrN1Y3w1dvcCMjMfc+PF5jMz9aeeozx6re4fviqnEx8OSGGjizXZcEvonXII8DH4DwpZG2cofRGAZMLuSiPkOQsV8jw4g9sl6RAB8C3ME6cKc100mhDxjVM7ANXDg8h/U8OuizYNqN10G2SQL+pi/DTWQIg6FuCl7RbbgUXdDkP1gO+SC1YTFzOaUe0D/mMY+xJjAxSCaf9svozTgTHRcjzwOEVx/FAX9injB5WBD4idZvasFQs5oqyxOtUCsrAJMKmJMY9rWLZzR8/0LnUIjGwQuNbIvUYx8akE3BUZmGU9xlqxmfRq3wVIRAsJ77Uta2msws3CKjuZDnJSd3k5wEY6jvv+Yzh22WgBFHHTEYm8uD6YHm21zzWbc9SeCbeI3kNRtDqHHhQ+izMblteC3fHObc8O7wCtKAxipiL0BBQANcjh/c5tivpYGqAJqHBvshxgOCwBTMA1RFyUlvi62cBXvkWCIx0EdNACzsOYjngZQ6kNZgIqHz0oIhuOlEhEnAB1KlkSeiPO5CYswGrLcCMOVAf5ONV5SiLV6XM31cuZDaTl/BrDHgOBz6KZgDmle+8pWVNZjBocbuSbLHTaxFpgR1Vk+1JUDzE1XI5Ne0pJnmnrRp9ZGGwCWQzD0sjiyicMH09iXh2ZH4YX3LXvOQxg7leo3rg/1LYOawCQmYrfUEfyNMIjrmd9+EqA85z6/7Z37jgkpGOMCFlf7twDdwRl3ls+EJpOhvmOgGXtDvwAogLhM56CXlFo828m/bustb4z7qIx4AP+CvJ+XWu+5VY2QySpHMPYcQjn0ZPOnjvYUcEJPMZNDrlopmoxE7mNL98pe/3CxSG8tQ0aYTbk8WByCbVwn1n0sfG+mOoms7iOdKuOOnZf5VPWsRswh/FYYBUiLGzgSJslcBKwCKEjLK7FKeEuDTVRuxbmqp2rLSuqc//emelyxBFU+ZyZfOvtjGZao30tRMCxdroO7ntc0SoKBQX4ys+vw2V3XWbT8S+KZHfdvNeYawy8G7cuzD4xzQu25iRfopUFi8cs0ONXpRejjYBhk9abxbr4Lsix1rx6+9JQ1EW4RvmTdtjEsR2HbkRnb2nKybAJpIJADf6pZr+eLUIk2b192gFEYd/AsiMS3NOv3t2idemycsERD3KCDTDOOqPIG1uaH1LIdI3Dp1m8M7tt0CQgKsEYpDAkSQhUUeLDWEFyMCJ5FmZUoB589+73vfu4c7vtQy/068XkZK25MGH4Js1NV9uMbmjmGyPVWdNdmPBL7JhyAHrKNR1RgJvLCdh759vIdoG5bbbiy1egLLLM/D3LH3z0/Du9k9MkF6BKt7y3lreXo6WHG5l3mORLpXbEPh/3MwquiMMJb5FZrxrR0EYRCoZX9TBH8PhsHoBa8zcsbeRA5IYMWQg0qvl1UsvJQFx7HlMi/vpgoKu2A6kQxrtJsrRXHkzFcdlcRkSjOC4NgYksRBYUvMc2KqoarbQWoSBd++Ard07onEFe2TkL1VOAiNIrGvR+75RqvxKk1RHs59EIe8ht188To23k9X993HloXJh2xe8Addwrf8r3O2h1wgFXsLfIEX6NQV/FQc0TAUEMeNwoVhiyvMo/TZsgt4H7jrNxnuIEsoWT5+KqUFfgVJAJ4UnSvoIg2XCa7dWbCp7bNcU8otgI5RCZFVuAhWnis9h1al+1Xi/Jk8qZLZ5QpU0kQipTbKUFY5dK/lYmtVW44rGkghQm6wQKobBibmEZrTtUnAtIHRVg3EjicqrL2+Dq3cXzVUecmk8ZPGqrwKD/EiVTTfBbIPJp7fWuQzM1lNAkg8o2wxOuaiq8lqec63tlAC38RrX7fZGHYAL2ARDkKE4m9QqOsNw2WiLVKehInN6tIHqTKMegZDktEo5d/kXwQl//opx1K/QknKMiQyVUCicmuSCFXbYlsIG5VxgXuvKyWl2HO/KiLvjkI4gSqZyN+7qZyS5e3Ux/BETdph71/VkLIEbV5o5bGuL0ePJk+8hwZWzxBWbWuI+2QigSr5HJC37WfkD+JbUniiOcSLPEHiN10148rHi7jvYXUYfmDrasXMZ9skoAPU+UcvGgNn26o667MfCXwrnurQlNsHNTId2ll0B+wbmFJ0gjZzg7lSDk8S3KtVP3NfMMQPGhXunikMoTxcjmKHbW/BzBaELMCKFeGaHfsBr70rbhS7IsSXLS8UvI2qSgCn4Jq3ht8hNAR5suLHwl8iJ+50WImHX2qB28PHJobF5ieTAe77EXTvVlVtMa6Ii7rNbqmSMUV+ahEgZZZbiIyWwZwwUZJ/VPX4IuosdgrOhFi84nmMEEumdtHKtSVhnupXykR/o+AYbG2wYvitaTWzfniqN3aF+qe4aHvkWDnMeXoFSW75KyueL2Prdm6/QBmIuOHmjI2FHXTVoap7yIMthoT5zqofJEnT/tpU2vR3ToFY2pz8YDcvDo7bAjCJ0c5Xb/Q8NjdkNLymxXMcZB1lbDRubaKxYceOcxlGT9uAA/2BvmnAPRy3o0RVYVlRnw7l0hD0uvrw++bCyCMFeU0XJgFy0CjyNLUgiFQecLNP4kz4F/LbMc+pvCnKfh9C7khcKxKxDJlbOZBk1wXugJs/ZTaGMX0eSnvXVWgo3Mza5mm9yNkr/DILhDvm2glS65L5zGcLJbAiXtt4wtPL7kG+DeIlIWE5zPE249pM821cUWbtguHvDB+L1JotkVUNrLCngRjDjMJOBaZF8oaG5gI/gSduD160fZHmyFMitwfZivEkeIhM+D/ALNniB+TPImo9yD3ZQwj18Ic/XEqIzzfZv/R6u/4Up7b8/8wBh/UlSABYi5AJiE0w2AzozG3Wjk3ADWGBL+8RijPpEZEYWBruVwK35YfVEVizSXqYhQBkk5v9QeFUHAt3eAFV0jdTug+rvesqd4dDsW6DyEKIFUi9KAijrNOmir0uUc98tloCqzmX8MsGzbnHufKEs0cDzpYhdiKnOnoiXdJOSHBDVRRIj5sabzZB+4SIMurohmKu0hORs7zWvLLoP2dA5joNiehT973vfY3SYrQCdKhnH7n9OH7iQF3RMBrta7OPWmWB7FJbb9mBaUY5rk/xMo7G+/Tnqxr+wtDRTMsFT0ZVMxsmPRel29/x72iLmyozfsriVIJ8XbpfwbVrO/35ctCsbroKRRvTNdqY3IZYxnc/LdxQTUzSOdTO6whLYEX9GsS0xS4vkYyB/mavM0ExG1L00BdUYJvIreXpjxRnIVvhLK9ByqPBhpP1Ck9hKjAV2+ZGOIvlEEXEdg/0t2SW9jhrSjSwpi16C2eCjQFPUnq3veN2wDcxUi1tblQx7AFyQChhwU/kYPML7RUnEz9zKFduMPnexTMaY2YXbUlfjpzNWSWozRsnnzxiz+orEzNZOrX7Hg5fLm/JViaEoKxDbO+6hJwNg8RyVZQt4A6gWz3kgX4EWrouic18jqQEVkQuIDsW4OTi3wJcAJf8l7nl4Wf5CyOXsSVW/X6NvqB647uhJ13bW7akewU624/OWc1eRJS3A+sMTiQAZRwb4CemOTSCgrxLW8d+wGhQhWaBdMBLtjkgsrPhYSTmlF1UEEZLUTuQD2hu8B17fihXNtsW7/m0hNpgqJ07/tXGNppn7k+wOcb4VQ55rJeVnyQDVWQOrdx7lxyK3zacFA+lsestVNPi2Vo6ZJUdBtVFO1uCndeUwNGTwOp43bp++Fmn+7TJ0A2/YPiIKQaawJSqi/cApsxE4AYjgfvGThh1hhyzG0sg0laezIMUZKgNVQ08xy2Cb5S3GzZJqC2GlF8p45AatU1nNw1Q26nkGOpQzKygDhRzgC4kN2VfrRjxJDOwD3E8kw8dOYzuEJxFZ498zHtIv1bP6PihNrarKO/DMmnWRHwPO9tArtHMRbfcU7QHh9RxHc1MRFFLm/wWfS6nyfEU/cqz2ieVwIp4nR7nb07NBlLu2MjWQAfVSCWEy0YU9oPnhgQoZkY2m1xou7RvFku/shyyMWK34TVsaptiGqIi8uOWoaxo61AeFjM5OrCGLo9mQYK7UZZ4Tyx1UnpdEaYH0GY/oZkAutmwy31FPd0cov1N6zoQ0qRFXGSSS3gwnc6YSSBFMtsAyfipME9wylvNbWnQ/uYLmE9bjo9amqejHNK1T+krgbR7kwxzJE1Q7WaqzyTARW/UU7rVs/JTAjsksCJeQwdas3O5GAOpt8ARv8xhruDrhlBx9cYaVvBrtDUiG6bAmjbdyAToiI+Kkm7bdNx3m9HZEqnGcD8YkiG4Z7rk4MGfhA4uH6jdkTEcB6nPoDy88wovQGSIrPzlgsJPGXmNHHcU3qIIpBweygegl1UExBnrkhHmeDg5jEDyqZDNf37tZlQyR720y5T0oYaPrUyafzTAq1bUPfqbHMC0buCL12fW6Cm/nUjRJO1q/u6+oDrNZK2lsoI0e83rKElgRbwu0jSM5gArGhS85nhn2AARAwl8FJcVhsZ+wGvaMcEZXXy3B0hBYWCqq9EBURnxsAWfYp/kWyKrcvNXZDvuyUhtWrYSRY/zbiqqf4XwRr/oo3AN08JvxDTgwFwVQ87IMziTQCV163pzD4OAeU0JbLkEmqTrrm10oBu1WzgD7Iip0GS25c2Z1durBFbEa2ZAGquzyTHCPPNucIMb8NWzAdrfpn1Es/hEtGCgiWVGd4j3SGWGkpz5eBC3xYZzXpwstw1YDD0pStD5aU97Gl2YviCBf2mjbjhZw2i8hz7KuijnPFKwH7hyRkW6NviGxfxSOBcqSM9GmLBY4l7shbMlB9z7myfiENZpdl/cXrvLTH/oEgiFB2vf0oriog8D63bPtmSccWMO/WOtvQIr4jUHDEhNlTalF7aJ4gy+bcMz7cNfVAbsvtOd7gTEgSxvED4eyGu7++CmlC7MdbFHQKdNH+NcIjkAZZAN4lkdIbIi/Mrpm2+19OyKPPl0TS+iVkwD8NcreqqUKBq0teJUz8YZnnxeNBnQykXys6knlmYQC/HIeVmsXb4zwymB9Uogu5E88ZDlHIlfAIO0pRmRcb0y357c1gZSugu805PaLqzHUIrN84M/RYPoWLCVAZB5kBYM8QkiP4d3vetdjo4E+gC3KB+2TTqVZnCydUfP5cCHhINgB7LYzI1vscEPo0J5VxxVnetIfhRtIZEhQKdulBtupOhlYfQowusnJUBro1go4qCiyLfnQ663JjXTssmUaYfRATD7y9S/D1TduNiLHm6RxxNUvzoaNP2SQtD8rMqkYVhRqy0ubRnjIFvYHCtOQ48qUwDLeR0ZCayoX2cbpB0XtJo4dB2ACHwho7/Qs0004SPcdI4tz2gbrG91q1tRunmMLPrMMkUWk28gJjskrYG9MVnnJuEC1v6lbueGrCBkC0RWnDS66ThRVKG5hEtWoFf14cEiEzXs32FsPDJfdDbkaEugZWW6CzdZOo2LcQhkM/mwrlvFYiN17wnWR68nrIjXVFeTPKwczgzp1+nLMSTp2jAXPraVIydZHY4hMV/ADNlAMxc395kiy4HikC/acEobm9lkSH9naQTcwbQ0BX3Nj0KGilN0psWUcXNJG0+6qtWgQYaiffQ+82zR0ZBAHlCZeYwjWg5QtqA0EGg/nThqpxjWUbJpbzwaH32xFSvidQTZMNnpGYMRTqUF0+0hLnBzRRaQz4Vf9rcdxu26BrW5uLkvh+C7V9KC24kjt7wGXe2OGR5vwXqbLYfi3MEL9d0sMOn71aT1dfdbsuo/ep1stmhdEoDOedbLEN3B6oOz8m9Kt4dUHOaiipt4vS6xb08+K+J1EDki7S76+eZyBBkHgkPMVNcYj3GFj/4uko96XtkG372y6F8cRqeeD4RtJ8XIRx2qYVd7L91EtshzcTvckmp1U5QSzQQyV6UDCK/TNpDF4RdB1HS1uavBr43oo4Q8B/8yg5aqMZSYoSUs8+LyaUb++b/axBsB2MXIz40qd9vFIbB8/idKqWk7yMOWxdIbCN2o2zTa71/Uu+SwIl5vtE5bmHmDpL7or2WpIdEu8I1e5pLmGLNFNxFEGy00Iqu40mNfzxyHy3TLwr+QG+ltaP/OUDWK4WOpytVK/+wgkWHDX1ILWaZRpcnkEyiPvQupVgbCCIMzXWOXF+kKKdfmH7JC2afcK+141jWdj2N3O8fElP3NXTRcI9/ILJAhTxg36TIbvcA0Nx4xS9my7CbNh+zQ/Xm33z+kT6OH5LISJZiZZC3fa5F4JI2wm6XxGte4BqAUq4erq4eZl9ThpP5OS9ZKVoNLLCJCL6qPgvyr9HSIcbNkzjPZniQw8XopcaEFMlRCT3QKsGaRp9Gs8Sje49bDyEeA5NIOrPkpZmjatFtLbmFGqRMSRqDapSS1yUTbj9dBmG80qKp1IWZyzZfR18+7KchGRwhE7MQ4sScd8VGa9fo4jjwVPabtPgdbUbF/m5lq/iZ7wWk674nXe/v88Lo99/ZnjtNy95bFXlKbDyjUBslLX/pSmzadlGZUANP1osCxNcK6NEMIbcgDp5G5XgjYixi+mfYUwms1bgeAG24bixTzCg3f8crAxLFjwC4wSC34Jc+Q+oZOMsxL+y+xHJonusn4vyPnGO318ubrqvzRyGfi9VLf0QihxaRiF6U608qmu+YYIUJ+O7rBgFyquvtONLBmMafFo373XcIqGWw/XqdsEpRtXIwcObyOPQqrtPnfv6MfRpGl0tIbmtGFWhO/wZqvvQXcYYvHu655PV1e5kq04JMtzjojv00V1URNC6i5rkL3L66jl8PE62W/aTFLd+gUm+YljIcUJXv36VBUbNVtRbxsvVdK1/hs91NWx3UxsCtV51TSr9VVKPZ73OMe1iVoNDJco8kBXpsAmjhDaugZNNueLixPUUToFiVbl9WxVR0vWzeWCykuQqphYASvj35pZtq0BrOf/nME3p14vdRHHHpunIBeC8h2uCculdFKiRSHCYECYqEYDylxK+W0h5d2sB+GYpv495DFupNuv349Jlch2m2U10M6AGhds1147S8gBsp2gVGlfRSzguce2tkItSVom/G65nWZK8i0neuL80MsIBzX5xgper3vXMPrmQfTP9fduU6N/CZenxrfSYhBh5kJd2UEnmbXm9uP13UmSC0GpI+VsjnoglOjq524ljVkkOZ3vetdQTPUXnx4lNq7hd9r+l9v4UeZVZoSmBKYEjiOBCZez24xJTAlMCVwakhg4vWp8Z1mLacEpgSmBCZezz4wJTAlMCVwakhg4vWp8Z1mLacEpgSmBCZezz4wJTAlMCVwakhg4vWp8Z1mLacEpgSmBCZenxp9YARQPTWqO2u5nARGvLAC+40DPXg6c7QvbOmOw3PHK0VEsGtGmrEvZrw1noyQ3COCuQ2Ko6CvfOUrXpfnunbWjHbb2znua8KIK7lY1qhVR0qNio1GjbeO3dav+WruGsF+C2xSuSM8t/tKGaHkRwzx8aJSOvv7uHHeR/Su5b7qBlNNvN6gcGfWUwK7S6ATIdqBAl/aMetkJfDRibo2pLTppuOWYFOHchTh1tX5eYGarJy+1HaqEcBv8VCRDrsQfEpB3f/oj/6ojewdRT3gbP9fTW3tWQdz6qOqmgANO4m7MH6L85DEHrbZvcoLvaIyJfNEAsKRSfcDVYvx62r7aNs+XUG2GyV6WFSTpNRP7U82AXjRQ2mkLCbXQPD9C2ETOUy83oRUZ55TAktJgKIH1wLr4AnA2fYNgwKREQOyveBwJ2Ad2JqOGQzJSoQpKmq6beeauim+q5sOu3D/1a9+VewRGAqthGDcoX4uVfVdE3XMBTRUitLhLzRUmQKlNbvUXr8WnaaN+/6VzLFnZEIUhaIsQSJaPEBDQ9S8IOOLOLu4+z+JeVeCEcUhwZoAijIYmqePmw6bEhavdYUT2L9gJ17vX4YzhymBFSUAHcBroVqiAgAc/PUEiERlpHICkQ6s8cShBB2tS0n0E3CnL4fgfnUPuIvhJ9sRwCRSwqmP73nPe8T96Ogim+bdB1jrjb9qSpBneNpJ7UXHVkqnF4Xa1PxaEVKrEmAVyDdRjBAoEHNQJenLLS+SSfceNvG0P35o04QwVg+K6ADuVOz08T6em3D5uOdyrDEIzIp9pUru5+X57pTAlMB+JNDxF1EcbqJQ4UUxxcCKm6997Wv9WkEf+MAH7nOf+zznOc9xD5EBUIemB1XSd9T1QPChG4b7f/zHfyz9ec5zHnwxQITsz3ve85R7rFK5n3apvFhUWvfhD3/44he/+Otf//pyC6MBpUOLnva0p7mn8sdadMaeJyp8y1ve8m1ve5v7+OgWCp3lVNwx6ZufBoz6d/GoBM9jhLzouWlMhsr1rnyC+GLS+nW0Pd3/cIOa7S72idf76Zbz3SmBfUlgKHcpv2PBHhj1b0g9rGfgTwS+lv+dEkl7hTJR4cF9GroAYX/913+dahnx/Rd/8ReOeZODZNHil7rUpc5ylrM8//nPX28c1Jqj5q95zWuEXX3Xu95V6PZ4c+0yQ6gtY+n73vc+ae5973tf5jKXEVzwz//8z//kT/4EtmLVRf7zE/SM/k7QHWRalG3tCtAzAISzAbdWlyYN+iMf+cjDHvaw3/3d36Vcl0kmxxAcx9Jsp3rJcAfBsq9vvNaXJ16vVZwzsymBvUgAhgIRmPXBD36wgOOACUi9+c1vdoBRTgvQ7dOf/rTjvt75zneG4ziNVEKq98c+9rHPfe5z6a1/+Zd/CXm9AoBe8YpXiOlKvcVLRDJIIH76RS96UfhOuQaCMAuW3fCGN5Tz5z//+eO6RuylNd9K26ENShG0XWjJK1/5yle/+tVvdrObmWDuf//7Q09JadaSOXPy0pe+NAD9qZ/6KUcfQEwVdkoOyTzrWc961ateBcG12iRUG5klA+UAdxAa4xTg4R+iycNye97znlcCttmUdD+1punvUMxlS85heslWa/7m3pp4vTnZzpynBE4igYc+9KH0u7/7u79zdjNU/cxnPnP7298ekEHhW9ziFuCYme7Vr361AK2QxUGaDnoG1qc73enOdKYzwWVQSBvFaYChxz/+8TRlv17nOtf51Kc+5QnF9stf/rLMVULm7im5l7vc5Wi1UA9IheMADlA6tHeNPEAIa8742Z/92etd73oKffvb3w6IXWajjnFQtBJzIwHKD3zgA1/5yldSq/1LDkAzpoKISCDWKKbb6xRwJL7EmV7d+DcKRTLZmi1kYgKzwgjW/U2PpsXnxejeHOAtbfevucTcqTiH9Wxtx514vbWf5usVa9mo7+qpaVsGJAPRVld6A5XLQJQfRYRmmlE61+L9eLiBWqwzy+hpOOWDXvva10YI+Jd2DFN+7ud+TmhpvAHsoGU7pR6IgzycbwcuUxWBC434ale72p3udCeasrMsiAK6UZ//9m//Fr7//M//PJL6V37lV2BxIgJhOWvnApjjRJgFNGPJ13X5UoDyiU98okN2TBJ4GDXUHAq1yUYFfEE3+TI+5CEPueAFLygloubHfuzHTEXqQw4cV1xAnHoe0Zzu7FAb9+94xzuo6goiQ7Od4pzB9Mu//Mt1CbOCxQRc9uS1r31tpIrmo60f+9jHqgzd379mFD+99a1vvfGNbyxzyxEVw94Qu38lHoXKc2ju65LSCvlMvF5BaAf3iq5mvFkeMjH92Z/92YUudKGLXOQiN7/5zQ+uBttRUkjdEjiXADdUSO7DxnxqVw8Xb7aj7rvV4lrXuhZeFeZKBD3f8pa34AdqAgKB3vfe974X1FKHgQvwhdq0b1DuJyB1/vOfP4cQ2ATB00nhEeYBOkMrkwFwTG4/8AM/cK5znStf5jbdmP7dAzIq57nPfe41iktNaPdml89+9rPaBf7Ult4aaIJmtUIBNU+woOrh17zmNd/whjf4ml4B6/DUdY1rXEPbvQU6yQGI498lg/VWG5YgcjNG9ARaPBzn+mIJQrOmKZNqqr0pAQpnfrTauMENbvCABzxAtgTldTIxHwBu4wtqE68XcygkkOyWbuLE1yii1bI6/BqsVu/TyFuXvOQldRR9uhP5qFTDXnQakUDNHJvccn4wdG9605tS3Aw8Yz67nJ8ycw3g3n4RAR0OGx/96Edve9vbghIIC3YjqQEHhMUqUPp89863zevDcVx0Z3r0Ix7xCKIAu5oM6PUWF20dfgE7kARu3EhDaKiVK1zhChhhmeey5okbmqneddnLXnb4dO9fbtoC8q573euqCZUfRMJudesbQXN/z3a2sykIhvJ1oWL7xOc85zl9TQCKurnABS5A3TbfSIM8geNR9txOrvSN63GPe9xP//RPe4uybEUiQ8Lx1hvf+EZtlKz0j3zkI3/xF39RM0nDUThWMCY5z01UGu4hmDayXvziFzN4Vj0Sy8ZLaHnXZNjcv1j2n8PE6/3LcIM5nPWsZ73+9a+vP+kx9T+aBbVig0VuZdZGbD5YBl40KyAwvK2dx97i4Rg3wH0rm/LvKmXZDp7YuGAE3fAXfuEXaMrZ/T7xiU/c5CY3sZxyn+sblvalL32pbgDWQS1znNeRAO5hH/5aPuCP+om3BVhAs62MFelFUGW+l89QsZWLPKFgYh7WOM/5NCiO3DNALV1bQcDXV/PE/OFhzQTQJqQ/+IM/wIT8xE/8hIfUbQ4wpKHtpuT49xgSv5qbqerMmDRiCw4ZcgSkUHd8pfFy5jOfWW+RifSaKb1y9Rycvgnguc99LrojaXjLqsI6hsETbdI2Ipr+QOdUcom3xPlaTSZeb/Wg1lHoJik+eo+OSEnRm7e60huoXNpNlGvKUSt68onMrcwQZ424s4Gm/LssYSt6mooNSnAjWGztAsTwS0tRBAife93rXkCZLkkHB7gduE4CZz/72enL97znPYHafe97XxO5HK54xSuiUACfSUueCAG+H9TVvNZo5eCJhY1u7oltKRIDSi4ii4E79t9qDBVs1RZLBLbTX/u1X1MlYMrRxZxEq/WNlAg04SxN/DGPeczP/MzPaIjpxMKChcaLlpVO9bX4iETO985fGjGV2V9u3ZhxrcZ+1CsQL4yu8FdBjtAkQ1OF9irIczJkob3jHe8omZ7DFupeWURq35BXTG+KQ9d4KLc6G8jOO3Ar3EXyNJzXdkqgWDY5zKabGMnbWdWN1gpjW+iJXImNpYobN37NqXaj1Vgyc/CKNoUsOyq5+Hr7OD7+8Y9TqDGwKu/XDMsvf/nLoQxIHemhEsUQiHjiOUzBkORKQZGkbmePhfu0TvSIe1gM7PSWUQ3wV4Y0TT8p0Yu0eEplz8tklytpq3ZpkDmmkB0PFz8KQhk6e6K2knFlwVTgXnysu9zlLqyRILusMDzcWtDotGlCoJHwJ1FDlW8IuKjJ/qotU6o1ASmZBjx597vfTYkBxCTJtFMrWGgtLNhjXdCZKq0mv/VbvyU3s+AlLnEJc5iJxDrALGJ5gTZRMfUB1jLJu1E+uQlWgdHw3aW00V//44Mf/OD9T6czhw1JoIAGNCMd1D0FAW2nQ2xPQIMNNXxHtmgQGln+wu1F5qFMG0VB2vERo532He4crmkICNJbGa+Gh9xxv5eq0iWDDK2DU0hqr3ii/iBMgjxhrPFp1n7VNDogVRo/UBwl2nELL8KxludoTBrp4GSIzwV5sdXt2JYDqqSNkfRcui1cA1XSDK+bXb6pTNQq8UbdMAkuPuxd82vmFuSyyuu6Jok73/nO4FjFXve611GNadDeRYw8/elPx8ZozpOf/GQwiswxnWiIWsnH5GSK0jR1lo/aSlxcEYZBQsOM05SBslZzofGExC5/+ctf7GIXIyjMeB4pXidDBBqw9qsxRexoEJLUhXCMhOOyQFFzZI70tavlGnFtxbpto7PBzHz/EqBG0ZgyzvBR3X+Gp2IOBvPQE9WfQGhnhpO1sH9TvbdEuVaT5fXrxW+Rir2o5Kb5el4Eu/4u3riHaMd+UJmArZHbEF0PK6hrvN5Pu1971a9BLa0ZO8GvyST0S7/0S3Rhn1I3vvCFL2yXkOKoyVRGqO0eTLOgUm9p0Kx/AB06U8mBeHUeEhixZBcr3NrLk/6OVustQ0lPvItqex6iHupFQ98v26Fce6s+dujX1yeQg1GRTulS2gHV38jTsXV4o+0aO69ud7vb2Z6r41JPDka5NpIL56Zz19hRmY02+biZt7ljNNxAQvJSryxy2dx6pTTboAdZDCFPUaJt8jbEDuaTbfq71BDglabJSVzf4HSx+LD2DlTZcU/zDR97JWpLbnr1opSAY/FOKfJ+GmMtp7rDXTxtWsi75z/xeg/y141aj+tJ1F6zfavOzV05P+jlTP8MLIxLKrDeUA/Hrbz1I13D8LD2VNw2jJMBEypM/hbRjGxUNop2niF5Im/uWyyf88TrMT8F3AO+9d6M5yF+LiLNxKUZL0rmV3+jwsokG+DRmPyW706LKSdeLyW3xc4EtXmMcp8CZOuNanZsVYonGWvJOtTONF0274jNXZaQyjJgOCdQoyoISh7AVLFLo4qQWR1wmihRMM1xuFeGQf/Q6znx+kSQGuaOTSg7vnU/7fKu10/LyvXX57PJhyyJevTNIn5BsWc+85nsXUx/AejmLtBDv8AtoiZgEwtMiuRxQ/SusRqs5MhEYM01xdZK08Phqq4qsNhkEsh6ZoQ3gaV/mdgyqR2uaWji9S4q8KLqE1syMHqg+bGofWQ4pX0O0onXSwkQBOBzmZJLzTGI7xTn2RZ0m7uGg8EgkStr0+UGgsIQ21DA5m6e2PTMtIwMBxAbvSG4ge0GfEdMUcDXG3R/mVodm2bi9Ukpi8FrdzP6+TDoJdXBhCxmeFrG7rlfZqkhqd8E1hReqKH3FGMoH6DNXWP1M7TLmJDNlThyzjcuwqfhVJiOQ7xIXh2SP1ak3cMkM86I8vwAZrJDlMCpUvQO2B3VXlzNx4oUDSbXZskWH3ruW+fRcao0fNP1nHi9lIQzkrh0nXoYCOskp41elZu5z43lf4EoN1ro2OENDSMcMtAfInVIcSaKjt0zpKG2qGzCs9moTRpNJG5MoofLhCzVmU7DiY6LvLso48H3jo53UuX9CAt44vVSHzetDX6FXHkadT7eRq/gsr3COYemQm600JYOyiouWlq2QjdNmu/yJSB1qlbTBlC2r088fqyUGvZR+tW/p1D8kKU63ymYKAL6WGAdT6Kqa1nqSD957t+hbi96gyy+cgqKZD1VXjNeL6pm6YONIv7wgY49oPbg9qmwom7GK+Mj1bKh0vZFy8Rf6XPPdC90yzjf3uesiLFvwv3w33AGhx1QnozBLM9xOFBx3apwNwVA6H7Y9+BXCkK+2Acwz8fG5gfN4pfyGJ5u9GpiQDhUAYTDYBg3Wu4umQ9iWt3GMawxIX2pUcNtoLAHP6tHHQGKZpAV5KwTtsJbYSkzhkyTbp+7jandZ0Z2HRfrD3GFd1jdfke5a8brASUBn62l0Bku27MvYq8bu5XEauF7AI4LEZnPfH/7SDYZM+45NMimAzuw2bt8PzgrNxYwm33TtqRk2PEETDeZQzTJZCWCF480KGw8i3cDtTk5cOzXzwThhfvtZy1uDhTORczDRT1aoR2lfAD4uCW9YVZjnxKAYm2WG3jk5gj0nwbmUKGOS1PsU3Tz9WUksGa8VmQGsQL1ijYrHG1O8lzEioNxm9vcxo5+K1n34eOjHvUoZ4Pav2fHmnN9xBkQSlx0GMDqiTgMhgGMFuXWE5tZzQEA3WY/ARXd07JNALYmmxJyFbByV4pXJHvQgx4kCI4nAv9z2uWua6uLIdRKX2BGbh4yET3dZUqA7w9/+MNVL1ViTunLdKOZJgnoV+2oavrXGw2HTTvLH5jwm4oqbg6NAxP7YkHrx+vBb/iijooQ9xZMiw0Gr/1LxRa6RUAygWDEOWwPsfPZIKk4trbwikEj7MBVr3pV2zRsYHNShpA0Te/0ZThuC7KdI2LNgFRoLtSLEQJkBSjo6GXDQ7wusV0E5aJZC+vlIaCXrR0WAnGIpCNDU4iHz3ve85wGBO5FovG6S0RHD+WfDi7lYEsO5QvNQk8hCbSsbKVIRQDf/rqGv8QpfbOI10buGOmn0Ac61au6fryOUow4tptZdC43wmLBTYzE/e53P7gsngu8Fvk3rywBw853vvOJiUUFtpHPWxAWxNNTvEXndQNPEdDob+hM0RbYl1LsHqajd0XYoXdDeTEnKeagGXxTsR3+JuavyLaCcqFWsNiw3ijKzUNAGe8Kiy4osJiKnVtBZxeKV7he6nlM6OFu6jvVe9hprf6AzAQ/uDUY537Y307pGxPPWG5O/fpQOvb68TqSK9QGjgE32IWhjqwXfIvGDUnF583DFzSjiUFnJ0G4h9RobuEyUBl3u9vdsBMoC6S2KMDC1Dpiowxp61RjbtEOhVIczR3Wdw6FAIn+QluzhZCJYn05Lck0IPq7UIpi48pNNeSD+44bkdjf9KN85gw86rbppFNK5zUlcFIJRIZ0CE72tPjrfB5O3csoMK5TqBsaPTmpQGaC9UpgU3jdd8Viu3xdOAgfBVeEib/6q79KZUY7FI9c5wa+aSWS9QpYF50WL+FIJGAtjC+Kw0NsibMwEB0MmJJRq0E/y6RQyLBVDqAWajs7mV0RAyOQo2Ej/7vf/e5F+2V4dKiEgOj+VcnWqkOm+QyplXwMOdq3BNuwtW+9X33mtlEJRKPlp6Sg4fNwALucNlRE57FlOK05Fp3G10bFODM/VgJr3o+uj/ZR2z+NjoCYPi2lGFmB9KBu06DZIcEu5Rc4AlmmQjpvJ2sAVrFDO36NPi5sJu049zIpnbKKuOATImYuVgQoS0/vZqW8xz3uIbQmZGdvxIHgr2G9CMKdMI0J8YR+7cQNMTEe+tCHqqSFKmbm1re+tYNBh6enh+YVh5Yqpb1Vi/5h1cR+dOp/R5ceyatmOoqMJFFYB+C5uIwY249e3YTl8+n5GrFaj163TCYHkIbl3JrPiTDthoVuw0/0AErfRBHUqZyyMvy0+cDCF+t43HiqW9JhNiGKw81zzXidja6VoHHlkB6+GRiJt7zlLQ5uoBejkq9ylavY6QBMqbqScbxzzAT1GY4LYe4kN2AqvUzYBqnYjlZqQAJ0xkZaNk6DdgyL4SxvP9w04htV4pAIGrGxwQmkGKS2wCkR2UJHZmyksyPBEeUDg1TmVre6VXjdOkC/vNGNbmQyYOpsp+yi6/GSeI1m2REgSc7xP7qyXzseVPMLzRESjZDTDKEjVsmIHOLGu529m3iHH4I67yixDFfuWxOvVxNdAUyY083oGD8aqA/h02zaJZwaRCNxJoteZxxF7mnCpikLOg33LR14RJjZEZlrNTHOt04kgTXj9SimjmK7MGc7btRU2qc+9anw6Ld/+7edBgSdacp06jYZ08Ed28MmSReGMhLQUPRyyi9XP+Cr8+kHNG5mRjQ0LAPiL3zhCymATv1hHsSKQH+voC+MEwOGc57J3zl4fAdNCY5NYoqE8qAfpkP5iBqHX8jfBAD7AikPhZnWETmojE4/sG9JvE4Obe1pC7W2q56ZI2YTHWR50WQQtvbXK3BZDUF2Dgbhcuy8POUjtygaLSIKaQxRzTEBIIK02uueWAFYJawWXHTi9X4gw9zMqN7JEm0C2LQrBa3IOsMk0THn9Vt9b9O7nBpZylrUKtoWux8BzndPJIE189ed9TnWrcBF78EawyY9CVxiseELvYMukDILmEA5BKf2Uml1uzvc4Q66OJjzrm8fJRfRLGdY7MQ27iJUb/kwLXb0HNsmzOJAwsdDJrgUtAaw1pOUbvwYM2rC0pgaEvYBQdjnr6zc8FRRJR6HfP6GbrKCotouSi3VEDAKWB3hTJFXVROP0SUia+c9A3H5t8E942dYDIjj0P2lPalhoY5gsQSeyEfrpHfTxh8CUa4SM3B5F78/9PE5Bg5AAqbJdmz5NPpYEQt8QR9lo5dJWse2HtU3lOujK1qv2GihMg+sF/c6jtniAKR9GixizXgNVkytkYxUSCgJoN/znvd8+MMf5uPsvHqfFiuiQyMfr3/96yOgAROwBpc6OnwBpnRnXwIA6YL5QrmHPrAYQ80LkMUSFjudE4stCDXPEwbM/PaQ1JhN+cifT0grNYXKVnGAXhqV6Uvr0PLBsQB9B8qpBp8/Dt0Ufxq3VrTBfYUrCQx/VT3bv6gYlTF6nYqCvUn3MbpUrzNc3GOENCcvXQn8pA4heL7qbghWhiNaXkYtPuyK04S0GxOPhlhekPkR2A+9wic4lFf0KN8XVu4IleXTbPRqUh/7hNuho7dstNBI+XYnRPgcgEZ/KJ91ewpdM15rmL6i64BayMgNA19BF+aZB3coHbhsa/YrXOEKlup8nAMd/hs0R258dGQ469vnwQp8B40rGSRifkStUJ+d8AKG7K9hqwRPWG9myYIgX/SiF406UBMVoHogxNHl/KzPfvaz+0nRKhMVoz5KGd8j/h153Z6abKcrGIvSMiBpC2EVO8tZzqIyHYANtQtm4jKNtWtfbQkKL8RJkUC8brYzn5mlJLOZU2UsX8iWks4lxmIloXXMDRLJxOOn5hivax36iKC2p7cd+ZosTvB1m2bugsxt7rKAo/EYNW2wLDLXAZSbItUwaVXdZuYj/6EPrYGpcmu88qlwgRLwF2bB5Y4rHsGYRjIKeOm/+MUvLp7cLKXTlEdAhlFDycYr6bBlhdwYJyKD8tJ7IoHe3L9e/PznP196+DjyLJLyqGR68Sh6MWU/iU9CMd9FaIoYDZRMfXjIcI8BuLDYhnsWTs/pv5wL7aU0S9nmw23GSKN6s5Sa8LiyvP71r0fN81aUGJVvDWHG4hTBxKohowJ4fxOSfyvUfOBvh0mbzyD+LlU97k8109ahhz3sYd1vw9VnrT5M1sYMUbivm23DNXpjlVHh6JH6w+YuPq+M9rGRdYPhIr25Qhd7+Oh7bhZH8TZ8lKNUhzXr1z7h0EbZ1pp4dZ3FyHZZ3szDkbwj2DzNN72g5+Zturm/YDTE99CLFNXU58I2USRlJU+q69g4nlKTV0nkQODrRUp9jhn+6t8tGKmiivZ3HGitoMFmrGC0ScsY4KIO1GEMPvY5D/HsogKeaJfVBtzBrcNHplfaPVoDdqukxQEa59GPfjSHReykt/z04he/WP5MsmbEZEI9J+1EnU7nbxy9bMVLOTR14DRWcO5uQ8FsieaLb06zLmdithprbkjk+sDBlGuYFCll2BgPMe7uke9ua8ZrvSTWNcHVcYEgTEHqwUf/wqxI27YR5p3qpgV+6Onf0CdW173XKYzdh8tZ5EpZxNG2wHiS65uhMkyFi7XKWOcJ3NTX5VaGdTsleldxdXf/Nh72esmkuST+XeZqRbnOW0D+KBfUjSgoHMDZbRhIq6SUFGRKMZ6al4vIKtT5gqh4K2Mp/0UVswQmUg+R7+3wVGfjtnjQzXC8Hk1Xe638TL+yBPL/qffWc4o9udGLsqJrDY0n9ry/G70MWG3U61KMDPNNn0C98nc5Gi+ugkQnbfkIIDngMpxNL+4qTRpo0ObfoSwsOiTRo+v3aeL+TQsOZNOj6dfuZYVJYJPcoREHwaZ95nv38llUAbKne91ftfLuqI+HKyjXjdVerPuqpBtPlOVeBSI6WTXxzipPrbZFiL7sV72f3HA43BmxLpzBf/3Xf52ltBqGwu3kTKRqS3NPAq7BXUqMHEedc3c56SebCdYlgaFmjp5T2I2NXvoD9WUo1zl35uO/0WuH65Ryx3J5XfKc+SxKYCN4vbyIF5Exmik6hYOHQE70RMeQuyihlv8oYA8RAoKvBl5AUHfE/47wTxheLt48AiUAbWyebvSqvESAl1E0oG35eu41ZRMMTbmZIE0/C2eKPzj2XAgUyq/GYkIo0WA3o41+b61gU4+UhqJtonRtL5pvPMHCy0crYj/yU+RFjtomkJxJEiyvQb4uc3261883008JbKcEDhmvYzNSSWIPQjoLfIqnHb188txzSgO4NtRAQBvZWduoou2OkRifS7PgQcF8x8NESnwuJ0IGOsBt24ic20OYAnIAKsCgUJp+kBIuNxat1gftoVBVNkYgy8FR3bifw18t4kvDYyRHGhsy73Wve5l18rCWrdblxp7OXq/SQDMWHdyphjBdM3HWBIisJ6vt7HmzVlMCUwJ7lcBW4PWxlcbnsnfzZrPeh0pIW/cgyV4YO8jBFuo2jgX82WgujB/l1JZcfO4jHvEIIEg3h9HseGKGxKcXNS11e69i2mv6jI3xet6lZVsWcAtpzuBZeJe73AXIAlOV5N3BIxsuS/n0pz9dSi/auknvxofYgcnfnDkR320vPpTnC+i5pmljBoAstPwU8fjZndoyIxJLu432Wv+ZfkpgSmAbJXC4zi7DJWjRNyh/IGwGaMOEwG6qIrUaUoMwe1sY6PpVMmw18jcPNmo1/poyTjMVcEdkg1oH8Tustms//kZL+vOp2/ApPFbCOTXmb+dvDjDSU409cZN9shfHQwTIjqykGXKjUPer3HrFVSaLbT+2Msd9Mv35lhTUliTDGXKmahTM6whL4JD160XeIIBruw3nYg5tzGV0Q7ts7HMBOhRPCimN+1znOle7+OCRcw9wu64gr+3XlFY7FWnWiIU8THKZ2HQYhzEhZzOEerm45PWRFuzSKG0cRs723GcI9WsGWAoy8sQrLSPkpgkR1nndEFQMUtmOoK9yk08py2Hy19uoKM06TQnsXQKHjNcAetR5OMB5woRoo7lQIbG9zthtw6Tt2m46QACi2VCTWx6iNm6EmokVoWhDamRu8ZVSWnvF39X88/Yu26+/kYNjTrguwA1tw9BRjYTgSdMJkM0JROXbJxlPPSylI95IRMdwmiSoPCZdae44ogNu72pSmm9NCUwJLCOBQ8brsbkGKkUrgzYaIq8G+2JY29gYwTHG49zfuGw6R/5SOanbUM+2bE4UsCnfPhsIqdUCt9o9iPPFjeSRrZSgLUAc7obLCGi1NGFoiGyqiLWo6CBYfdgMMyEGr20mVsOOQ6vcZDKiheRm7q1C97kxRRWtQp7kRlayqr1p65KN7RurtWW+NSUwJbAlEjhkvB47EgdwkwvcsdgHQxAZqIFmPh6iINGyxdZAfQApkE1d5aEsKId3QRKEEiXVxlzH+Aow4ugDW7HbSxnqSbZyPJC9fq1h0gyaw+iRSdUwlwTWLSyG599xywrBm3Xag9NN8VV6tyuSZBQ3JsK9NmGm30IJDEqNEtB9x9rVGZqYIwbdzHl6C7/gPqt0yHg9XOtSLdsFrue1t4WKjRNww3JId+avRneG1Dwl9Ei8gZ0gYiQVql/HddAM7RLHLcIfhsQWwcLf7JDRInTuU3zz9SmBg5TA4macNkyZqtsS3PYCbqP6fLuxDpL3O0ghnJbLOmS81tXaydI3aF+W3mYfNp3UPhFKBIymJuNGbMK2ZQaF7Z7uUMQMWioSQA5uKJs4E7COUmCi5FiSKW/i9Wm5ix+ltrcyy3Zt7Oj2YxNj7kDFHmB8HpaMo9T82ZZDxmvoTClYJJSpyYLScd0T3prrsXCgdHDHg0FhSreTBzDUiGlpbJlpEwqP49Rt7yJMOF97SxqK+fC5nl96SuAISIANuV2yBbepRYDbdtm6Osg2HKjhBSo4Ak2eTViUwCHj9b+ryjf6X/s77CkHzcyGgu7ri44goFnbXW1TCZhGZ9OdbZmhTXAIoU2451MhNLYISgLaOciRzx+Ib804rymBoyEBusswjYBmK1HdHnDzeWXyyQ1JcIJc9QfZfTTaPltBAoeM1/TiwYekDlC32Qmvec1rFhzKnkaRQxDTENzubV56+JB2B0TSAWVxoqnSbh7/+MezQHYmgExo5YsUnvtF98H5+acETjkJZJYPiAvMa48ChcaWV33bNjGxDTwpbuVUVk6573vSCh8yXgNWPmrDbaMDBzyM0cZv5PlgDci0WDI/6aZtJIm2RlVzn4jRpn1IJhM/WTzOJeFJe8BMcApJIP0jkwzeA/tnuy9rDYM8k4+oBqLyih2Wm//Kp9mdQgI5rVX1kPF6HEIIf/XCAmKMsJCw2HM+f50/oAvmd2y5F457xRPAXQJPxrEGlItOTdyhU08V+7TWxY9Ye3Xg9ovhPYRCM0YsKHMJZc6xYL3yla/cZtd2xs7rKEngkPF6bAwZa7ec+YYF0vOg2fPB3LVtxLWoPqd0lOFwE6wfjw+249/lP2R7yqVvAsi2s+gzvnxWK6esAgdDShJUrvG5cqep7dLexXlxuP027+54q5gnKwiB0/3wo1dcoRyDpCRT3JUx2a9QxLGv7GhLzdmliHbSjm9UHJi11KRM5O9z5L3nX8PkTne6E/guhkEhDW55y1tK5ick4RqLPlFWNXCoQQcQrPgAGrW1RRwyXm+tXHZUDDq3FA2/goYD8G8d648Gp78w6wCioGidaRIaQkmYNabME32v9nD264hbO5zPetgmjpX377QzSMXafJRDG3SAnurZ+qzJfhOdaniF7l6EimUwVwdVau/SGuszYg9E+kFnp8dFFbap1c4DO8iavTp+ehNX0/PiUtXs3vc9gGDFm2jRqZLnOjvTqdLm1eq5OPDGtkzjZ6NXy4WOA1YQpI6g32ihMq+BCjLmlajtZo5dVMVFj8zSN7fJqvXNeLiaRSGVFjrLMw3XjVlE9QpGSOX0UA2hxuIkt9q3Hm+l0S9q2UVVPFG2TaXDKhh8r7aeOG4RyaEGFlVG2HQYrdxk7tjlTW/iHc3vU7YyHtFvOpdjn2Kfr59IAt82+dzlO4dR0Qh8ylOeIo7rPe5xDxzi8q+vkBIR0XhAU/pSAAuSHoBTOcbJuZGPecxj+OF0RDooXNz1fmxbshW3faNfQSeXHidOOCk4FAv33ayghRF+SEQIqsfL/td+7dec6sB9iF2afGDZhpTr2IbgKb1yd625qsLTFZq5TCfRBxa/xdvf/nZatiecXB3ZoZ79OiS2TJ6rpfGJx4JJrVpbRNqsluF8a3cJTLxeqodQGVIcUrhgxAMf+EDK3VC0l8plpUQFR7UbyHnqzm2AHa7Wnpu7mpmgknMVxN5a8oSHMVBV9Y1vfCM/S57yjviRiYlNnYeVYq8qmJzbde2ve/W5973vbTrhHcHXkxx45fPBd0Pd9l32mv+JJNkGQr+arpZ3j2vmMNcW3XeNIbc0vKOih+Lf/A2vRaN0Wp7DOsY8Ucq1d5KmrhB5dMU8CH3iAwimtvYWnUIZTrzew8cyACh3oMfopX4WxmQP7+89qRLhtT1Br3rVq6hR9nwqnYq6IUVyVNA4/0bg7v9Bb22GMCDZtUaU7R1Nsfs5f3ne8SYzp0x88YtfzEr58Ic/XAxFNwURhIByGxbj5UWStthyUGx02KRQ+dhU5VCelHdplHKiSi5f1kg5rBSDC1LKLiBYKJsVClrylaEyt3eXQBgYMPuOxHMos90JdiGk++/QwZfMf7VkWk0mYz47GNPOalU91d+aeL3UF6S+GRWNhMXl3qbZpLH0drAOBgAOputtWosBzbTU2htpvjsDwBdYQETxXoRRJKtk2kqZa/BNb3pTKAZizD0RSnmkLX+ZDNqz513Ku41R5gNrDrY1ZMhDHvIQZ1lAKPeckWNmls98l5Rq275B4cNEH9vx9Y99Mc1aSy0sHJdR/DIq9rqsjtolf1fBeH0jc6rMO9+DHDy36TfezIJjXabp+vzo/zXKXwyME64Xp4dm903o9Wv5oKd6JhOvl/2CkSF5a6VD7aJvLpvpEumgj2U1buHBD34wBWpPC/Mlst8tyeDrjUDV2IWNhRSveMUrHBMhO3rWojYKPozqaGuab4bTvY7nfPBZXzM2mjudD+c8TPw1GH3BC15QnKPCMcLxdblGkLwDM+32FuHArCNbTdtdxVYNiyHaLnGptgVKq4p9fovxeiZHkmzOA8pqCMGb0twEpmQ1Ignvv+hFvJa/5rQlR5T5u9/97toYCbPM1L7/ypyWc5h4fWp8fZD0spe97E1vepPRsiSbfMANc+6P4OPIEMcHm9ViVNThPve5j7jkcASMGtiZAfbKL2u1HEBVFLbMUUOCyTh3WKxzOOVJ/nMp9dKsq/nplfLsWkZTNnX91m/9Fmmo84G5fq6rvcfNZ9ha23vsryfmJNJ4xjOe4X6Ydk60BMlOG5s/WCNP5BaRMmj3wfn43L6jiSd3oPqAlMPIuWhQXayANHWA3vJ3cU2cxjOso3LLQ7Q+OQaXZH3xLCInatdGxX6czJPjvLZcAla79q1l3tnOqrYQNuoYAGm+nIL1NjoXC9hihY29WII9XbXa+Myo5S9ANJbswHbfwM6Zr1/3lPkuiY/1myzx7p8AeXX5y18+WmaNlVlXo1bIp1aQxpC/m7ve9a63ve1tk8ZitzyufI59vZWWd9khfNk2UvmUO2QbDzbyTLUvjcTd+5u0rTlGTfqpPpk3qn8V2nHb+WWOk6n1SdUoW9XoiOpxMHdZHVu33bvBJn6d/tcHPUEeyfKEHEq3xRShkn/zN3/TUsBRyBe4wAXoYs6UyIU8toTGNHwMlrxJ64lFScMNdNKJyoTilkI0niyZ+S7JlLV4SdkgPNFHXISqdNI1Vmb/zVk5h1qR5IcGusxS41hBgU4oCVXHEaaMxr5sXFa6dnxaJJJPDIUTZobNukGLLa+0gsFcpQirnmRxbv6Ce33Sr/KXT+w/sO5MwU7a0zP1yWzgGRuqhp9inypxl+9+YIN64vWBifooF4ThbQiNTX3nPOc5b3SjGwlIdM973pNV0CBpDJRmrypesvPWIlKnWI3nDaf+7jX/E6XfoSKFWbvg1OANhjpp/Acop/TVOiOCK2XTzWrOUSDVFQKm/CbkYYL2pJxTdQuQUumFeIPLwwSSLaGu5dehE9QxYDdaX84h+PBgyf5Ud4LUuWxW3GK7FB2jlSa+aaesZQBi4vUyUpppTiIBmkjREHc4KRsJ7VTOTCeXYjTv0FtP+m8AERpGIsc5NuyHTj1qedIMl0xgAA8CZJlOkAKbf7QiwveB8ksWus3JCKEWdbOMTHakCRMBqA4jh1yGXMML05MCIWSrkPhzn/ucDta3bs9tH12/ihJxlZv+lu3EDVeZtoDKrZBwue4oWnHDKF0al5/cSzbc20P/rO4KrTKHe60i8cOt8Sx9CyVQNMQ2hQ9FqdA/LWAHjq+mlDXIj12QBhyDeSjNGsdVQ3eA75KSX5xd1G0QCEu+voXJgtQAesD0CnjNKF2vgKc6DMbMpqfRJXy4jg/m8WKP1Yc//GHo7Fdxkh/60Ie++93v9noAGlj7OnJjzbYZQm5OlXrRi140aBDasYdQeHgrpWXbEKBQLkZ9puEaC5FRImIccpytoHgbkffzo12hvWv/lBOv1y7S02KGxk9H0VNhctrT0SMEB01hmLW07OFer5FVHPFgij0PzceTwTLvtYhj0+/1W5bD0Mp7ff/VOPQcRiuSc+1aYV60K5iVMo5Yf2Dn+NSnPgVhTfM2xH75y18GsnIGnazWJn6I6SFIheDXvva1+W5CW76t0gzOhINKOjJPoXe9612ec6Zy4AmrL6SWFcaDz/6XvvQlWjZ65EMf+pDzqnQSv9o34HgHXddbadN8Uvm9fPazn1VJe9OUfv/739/e0XEO/V67xHrTT7xerzxPo7kBFOhsPBjDun7HHA8OkVAMD6MuP7AVxnkqan9bjy8uyYfelzK7qG7v83sMoFwyn8GH7E5zL5nbViUbUt2PeDkO2VRFXaUIP/KRjwSLvJ5o2c973vO4ZtqlqckwWv8BsiZ+SPrUpz7Vc4EHOHr/wi/8AtgF8fBdmuLg28oEhSGyY7j1MVPCs5/9bL1RPZnBQ3a+leYJTlZ058te9rJXu9rVXvjCF3KQBfH2xz7gAQ/QM5UoZ7bxX/zFX3SsoLp51/4vfiM3uMENTBhCBh3+Fzn0qXtWYBkJbL8/3zKt2Gea4asnnyc84QkGj6HlPlet7blodmLmLfrzbU/dqsmiS1zrklzrujKWkvbiw577Oxzm6KG7+PO1Q2pk2ETuX5uJ6KoYDN/uZje7mbP9HI1tf6agC74jIH7b296G2XB8K3S+1a1uRf91IqsE1G2n5whoVZ42uFLJKde24Mvn6le/+jWucQ2g71C0b3h1/g8eSh/4wAekfN3rXkfLfu5zn0uDruGy8hfcOzJQOLM/+qM/yuzpNEHzB1dRYQ6dWqUykNqRhOYY+7MY1VVyGEi1KBfSg/y4U78+/Clz1mBK4IAlQP0PkdkV0pcXFz1R1bH2foJHK1SP5lvOscYtfdx0NCvUo8lC/Mc+9rGQl47s16hklIhTthVq8yQgholAlqYMcD1XYRrxJz7xCZtm+SChtunFPJFAPJ3a5njupBEdTuh+//vfT1uX5ta3vjXIxpa8/vWv9xyO0/EF5AH3IFi0rCycVGm7WB2oBqwvcpGLYLFBthqq8/nOdz6KeUaapKGGY523gnxWe2Xi9Wpym29NCZzCEgiOXWFxYL2oTS+2bTW8jhEGtaAQ2wCU7X1l6LvqVa8qyi6tFjuMc4Da1G1bVYWBRBZDQz77rCC54jk+GOZStAUekAwrQmsGnc4XBu5C9UJSyrIb+QBT7PZP//RPn+tc57r0pS/96le/GokBzX/mZ35GdDBnp6nJ+c9/fuw26Pe6ZKpBfc7+0eZbJIwQNMDdfONITMq7uSRPPlJSRG4qXcMGe2BdYeL1gYl6FjQlsF0SyOZG/82LeWzoj/oYdV3BL2I41YHF3O3FObnQhS6E0HjnO98JcK9ylavgUgRGb+sKWyK8zlcaTYE1doM5Aa+IiFynb37zm2MnpDz3uc+NtcC3IEmo1UAZGe1fajJOnF5sSqBTg2macmq7uQGg06YVcY5znEO5NqBq/ic/+UnMVYctqAltmt6t3E9/+tP0bpnQqTFvnP8EqFmct7ToUDx/Jl5v1xCatZkSOAAJwNC83MY+JvfDsy2Lbo7nK1dmoFt7beitcBZlQfOlKQNi/4L1M53pTKYK0Qto36KGCe5IEXYSBQ33Nre5DRQW9xEjgeXg3odfFpqR3Q+e4pRZBVHYFGoEN2D1kyYIUQCmL37xi7NAUo3zLtUQr2c8VBlRf3/3d39XCBox1NDlOJNctinjjJaXucxlTA8kc6UrXcnxPY9+9KMp2qM5TWaLTMh+pLRX8U683qvEZvopgVNeAvBo0REeilEtPYGPkQPhUZa0FVqbE3RFAMFmAkXIE1jDUH/hqdBgVNePfOQjlG4oCX/p2lxHGAApwmAUAULtxSYjMfzElvigBz3IPVTFbsNx+jWmpWOetEJulGJQi9wQnt6cZJ7QBEVzBXFYEubETIDWcC8r2rSZwxMVU2cVM3PIzRzQfKYg5LgEXEeKXhtrtB8nmRXk+a21zn5enu9OCUwJnKIS6GhQmAiJmNpgELqZ9zHPjYJmDMheoYFya5+Um7aPy8S/INWUQLOmDuNGcCBAkKMIEyKGGpUMSS9xiUvwxPBKJ2CoEtMiXOYrItYjOIb+6oY2EeQW10wvhunSw2LwWm3xG5A3zVe7mCvhrz0yfLep8FJSvWWloDy+2z2gRIiMJDGXEILa+gnHglpRhApHWA+CqMlsBb5oBZH2ytSvVxbdfHFK4FSVQGf9wDgsgQvu5DIPHDk4twVxINFqKnZvKaUYTB/72Mf4yXHP4CrH4ZojnedgEXYXu1wa2rFqmDDchMjAHcuB32CQlAwH4iZCHEraxsL8CGcBsbZ0UAYLIUMiutw8RLk2W5iZ2CGR13e6052e9rSncQuhp9uP44aC796VXRRAo2XQJqpHqfc6b0JEttUA+tustrjTdZ980WpdZ+L1anI7oLfac5UhqDE2NtceUA22qZj2y6Q0je1t7oOGxb/bVOuv1yUFs799wXTYGlLN26TXIWol89PgRluGj+a7AWr+Lp7UI8+KKKt+Gh3GVpG0XQ/BoufgiRMFJznKpodoBCQDIMMSyGf0vRWE2WRQk2uR3OxPsZnlbne7G0h1YjWemrs0yLaThfWPWm3TOWQ0ZwBoQAlnobz9MuKJg3ikMxOlVrTpXLYkQOOmFNPKFaT5DvSA4AyGJqHUXi3FcdPfMdG0aUfHcSJUAeq8k0WveMUrMmBy7/M6cfE2Ef4XG45ywZ7LQZ5+RZ7YDc+MOb6O9H49eMie5xWs0BsP7hUqhrGnW9igZc5/1KMexWLjX8vAg6vElpVkqABu3GXnFRicoKfzXqNcD4tbHHJClcIjwDECv40qGf8jzJt9HNRAWOlr5gpNJeTzy32CLgmSaJdc3OBCYZoxrVpK/UQIwDJqIKKAt4OfPGeCs+rnDCdP4Cg3WXniWDLMAABiXvMXVOEBQlJP/Aue/NsJnP2F2nqaWsU7J3A3yXb8C2fV8LjnFUBS1cg0FzcCiDVc+kpXYX4dmGs+Hv51Q1aYBzVHH2MtNFCh6qOGXD4Gk86HWm78rCOmzS7kg+bmcG2M8PyjJnuC0yAQnLh/FUFKSsy4qoi+QssLoqZK9+06M8Fz6naho2SlFDZPFApWJBdyqK30dPyDHhwJYl7bKQGOSgA6c4rLjWFgN+121vZgapVCypOXQOC1+wLJBw1jT93BVOa4pRy7v3HsJwx5/QvQqbECaIiJwWLmIfOXjdE2+8FrTscAzhnwEIezsDMwIQ6nY/hFMeS34KEbOimcIhCAInStnSD8IsCT3ITI0HmokwgHBeEiELUeQsYc1+CXHCiw1cffsVWP55y5xL87No7uaX/jOAqgAwfGlbtIoBky9hMQPO6BAOMYgWNFPb51mchtbD5c3HY4jh3oRkSnknUogUzGTlTTTGz7KKsiFp94t6b1Vm05sM524PPDQc9Hp3Z5ttia0o1JM7nxpu8i6YzhU7tVp73aRw642m1hwwjt23e0Nmdko0S/5z3vcUQvPzaqIlscpzR6riU8JZQTG9gF68Jo6AY2alMSreKf+cxnwlP4brMfroCpjW8clBdPziZv+7Yxxbe73e2oz3RJf6mEwnec97znTQMFjqDHWxEvURb+5gZHiwdVhcdb7XN1nCMETBEuc1cmu1Td/L5jb9y3SPKKv/E2rqKGFZKp56NK2QNdRappE5CbIH4wTh1P7HkrG0pP8a+p8DDXTcsg7cWDq3ZaMzlUWzX3pJTSeLeDTFsz1ZbVRLTCWxOvVxDawb2iK9ggW7fQ5/RL4xa7d3A1mCWtQwI7hjSjFt+1Htpix3sM+FqYoyDgEZaWaQuCm6f5JCA0QB6UMWEX6R8PG9vgHnzjAWCKsHMQSqija13rWpyLpe8MdeHlqOHp1CO4aJ4bHY0IdwpT3mEr3OBsO9TNmmNKuVcZRJrrtLEfYaLKtLk8ePU3GA3+YtsV6pWslP3b66F2z1UpyO6c3yoZOgfNprrSRDdrlJT+elIyNQmOR4jtMcTclCc5VLqaqypZjSnHQ2pTn28w2nsV0WrpJ16vJrcDeouCYy2ssDFmaNxZh+Z1akkgy+E4MRa7Wv2jSgGHvdcwJVeHIAZSeyuAA0PQlpqZd4T+AOaASA8BOlsZxRzHzTuCoi3GfxusXbAJ0oVuI/wF4NOXeFxEUtfBZIhOURyIzxgQuu1V1JAavc7AKKtO83LDq/qWt7yl52Wr3PRc0wNeS8OjX6S0MrBFxb8FyRuXWc1UBzeJCEMNfOPxZdUeRT+5wXjwKglqaxo6iBMIEE/+rVatSwgnBE9Vx9pb96iVZY1//drUkohaEFSZfA1dB2z/n3i91654oOl1ESPQltk6t4tF5UBrMAtbhwR2eHr4iCgLerG8uYvZsIf64BcRTCAEOCQIZuQt3nUjEBIFnJpJoesATDhIAZeeowUeHNzDIzlAHKQKxw8Gar9iNqjqXpQV+6QndMN8jaAkNzUJytNf6MN+izwBZ7pc1PMKVjX5UPAFlcTwBMrxG6yF7Id6NRwElKm3CBwEEbZdekiNxMeek4Yn9qp0VoCZRp6aZp7zlotnCC89DidoJcIMVduj6HVuHuC4QrmaMI0yvQ5aBtwTFJM19Cdes6N87NkxozASKJol1oTn3U6bRPr7TPmQkDlw97rEi8C9jm5y8jwmXp9cRoeYQh/VCy2QDTDDifXfdt5DrM8sejUJQNKoVR/UjQkYB8KfjIsYbppXma0fFlJQg98Yc+Ud73hH6MAOGY0ANYA4fw9/qdX+wll5+gmOQH+4Rq2Gs1wsqMZXuMIV7C5BjIgyaju1PgMceYkwJII8XEqKJySVBrLrWuYGuqei6eZU9UhbWuTixuvl2w40LQ5sIodu2mtxQH0GdsC6oz5digOguHt+0DaFQ21l3eMe9wCUJjDoiZQH2a0mVVhtycRb5iGobdbBBeGLtEvbWwTI0E8QFouoxGgTTUY0mdXMFnz7PFEl2VqOmCc6oZHBVntVT27IKCuDmBzzHB2f3CxEsExk5ZXXvva1vAwFM+EAPtwxlxfOflJOf75lpTc8sdIL9C1dZNOuY6lRqkjhoi/wQjXC4y6XrfdK6QyMthS3Wk/R8GSEmFgp1329pDIErg7J3ADjYsFTAuoZWoWakyBYPNzrWH++UbHhDAdw20zI2we0qTAVElhby0MWAYkgHUjKwEXsKXpS0uxIAAD5yT244WoGHxUKdtHiUCxlmSlSDlybPfEd+RFTHmUuvX/7lJkEO7dQVjob3jbuGBJ5uNjDSXhJf752u+BhlAIBQaGGw1kaMYxz74n8Xeh7CrISqbrmFcSO+nBcoeFqOAOpQsE9+Ibs+BDQTA6GA72bv7YGgk4rFZXvCEdRnzTQjAhVIa/JwPRDbsy2HLfRLKYBKMxT20CmejPMyk1WHK5t5+Fgo/IUduIyaen8iBeefL5X00aEtUoKXyWN1h1olzswT5RTuiBjI5+eY52cNtquCtVv+Brrhe0V3miJx2YeLXjAhe4obnhu0U8N0eGJVTIfRSV3OJ8dYoV3Oa9gsZIQOUe0GOoqrHWj5r71+NzD7SxXvNJkQ+seOBaGf8iKlCDd4pPhWjdI8NGl62mZKMtwOLGNIpb35+NcCPs4JiKsZWUeQovzQaRxuzfRmkUQFPAUbupdFNv73e9+IuEhLiwy8Mie+OvdJKAtWB1A+bjHPU7l1ROwUpZpu27IIQGCcsOEek4U1igcyb1FEY4MEVXVssONecuJNjY3mhW44vheT3rSk4B+4Vs9NInaCZnbH4g3SdTlhgOizwSpzZcH3M2mfr0HVSxjeqfKmlo72nkP7+89qYKsH03mHPv1J51VH9I1V6AU91S4NhoDStH7WzBSdoZStqes1pW4Y62LetFl3LpUzCjNf8A1Vj/rKneFfHbZL0OGWpFX37hSb4dXWdqoX3N9G8lC3rF1ZcdiYmjuJOCnRUGNpWFZ+bL9KsMTdeDWjv3adqSRfhS0y34Zr1BLnTbAqZwHoXuTEzoC74Gedo+1QFX7iWaN0rFqBO70XH4paB8IDnMdMkDR1v2K4kQB9woCB9sj5Ig4q6LrqRUKBcjWNLiMGgK1+q1foWr8oYf+Ams5W6T6CgYUNh/FYWpx0hg5Q3a7b9hgcSw4GU0A9N7ioq4mOHEAPb4FY4B5wivmFWLc9Hgc5U68Xmo87oAqe7p0REiaV+bmrowhbbWiQFnYZtHe9DwBHAszLyIPk1FrZzqL5ermGrt7zscFYrASuhFLsHK4k0pN2AWvS5DXgTpHsA401EYPI6a1a3zllDgppS9x7FDfxcMmANnG8PZii8JBYbl3Df+QMvE3rOnX3CdSuouVUbbDh2RJPqR2sWcCVtR8GjoGw6hBRyxya+1PQYnAX5DNlKdc/ZxijjW+5z3vWa8DxE5MZwsF9wx99pcjlKkvNFw7p8wEESz0bpG1kSGstSgUWXF+Bb6agFqhuZsqaPeeMyHiQEwPLnQHZEfUwH2OJRFTHiK4tcKi1nQiN9VQRKIw34jBLVlc1oFdE6/3IGp9zvzsm8FrXcSnjenb3GX86EmM9Rms9E7k9QG4EDE0WTNy3bWfwhgzyGO0N9fS3XMemmCkJ7GANtKwxClaUJRIauPAr8Oq7bF43VJ6IGCYGKrucrN8/YcGfWzbA/odOmAPj531B2ed+W5A+VDql8TrcsaVs3bmv0EvhtcQ08CJz2ndplP5cFCPkgs6fUGXL4vXxlGIbWKIgWzcBV0Y3Qypeb+oGIYQH01NRptQfgE9Tp+eERltCzv9Gv8D1inIXkGeuFeu54rwk03tOGjWSPZ85Lglmr7EO5DWr6p06jQVRcPrdvEMMTJCMvOaObyiOQemx0z/kKUGBZhuJetL+za6Gp0XlukiG70gtVJgNACl8Lpn9d5oiWUOoDsGKTOUhi9uFlhKZGtNpAKDyow3sPeasZFuVdgjw77nrgOYz/bauDbyhZJdAyvjo4eBxE9p3/C9nwaP3I1f015L6Rp278X8x65FiQPZso0O3gHW48Wh1Ltp4ZKmv9f2ehGAAjtmOlownlq5nsBEyFinkrNvR9eGuZRrMUOoz3odJBXUiWKOagDZgj1ZWQJQ7nftSOThKh8at14qMQutT88a78YYAe7Uc14u/uYljcdglAasHRljTCndv5hr/yoXt06VVkksipyp+agSdlf1V0nj3ZwBtVVDEdRtjaLNJFhZHRhYf30G3euXOG2m1yF8vNHpfSf9BoT5nBu9WrH2V4kN8kbRRq841jF6h+p6WF+/ydLYSMc3JhGIdBwGouIXB9MFAs3hd9su9Y8AcfXtfEdsQN7EA9BBZ5RFoOY+J41e91c/HAsd9y7vDpJk/JQLk3xavxczOpjuGvKpJmrl7w5oHq/sVZiqmoZhQzzakN0vgIaJoDBtXVmaT+fFLdC+G1w+qL94YcovGAWRvGgAolCoRbni1g33gSxiGozKts8NQLUdnnooARIcOncwgkUYbV1Qp3YhScwnhO4MdlVGgvYuBu5eNxNoeKcT4Eb6CqrE1YSLC52a4405RjLsygHrMROvl+qKQaR+lt+Y7wfBfcjUkM1dissTVi3btls1NldiOeuvIcsYWm5S0A7lGi5TqZZEQTPyCVqfVjGfI/p1C/XrIbp4rYTsBii4GUuHMUFGR3S571tEMfdwUcuWIKaufiJlEkhomViGjXpMFTFIYbRaDQ/xcDNdXjdYQbmuDuEaYyAmWibtd4etYE6CdrLQZ5kQRVDhLqLOKAg6r3/ptpzwqNi4ZvQFxAfTASggVitEM5WZzq51YBclYvtM7IQ5m63S7vz2BwFo6MzgSS8GzWldABq1wkebx4gKyDyFAA/jXoSshKDapgq4f4YznMGEIWaLdYCLp7y3MDM0/TrhgQ2KiddLiXowj+kmOp/utaikLJXLSol0iMWCVhs/ey1ZF8z/uvmpkX+Iztej/u0edqlb6xuUZRVrK4qbRZPaXhu+ofSLoju227R0ONFXXsTTMW8tatmhvH5S3/DhFiUQp58a7qZk8smbfmQ4Gu5JzxfV8KjbHcC0S/9XhHL5h4DR5hh5+lLAumoshgeBp1JyobNvyPeFqjCXjhzP4yu31ADNWURtomE8pC97zkkD6217J491BAiFV1BDvyKXbXEUTktZKETeXLw+QDZe21vYEpQ3/PVTW9gL2wKIuRVS0vnwIUZUVX1w3LhvlWlbafKkLnBPXHn9sXo3G19i3iwjgXQZ/aNInkf1qpls6xaS3R/uNeJkjmrY+yde3R/+4R96Ujw2yle/jpvDqvMu/teHVaV9lju08kXx8ueDcXWPRZn3xF8chZvhLS66N0usJ0Aw853PKo2tT6gGCm+VZGCnL0ff+7dVRT9JiR6hYi9+6HYSdaTZ6AyjvWWiDgBaBMTFF3OpdkFn9Pd4RdeyMSdn9toVX3TwWx9GlcbN1K9Xn+rmmwcmAevoYWSr0OIU8h8Yij+9KVXuWJ3xwOo5C1qUAIPhWA95jmrgbOcG+qRf+6zS8L5g7mMV9NxDtAlH6RYN0TWDBUKSICvo0e0k8qHzdqXz4j1ijfLEH6FW45dNHvY9Foh4RGr1VlZZYR6o59Wcaq9rYWaiX3rYiuRglra7d6GJ13OInTISiNU1euNnC7fWQrU2lKBhP6/DlUCxUgdb5R6HUMhWXw09ktrrk429TpHyfs30Vxo3TcB+8qHTeY9rq4jDqW8oKFyWebReto2yHeaBAk4B4rE+aG5okshW5N/R3w5XpF+v2KHXYFZgSuCkEjCcstEFyvGzOTb0MBNZNPGiTnfSnGeCDUmAwgtb88do10IFhYxuglHwDdOzqQ7a3b/pxRkq/YWYub4Eo4OdyAg/+sCwiufdVKH6RtbU/s1LdRilKzQrkctUIb0ajm6WKXJDUtprthOv9yqxmf5wJDDAOlDmIfCQhzykCMv+XVSaJh9yOF9oodTitRaoOjp7wOVwNAxDcxqReHgiSp8LXUA8vvtAXj+1tOqtbM7K8lxBnb0gcREUPNE3zAquWPiyLf9SDpI6n5DsnIvsx9hHeuiCnXh96J9gVuDkEmgw54LWDV8x29hY9obiJk1q1zb4sZy8SUc6RXuX2iKUrwgEdO/zxUu4L0RwADqYrjjoIDVqYnijh9dDbO6ZBNHNcgbNlZjOPtThMN2Ttk3m5z46TOH3qmeZp/hXw0ovik41nPz1ke6zs3Hrk0CDx7hqKDZ4utrzlnvlIe6YX19bj0hOwHT4C/ID8cnGnp2QcexgiCaG3XkZtmuxr5zzOIRtDg5Jo7k94Rydth6O6yR1gIA1psVNEYlzBxy/umkdlootkzYu5Y4yksmqZAO4D/fznCR+SPNVsovfie8nrOKwuE9GI+hXbFHj6tjX/SplFgYGASlzOB+ybtLzRA5FRYij9G9lcdzhNen1cdBGr6hPuxCr7ZD4iC7mSfdlW/wglVncDldWJSjm0Y4gR1XM8UJ8g2yf3eXjLU7IrNV4sbIdDSQKss2rISFXYn9jbONkh2ylybOnVdvol1m6622y4iPFd0rAGoUWkV38hLp+W7naH7EomR0NqZnik9lmxiN1S/i7WlfdHPUt4oQtFVzESHJLdOo+sSqpG6e0nJ11oXW5hJ/IlEoyoggYGvX8WIIxEPYPMTLUf+pgeibLIV9mASNFSrB3nPDr1XXUobfuv9yZww4JLBvvKXp+dDvOktDWRvuQGpnoVAtpBvb15bhS+qLZiIN4aTxpWmsxEu7oiBK3rjH8uFie4xzn8GsDQFk5AMmBy739TlIautzgRYqx+2gR0RimWTlM0RmRG+T6lk6mkotju0mo2VVfh3EKVZl8g+qji3Epg8tl8Fqhal6oTyWaYCp3TG+1q8nAT5lTPGmdOOIWNfaGuMZcRWHJ0lI+mdpVTBG8R8XWsBcA1BIj4YA22woKNrYo8F1QeOL1fpDCRjth5PTYQlu4WZcJ9ETUvI5khzSXtZxn4mHd7Oi9KzdKbrpluzEbjHoatcDmFDv9RraNl9HJVy5uvnhCCaSvnegaLuUjgU8CNVCHfCHHQyFlhfS2MdQTWz935MbtUaxCXRaO2F/k4MtxlloWAPoIIjLQ8VcELyGybNh3D5h0lDLUC1/wghcI+uWVllSCaUElh/R4YvtpKf3klGjBB9zb76S2shXWVmxGudmqhPosjrsrK4QbYWgopKpBM5Im3NT73bQdo6vEJ90vM+pcDpWSME0kajgix4/Mhze+8WDq8ncU2n3CkU+e/HIWg0aYx0Vpa69P0z6FRKEmVCHbzDRwsVHHftnFfGrm9uyXqW7Zhaqb2Pb6NP16SGax/od1P767qmbjqhdFy+7/Ks9jLwHw6CKmh34aH3f/JZaDJhSbifB1znGowo6A/duwo+SwPv3BlHsSeyPtwBfywQbT7wn1EziKt6JbCIDiIAnrbl/UPlFHM9jyRPs2lmAipBDMBY7XZXEIXnfGhG3+mkcxDHZpf4Lk2kqnH3jXSW60Tt713nXvnAj5pGma2L2r30hmwxLUkwzcC+IlTIHKVFWqNFi3z1UoRZG9zBa0TnEAKD5OD0IRqLCU6fipmfJRugB4vPeVKP2OvbN7mvPLU/elj2iFEl1UD3LQNNOG/M0NKoAaIgGorZ6i2KQ4q7822rznTCP5eEJTNgOZewik/V2i+uYgYVkQPyilgOsKpVO7T80hZP/627mlMVrd7KlFM/EyEiBn02pUrK4VQbfGeCbleexl4Qus9ZN+Gr7Gy9R5mTS6sY7aYNE5i0inIyFhhpnOkzw0lslwpllNAifB6/xa0oLTayh30NM3Aw0AGghCYf1DnC0/oR2ASJodNVlIFJ9WYiCLHPBEPBcxt+COZF7xgel9wrKIiw/L6OaOe6CAC2IrYouY4iYGABQnALDcg1EvYmAkcKHPLAOdKIFsxdLGSiuXIg8NqcwFOxdBRh3MHG78GpyBb5gOyKgnZh2tsDNVNYQyAOvqoCYatYJdOOJIVg7FsG0XBfSc5zxHxF7DWKNEsdFS9LeACZKJM+dcO+NBHaqb2UhYXpmQrfgyJhKvC99OaOrsEFU4rqVmIzOWGuYR5UUzljzbqtDS1Q3oJyI/qU8mcg8jo+a1dgmQcAxeCoFRQ9QZKvZ/ZQ079lKW7p3pzNDTNzxRh/2XWA6t51rfKCJrQcWNQDqpdFMPWHuPWszwJHjtIzVt6oLGOcWBYogpAzEW3eCSGiuQikgO9nTS+ATNQgELu+UbW5vjbdvxKR/I6An0dCYQzgHuUAwtsmxIVYTgLCg/YbokgD72GVtqAS8LeVHJO2YUPHmLLqlcCCg4lhDmDpKA406UEDJG9agYyjKL0LidPQruaZcGDMgzSYjzIj26Q+U9hN1OiKBrw8qOnfaimssK/+uENztT1Sf78p6uTNsd0SL0DOg3l5hjdHFLENVwlDXSRhM0R5Bf9Te1iAFmqaGq+Baai323wgGb5IAyxV/rhBPTLoyh+UnlnbEtWwLMFGzAmJCM2+yxnliOZJUlBPpXLCr5pIzPa+0SyLFBFzJYsqUPT8S1UBMnwt8MIQEoMPXFW4yupVCZZJrOP8+/yU0pOtKxptSRYO3inRmeBK+zb0QaugFqbIwOwqERY4QxGPREfUUyEVJ0F5eIt3e7292oeCDeW34CGTACa4EJoV9ThCG+YIaMFVRv6jbGgPYHW0EVOKOHCr9CVQfQsFX+eoDu6Nw2IeoR1uAeGMkZiomGbvIAiGLsAjKqtIJooyoJ6YTTBc2qbSaAbm1eQvuaWgClWAT6nAgy8pFenipGP0X40GTVHxSCuRXikQ/vUdnS9AnHfIP0gJgmGzCtUYaTE2rUjYIveIKxjbXH6pCJWYQoTI1mF2fZeGJUqDxDqxcd5OxQJbX1rqqGzhmatEh7oQaJpem0a4Akya3uLqXqeThRe+3jf2ytXpRtxuS1XCciSbPSt107PTdicC2FDncv2cpzmDSDheGZM50p196djs3wJHi9yHWOLugLYXvxIeyHFDeR6oAL0IFKlERmPRFsQUwLJT0Y8IFUaWjikIKWDc0pvwBXGnCJXxY+3PkRMLpDoxkSqbrOTka50Md1BYWCHuXSUrEBHbaim2KxTQ/AiGqPZ/Auwwu9GK4JhAh8JTYZeEhjff7zn4/MkaeZA9ipGG7BiwqKjLOEhJXmAyy22pppOm5qr5fRUtx0VlOUCBFVAe3VQFpwPgNaYXFgkrPUCEmp3hYiJCO9ycnlhgzhdWPS5EEa5kuJ5WPRoBUd2Nq05PVQo7WRFhGdatDc40CGxrcCz7NXOZzW0reu0uq+7xg+6zJGtZA69vJN9asOgO77NmTWVW5KdD5O+ttg1dIJCgPSCm90sNPapz+Y9p6cv26udjW8YatlO6sXrMGK+kjMX9Q9DAY+gTaK+YXOUmao7Fvihfkt6MRQHjnrCU3Quz48rZlejE6B4G5gK7cEWEyRR92yuUEi/QCscwR2oqB/US40TWBK+0bIgCHaqyDlNGvzBBoBMnaMhQsHTXulqArBpQgZ6srDVRmv4kVDi+EObsrNEXOYCgG6kDDauJonVrLSfHOY6qkPtdcUoq8jxzXE7CVn5IbKsNwSDuT1lqI1TXqrEK12oT4klltKsRsMuPmGWi3nJlGjqK0BGkjIZNiSvLfMQLC7U++KatbXOZgedpoqpf07Ndm3Ds7aJ7KW60TChMujry4yyGspdGSoIWOO14ta46rSgO8t8YI/wl3u5PvRDfUAjhQAB33QOh2YAsGCueTeC0HwG6gMzGzeFxABAtJ54XhHpVEVqeToWpwJ6KGJ5IzlM6d0c6KA7NhwiE/nldhhr/RfzIZfwRA+F/VB68QqUJxBM1oGwS0AI9VerUwYupQLE5KKAf6wHOoMqujmKA49W9H1NigpDccMNaG60k8pxdwTqajSaMVqpnYVUBOTgQCS7IrEQnRoHw3hB6kmKH5TgrIUilYiIhS2U5G8iJjWZHWD2hRzMxk5R9+Tj/mGKdKUqXVWABwcTQktPtSW5L2iINOqBpohaO6aTz6y9bHS/hpjR7hbz6ZNCRxNCZx0xZSa7IIyeYlAGeZBEOBduhuMo8MCXH7WXJvLkLrnKCBYyWuNbgsocx8GtRAzT+1xAREogzcwGeBewY1DgCjsyGiFIkZy8zRziGt+wQtesOj1PL7FL3dDzYdZ8LEMQTBeBVBiBpC/GA87zSjRvEqwLqx/6bZSWhmopPrbd+MJ+lg9uWSAP2CKk1FiM8qoak4yJ/W/HunREegXZBGhWQ3AXD/RtYG4sjK453JjcSCBEnOQIgTzVg1UAZWnIGsXyEb0e5h1kVEUHV9xI6i/adK013RoQTNCuWtjD10VfaKrZk7/611EtFU/cXCix+SYP68jLIGT6NepycMq3fKK7gmGWoDTmoEgSKIwgr+0Nm9ZFWIzABA0pKKm6lrIgxK6JFjPlg1i/OXHBs48t8YHWE76wUVQlvFx4Bvot7lRTUBtAb3gDm4E5IFvswWGJNLW884/NpHgtWnf7JlwCrhjSOSsT2e+o6FjD0wALJwq74lslW7WQenQW3Hf/E+UuMIqr3DpWkR0SB5ZqR4mhEas4WYs8xOSPX5D6/Dytn5IMJzwVPVGN7qRdUkLaoLCfuRGguNOGlrEb92TCBP1r1zNZ9L0lvyhPIFAfJLJY0ECHXqS10dT/5qtOtISOAleL5qG46poiJRWZEW+8UhhMAGYnJkGcZDRPPA8l5I/Bjo4xVxiZkMsrYvaaDmPn3UDUxgnn/70p8sTWNNbXXRGCrV/qduUa3o3zOWmTbXkzxckKQISoU0YFR/zmMcoGg9DxY49pG4oUVaQURFS0vExD7JtkgB2MFoYENQHJh2ljibOUmcq4oBBk6WVA1CchjrstQ8UcL0zYXs3w7q/JrxmKRg9fs1G1G779vSn4boBtZ5D5AIbNXWRaoFQSlM+8SGK8Er8dZ/MnCd/r4fRJtrhM7vXds30UwJTAocogZPz17mmtdFWRel0lFn+cDQ46Mmpw/IcP0vbdQ/j0AhwJFCwEkfCwnTaLur2kY98JOc22IqYxgDglEEJDzYuJfLk8oyrBY72l6OqobOUOArwDWto3PLkDcJvTwIECNraeZosn3RMirDqweuQjnJq2vAugAOLWc8DZfWhobdfy1SBhZetGmLVTTYArgPt8Ta8sHOx8Mpev5A6DK9tE4B8hnGG8jtgehgzA1YzisVEtlA1h7wmpzxDzHAWMeaevKfzhM1j0ota5AOViQStclKi5dDJoaMJmfj9u5opda+imOmnBKYE1iaB3bkeQzoO1xWv6gKyFGowDVtBW8FABslL5x15ZnJkKqS6ejj4tUx5veV+kSD2sOgHdGGGMppyT0bwDXl6Hlu9GNlDZUpZznRYNzJfjGeCR1ZzjVKlmjP43PRfT0YIiFpRQIbFFrlfnr8e76Yv5++12PaRM1gvqMiiQKok+eyo1Wi752nZiaLizIXDltuHkyyH61HckPPikx3NnPz1cYWzhQ8nf72FH2UTVTqJfk1TG45fwx+eBoqswKL6lXuyKydfiAA7uOKZTJjU/KVUUuUs0ovkN1b97dD1xFvucxSFSumVtGloS6ulwtNzZStNm6lyWvI81xQKqRfBHzyimfpJsnIugJ8XMSFyTpeMR27viV+LHyKHlE1KqPv+lj7WeLWt2ynCudzJcNAgtT2vGPehrSbEyyclP+UK6b6UxJhrR1zKEGY+kf7NoUWGXmxLZwGIW3BkQnDTiiFPwXUFb1ub7jAzmhKYEthVAifnQ47dtjT8MQNNV6TqWGi7zya24wr4jrtdMNwBZIFIwUK7cl91EyG7uOkj++cwo53I96799OUWmru8WFZlXonuK670i9U4tjm7P1n0gB5FDNENd7q8dBNydRv7HUozUu6QTOC+6JZXgvG9hpxHmuzGiXQFI+peJTDTr10C6RbjSlOpo5qA2w0/aa61i317Mjw5Xm9PXWdNpgRO4xJovm95ZKk01BecpNmabam1VGlWiHtzGhfv9jd/4vX2f6NZwymBb0qgqCAtj9phCKAZYwrtNPzrw+sV4t5MQW+5BCZeb/kHmtWbEviWBJBdwwsoJgRJ2IYDYM2MhBiJD4kbmdcRk8DE6yP2QWdzjrgEcs3M1yi3n3au+bctYzkI8H894oI4TTZv4vVp8rPPRp+aEmhDbA74HXZa6BhPcor1q39zsd1hnDw1Wzxr/e8kMPF6dogpgVNGAnn18OlMpwbfgkCgPgC0nV9tQIPdfFtPmSbNiu5FAhOv9yKtmXZK4FAlEEwPV33xeO3RFVDBmXNi8vz8z/+8ADUCpdk8tRhV9VCrPAtfpwQmXi8rTWacVqOujthY9s39pWuHi4sDQCrVeLK/jHd722gvREk7fdrRM3ZOHffN8etYhieinmcca7NlD/d09TpTm2qERGPPvfu2F41a7SnnEnu36IZuhqXOVtiqSuB7lfl4q3fXtdUtp/sqo0MKZyaujqtdu3RtIRuFYbAdbF0lTl5lc6NshZwnXi8rNCb4gQvFTkrZ2fQFpPK3jaDMkWvThcofQzq2YBQDfZeQfgF6tcoC5glIFSQAgvg3p4URRKUY5ctfiFpea234zGvNv1CpKlEnC6jiBrIvn+1ICV47nEXlWe3EF3MjXJeGt0srmRdYeBdeeKCkrEbmOd6t5UrCsSLtHBY3Tdvb+1qoGaeeqrziilqzlusA+tssYhkJTLxeRkrfSlMUDhePV8rOerWYY3MLBPO3HYegt8F9o1cBWg3+trCe1HLV9lTJaKlFphXjRRQwMRpFYfRvAQuBbNprWufyFxRWEznLH04VqhA6B6MQVs7q0EEZK+QPW+0uaVryutM7hWZ0EEfBERWk3H5djFh5bNc5LjiuUJ8TSYYcWrXoh30UeJ1se+hIEOHg+4lwlpfw7in3Nkhm6o1JYOL1UqKNDNGnQY+xnbZr8KxFedklk/CoeIduCrGiApsuVxTZUKaRf9ItzmnQKZUA+rKXvaxAjOI1UlSLbxWMwtwmgDTW5a/ioqQFe11cdZEa4ZSwtyL0Nlv0IWNLls+5lCpvd4kbEubF7K8Depz7I7a4/NnxlOvXRTeMpfrN/0en7LU+J0qfQ4iix7QhnrAYO56YxlT7xje+sfviOI6Vwf5LPxHFtKQQZrJ1SeDr1OS68jra+RCUUV3IEYGzRURzatemQyY16nLYCqPppyOM6uYEbsBzORBYHEPqSDalqwYgK1DMsZcEDrJh/nL0BBaVlACc9GouEqyrcFpdkHcXauW4+WsylV/pchYA0nlyIj6CJ04RqFvheSmVJoZYY09QGXsSjtrK3+sOkTDHOOlCW0YOSneKBU3WKcz2fO+S8yDxmzYaXNkA9lSfEyUmt75FOUd6CGvs1CRSVTfLmqRE4AfQT/b6HdcihNNyJhOvl/r6RfIrqYFBhXQuZccCLPX+qokCINEQRa9lVnLmEzBa7UjJPVVBuUgGrb797W/fwW+7I47o544ug6QGMFU382CXfICgatOs5VNc7702QelVST4ICsd48oV4/OMf7zBMGb71rW8FVVElbcLeq2mBkIsKGQi6UZDJxpSjORpVi6D2He94xw792dO1Lq0ogO5z1PdU1eSKBnECnHDwIv3qnyPm1xrL3VN7Z+INSWDi9R4EGwcCEYwWiJDOu4f39540vc8IdMjOO9/5TgeVgQ/wvVc82mvJkaSGffAHFNzvArJwzfkSzpFw+qVTgbxSYiK6+c1vDuNAHqAJUtV/r6GIyBkue5dA6L/OoHDkppMrKLwOIHbaUUsQ1aBXUjBX0Pvyh5G/oy0wIfgW9Zdtom6GsNrAyCv9pPlr7FgSRRPt9RMcN33KdexEJtZ6oPNU9Q3HRjvxQwI/RUAdG1xztWrkkXLstWl9ZbXaHuG3Jl4v9XHzCog6zKVsXSNw9+JbXxsVz33uc50HD0TyxFjXODxR6U1IGVRNUdE+y5RrEeBoY2SCU4BzWnCokLN+WigMAa4wzlVpkZABqY9+9KOdSeQwuQxukBrgSlbE8KW+6/+XKGz1TZsVHAj3/Oc/P+Fjh29605uKnL7kMUPeUpMMHkO9HTzJnmp1bOIY/E75sF5hZRV9nhMOseNwuGA7qsIqxIxoVus80n2W2Osn+l5KX0v+M5MlJTDxeklBHXIy5/++7GUve9Ob3mTErgB2B1P7joWElaCKou00H9W2SEc3A5fFOW+1+kAfbU+p5Lxx97vf3YlxzpUvZN1qeR77ltxU2EHMtGl00OlPf/ricniu9N3n6WpIz4X4bLbWRmbWEYNpXTU8Lo4fN/N1aRW+rFUL20knh2jXmc985o9//OPO2n7c4x6n6BR/nzjnxfFFTPZFeE+AmUD3L4eco+SWVtFs7e9eeTYLvhHjvn7FF8j0H/85WNBalzFJG3W2YUWgQ4w4iKOBKVVr7JNDYhOv9995DiKHLcfrui9BLDLdurJjhqilO6x/i8aAPcluc3g9vG4AEyX9E5/4hOY4mcgBpMA6iBltrBonqrkcXvnKVz7rWc/iWALr5YP82c/BF8uI6ES83Lr4a+0lFup8cUsAtxJbgrC9q2EyGSLyZEChOsB3IDjwaxhL6zD7V0GGorCMrI5No6NCZ2hrKorIamIe50+ZFXzBgdFZEYbqMDKUwCsEFVW1CcieeL3aJz7ot7YcrweEZVEkHQMgBG+zT9t8Yl1Xlt3m8HrMNMZYevTiwT3hkeYEi2H6iVoh5ate9arnPOc5fA1DKK1eF26eqNAT6dHr4mGUSyYxgc1VvrL1jXYxvPumx+JX/pep21VvdJJFWF+cCJfvGHmL56eoDuaGuLu9Ku9RfMMqMHrs+HBZC4aFPEfeotdC8HF4oXLHMqJWqIzEu/ST5Ru7mHI9ZpDVyp5vHRkJLPotFDcum1h2S08MAF1/HKS5hQ1vQW30tnnVeGs/eoCyiLm7kAwRAsNKmTNMDzd6fd3T83jXugpNDkXfjhMnJQxJ2uhx3YckBqMBqO/OPbT7YxOvQNrkhtT06W8W5kyse7rSHsYWAeuAzFR98SrmJppFD/ETmI7j8mT4wuvwROFbe6gaORqtHazlOfF6T993Jj6+BOIlh4UtF4UG1SKLB8jaUL5tcmyUNt4CJiiAxmk7a0rl4Bx2UeIa/0ZsYxuo+buJcbtDgPG5x17rknPKdbllTQ3IxhzRT5EbrgALzLUuIQEhA1tkDLxuOl/NIjq+hUxGxfZKXg/hxGD4y+SQDL+OjN8A62bcUlbVlixBfHIo5QgoFGWkhpvo5xOv19WlZz5fVyh0Ux1aTy2UfgPSXwxg4ypmcNuEFQfiGqFOcuNT1WiQ/jaYT0QWj0Y1pKUkhNylN93eE+nXayy37yhDYDT0zcERJZMBdiWQ0hoFtL3//e+PVRjo1s1JJXmi+me77utEFuPWV2jsog3cFocWQ4PAkaH7nKPUP8PmAG69JUrElKzDq0aqiZ5TuzbRz7du5Kwg9PnKoUvAaBlqjm5quLZzOhAsoki65wGA1wrSCGHVXD1Tnxucx6rSu0MMRMtJwAo9I9iiYr5CxbbnlWMb4vs2T4zPGtKFoV/5ylc85/D3ohe96M53vjPXptYZoK1gLO7rISu0cWzH54bPc1G5q9lFvNWikK/LTW5yE478o3920y457pLiE3DMNwEzTrpSrnUb2w4+9alP6fC1Tkq7EOynY2nfhH/IxOsVest8ZacEuOsNKqA4gq6UViNTz17kFlcbohsVevFJ2sQ41r+V2Io7fDmpPtgKIzJk7DBqMtjotWk+ZOiPSalFg+84FOpaN+C7T48O5mAjRIGQ3NzYKZ7e9fCrX/1q5yok3tWmcC++733ve9SjHmUr2X5kG6vDY91+NHwI5I3MGVyNJr/tbW8DwQzIPDVtg7DDwM3v/u7vPvOZz7zZzW7GPR87X4g0+XzoQx+yM4AZVtiZ/VTsuO9OvF67SE/TGcYDNm7TL4xbY2CoP4uLza2SlBqmTO2ICZO2uPwcU+IU7YFia2xprhFlCOnGRHJcSmRMFYtc6nh93FTVHRPVYp3jNxTXqj9dOzJhWBHHfFatePvBMriGuT772c8uXIHdXr/3e7/nL0fJ5z3veVFn8Uujek2Z/TtwfAQ784RuG5j6Lhe84AVHtAALmii4IZluSg9qaceDYu6nT37ykxw3C9WrLZwvczzVRtGBvvCFL2iFPKnwD3jAAy5+8Yuf4QxnsCNJCARBtW50oxvZXmvX661vfesnP/nJvBVz0lcEh3RRXPSie9/73otiz29qn9fE630KcL4+JXCgEhgeFy3kd59IholsoGrOKj3fAdBrXL8DQXHPFQTdnvGMZwBuO1Gvda1riR/gQByH4JzpTGcaM3cbU21UscfqM5/5zOc+97lqIoEn8D1fvfQAdRbfqngGEcd+CnMFGutLICXe9a532UgFbeE4sBaaDT0N4oui3pSAVRfD67d/+7cV8ZKXvEQFqMymGdEfbXe64Q1vWDxxrvTgGEDLEF6buiwaTCEAXaAxkVsuetGLmnhUpr02+QiithEjIuooy1Th78rm0MXuNfH6QAfbLGxKYD8SGDbbHG+yaO3ix9aypiWCm0E+BN+LBrH1kjbmAwe0i55IqbzkJS+Jwn7hC1946Utf2pbXCG68gQqkXOe5LP4JhfcjH/kIMgEjAZERysyVAhtc//rXB3lqaCOS8ANep+3ycA/TQSouglaLpkBBeNHeVBUQx0bsGiBuDpChODNiOo547gqVGLyaQq585Stf5SpXsbFL0HORDi984QsL9/jLv/zLEThPe9rTkNT0ZTOQtYLMTQAWCjJUig/hb2syuWVs98RMc6lLXQpke57avhbz48Tr/Qyf+e6UwIFKAMDtANbdcXYQ7nELwzmnt4aXXi4Wa2yJnFG6LIFYApwDyIa55zjHOT72sY9RlotZloJfuUAWoFNUf+UbF+UUBQEcwahAMUL1QmegbNfY/e53P2DtKIxRYVgMIhXxG7/xG2YI2jFTp+3yglnSl5WIX6ZlIy7ECk9Pb2EBoE0qIjsqSAwvere/sNVzSK24cQI9lFdDij8OBJqbSFzCNGJCxJ4c65V8GckcsoN17DaGndK9FqTu60y8XmMvnVlNCWxWAnRqiJNCDRpof/7u4hoxGNt4gzB6+Cy793z4sayx6oo44xnPCA2pzD/5kz8JRmEiEEQBU2xzXlYc6Mxo6V6oFurtPe5xD2qpdiE9nCNMb2WchIy4CB4mHU4kXocnt7jFLUAh3H/3u98tnK/oie3/htHSvOMd76B30+sV3alGhaYqBwDa4USIZoowbEVYq0znYKgzsGZ7zFSeeCXwHGSrBs5Efd7ylrfgdgSZQYyMWSfn6yc84QkA3fx01rOeFYOv0NXczI/9IhOv19hLZ1ZTApuVQIT1YDlg35KG0OEAF1qNLTyFxajSO8xx+2mJIujXBT13Q3d2dSomAyCNuI1IFUEhBcGC7gpozq8OO4H98BbULgAhZVnDQSeQbUcltT3LNihUFjWW/wawxix7CCixz4yc6Gn3UlKZ5Vy8KiV6okQpTQkUZ0BPAaeV++snhap25lASTiz8W7j0CTYpT1o/QDdnnO9859MQVkdvqXNxIs0fYpFbB8j26le/OqJmhKDZj0h7d+L1/mU4c5gSOCAJDB+DvJjzCdmFvx64HMTDlGxfLva3b0LA/7d96aTeintq5AiQRFFllHM+3HnOcx6eIRAT7QAu4WwuzOpP9WbKY9MThFJIWGospOMSFxFBgXXCHGaZro0eUU9wiVYuPBOmBfPgVA1+0NRt4I4tkYMiIOynP/1pIE5ueI+O4KgVCkW/OEGJYi5YLtVefRTqxnPeLPT97Jnvec97TAZiwsiHZu0ejX7f+96X8u4VR1jk/1eUPmkcGXGXu9wlD1fnyXmIlPd3F/eb5QU78Xp5Wc2UUwKHLIEcJwCEhTw/3yKc7L5VBEy0GIdZjG/2ccAgtjhuakH2IFjW6B8SPwCzAKhjPDmEAGtABt3UVv3hmgS018yPin7Sk54EB7XLkQvSP/CBD6Ttsi6yFqKDRQGUhiMdbw2QCpER1h0DRA4mg7ve9a6eQ2csNhwHlBI7eMi0ca5znYsQvILKSAXu2CBkBe07NR++m1fy+WsaCH/NDfgcgG7COO95z2vO4Et+netcR0pcNq4D7aMI+WuLVuPZEdycYTpAQ3EOw2P2bIfn/nvPxOv9y3CzOaQ96UC6RS5Qa1y3brbqM/eTSWBs0hn61zCj5TjsWhznQSoVVR9gx0t9brsdyEiDK4dBmI49LBRDAO18HMiC1aXzolm5vvl3Fw39ZC04/u8KjTVmvsNvSERNVnnsMLUUWGeaq9USqy2ApmXDX9CMvoCSdqZ4BTJyHQn9GSE53vHosGGS8zW8pm6jPjTBX5SL0YE/4c5hklCu8NwcB0mJ2n75y1+eBVI+pquOIU34GQMBq6JBdvzSmLq8i3Pnmq0+TItWBkRnBeD8EBHYnRRxtrOdre1RKmPKMUgdHGFO0pZy5svIq8/8weV8NWH+u7faoTSv7ZSA/qRi+rTBxg4ztg5uZ203Xas2aOSUBmv0Y+cVuN82sXD2utzlLkefTSBV+ERXxje/9q2Nc39BcK+DvF6Ecd2AlW5qtZSwg/rWQ7Svv94FH4vJqJbgbPC/foKn6AIHiZWs0ne/aki1dTmJ4ra3ve2Oh557oto+kM2H/h01cW/CoBcDPvXUq/uphoSeau7fITE3oFzK7KVdxaKpIH/7KUJcuW0ZX2xIuzFdfh0fJTl3eddOdLq/9ccQ+GIO4165cjDJGY+6n8kP613OSBsWSFBeWxZbTRT2zvByOW6ee3o49es1zHmby4LiQDHRt0zg5nndwrUWImxzdZ4570kCi6Ew8LAoWviCrGC2KvgUILCut9K3sZt+Ko0+gO3lsaAgHr5MW9hV7K2OQRvNSRkKpGUXd5DnA8UQgTu0dat+jnFcktvTsV7yGplA4eVIJ+exT0TRtF0mO7MLLRjwtT5Qw/TcEXYmUlvlW1BmWhxSjUVJU+5hBylkt/QrJdfrbRB3Sdwe+vzzorA1P1HkAUJbR5fjvsdhMcf9iLRvOVC3kS0cUUCwpUBHHltJWLIYpIldWWPVQuPmwQLc99Qxjpt44vX+ZbjBHCwe6SM2hrF+GIduKG7osA0WObM+WAlAjdCHVgjL2gZtkwh/NYhjAf7Rj37UupvPGXMc2xcNjk4naIbVt7dAjNdxvphi+h3VDy5Iz88szwdpgLhsz3/+8+e6FzSDGAV53cTgX4C4Xp6NMx9cS5Yho3qaRXRgjeoYrdy0c8NQ1XaaSJkPzNCgu8kzxH2eG5Ll7KHm7YLpXeiZho7cCI5LCaZr+IDRjLcJ35RGht3srg+1DjCVXve61y0AoelB/ubCYoRpWnRK1WgzfVGz99+zJl7vX4YbzEEfYgkxVi2HaQT8llhXmsPndcQkgGDlPiG0EADi8wCX2Qa10SKdrso4xvns4Q9/OL8IVjJWL+MfcJjO20mIk6WAU8xBNg8zOqwcAo6wD6gNuhboAK+8uQc8rXFbR5S6opW46HGoUCWiZWKQ/UvRVm6VyT0R7PauavdTWva49y8QjCfJnzpczuEPMsoqfVyy5iEXME3RLnTiOOJrRLmRHrz6dxe760D/4k1qC7W6ycM8ETTLXw1NBpkcs162E3L/PXbi9f5luMEc4DWrtwLM3nqDDmrfwdSvNyjxg83aeDaM/c1jgQ8yI5sPzU2CE4LtfPAoPRE0xBu4pzgDDq8AOO96SL+TgIuxt4AFEKf3dXqk3HJhpmLrRemYw4Obo0h6JUBZiwKY/HJkdpMKrBoxzvBUBTqcpfCk/m3PTgROLY0PcR+d3fNqLrG30s0JpChLSCT38JG2jomW0lshptwI1hWYFtjEAiVQHqxRunnG/MUgTTu6Q5HLtMLzsTmze41S3Hi3+jfHKGVJN/mT9r6J1ycV0SEnsFEqFrt6WE7Swg65TrP4tUogOANSTMoGPK4DvuBG2AO5Q/BMwG8EB55LAK2kL+xG9oxYAkw0LY/djMadx4Jqhpu2e4gXGmaFTd7CulDV605rVK7lVjDStOAwMTU5d7o6M1akY7QKHh1MV2H/Vm3Kqfu4bL/GnDQHeFg+WCCGTYsJxcn/nve8pwgk3vKuNtZkV2cLuHnIQx7iKORcISEv0inoTyxtuTzR5y2HOO6mz/xAxlQnQa6KHZYWfKv2umxOE6/XOvLWnZnPzOUT85h6paNw70/RmNcRkEDapYYgK3xiEEY1tiNOpAsUB0qaUYsrGKMWbKKQBg2hMwACOvALjhcdX99AquKjJeDoBi/gJgCiicNr2je1fQgNspgYBOtonS7D8H0tl8pkmiu0bJg1lFntyuXDcwnyXIzxiJ8J7qvJYLRLMJ6TQ5ZMMaTManCTELwLKAnNPb9AEaakN6X51W5ybtGWLBoO1lkF3PP540cYdksJf00Du6wzzAFeVw2fI47F1calYDqX82quLcWBIuFdOJY9CXzi9VLiGlb1YaxYu8vqceuR1oPN7FfjVsiCpWq870QNp7FKzXiy71xnBv9OAsZ5pjbihVywAICKDIf1gh38K8QjTTXjCWe2ZsBIGY/ajgi2K5pbnoAbtmZwUXB5i8MDO0f6uDTAXcAjvAEtW0E4cWS3gpAhQxNfC8Fa81Ip6r2hqlJ6OBych99IXPZ4MfZ5KLlj/33ZjudNRVrHZ8Y2RRQH7h4ZAoJtL3RDgPYrkliWQLOdBPbO2FBjq4t9Lja22JiD7pcgfnnYfnfppkFw29lLFr0zYHo0ZI380rfqsyfvv9Ny4uzXww+0RegBXGZvw4xZw+e3jlPiQbob5ySbcnTo15H0v06qw6nZ/XC+ds9TrV8F38jV19f3L5UQH11vhDiQqF5B7+P5J/H4ZMOtQmIpc9CmDNo3CO4Xi150ST7uty7PZfyvN91VqqqaML+bnzQHOhsmnBpJhtBEtWYMyAnaXy1FmFB+LSnIipGAN7oZC6DzjN4xpg5saK8gpalfL6Xx6fSUhQwXvTDWZUu9v49EdArLZHu69E56wVBe9pHlyV81AFrGmiQ67Pnk78wU+5NAtjVjOP8wKOOLR/hSKlHSVleNcIBCm0OY+C4Aml0Rf6J/Anrfy447iSWri0oTOa7rSsn2mHFMsox1u5jX9tegDb496AV73C01ckdB+LgXnJpOTZL6MNMi+WQkNNsRmlZbqRAd5Rp3Tw1qpSLDTuyVfpvXkROvl+pVBkyYNc6nsLwyn/u6G70YQ5SrIL63iGwDTEfEx220UJnr2cZ/NhytTuM4sClqqU9yJBIlVQChg2Vby00thcCvbnL4lQag50YCzd3k0eEqpRwQCzmKeMvn8yR/kriIAUN+GngnMTjLQ2PHQWjbLGCtJiXatFmtzZyd2k5WZjUNDKnd5EnS7hX3GHwYDbIp5i7NH4bWnLh37M3ZNiF83ddk2+q0hfXJcXUo16LfYgyjHTdaW/kbhIaT0k0VhpkwY7wFBve3odKVG6knAsPtbne7DZWy12zVp3DJ0Ef0hrvf/e72o/sWhu667Dl7rdJx06uSzXK2gOfJUIV3yflYG9exROruT0yr0HZHKe3cG4SvHHzWLIFVJgrYTQ4MJ+1UNaSv4C0hlmCl474WHy7T3rUImSrjhBdBU1l0QmEYnd1PPS0jDBMktaq2RhERWxxUEZroIi1TtNqWeny3UFDuYfoQyFpquIlMJl4vK9XR+31UexZYOXzmVpQbvXIbMpYAN83a2M7DaaOF6uU4UNuaOYdppsE8XKw2Wu7umR9VvK7V+UWQfBhqhs54kN6XduxhQZxzgPMkxTklUT8JjhdniIAphI3WW4TXxanupNa2rcJrsgLTXKfscbc5CAXErwbFYVeRta+lIfXZTgVxARMvhxB0onmUrdU9RxpiFOkFrOvnZNLahQCN9CbabbxW4LxPg68Mo029n4NnkYbyCd3claj1JL2zQD/93VyJ5awIU4It0Vk4W4wf+nc/evbGTuY+VrDDrO2noiBFevQtdqSXQPeIM+kn6dtT4z6vvh1vDZPa2KvSW7t/4tExSrZLvKdNdxX1T27A14oTB+1eOBRx+2wQBd/CriLreYk0fCA4/VroFaSiCc+uIjH/PBc+RfQVMVgkO6m5ddONWib/yV8vNYnqHy02DQM3tpxlHWoXwOYun5CG1RZb6zgDpr+bK7GcU/QM9YwwnuQbu5SwZqKlJWCpnjoc5g5Fm6IXRnvSDhHyh62eZD9sgZXLsARt5h4/SW815mEqc/z1+HwR3+WQLh9jflI+ZOlmbTyh+g9vcU3DBUFhjaVhiIXNlihitYbbl18bUSWYECsVUtVMerdILFDeSQKcGvlQctmWSXluswH2m3jdamt0guS9+NC/eZX3dReb5POnfg5TiTQ6h/63uGVzbDSqn40cmv/HF67QHVdqxRBl9cyxqZTZVRbzWWQMFt8tvQzb2Dqa2et1XDeLtrVFai9fUTNza9Jjq7reJ/pi3p1dLXuHhWS9ZS3mFh1MRJF97jV2dxJ2c5UpZx+0RX0MwKLw634ly8Vi05VZb/5atNidEj742LHRrvAafsrM6KY9KYuVGT8lqMWuMj7fyKQXvx4v4xslHu733atIyUeXAMG+vptCDzouAC6Ldi1gYbsrZUvnYOoAXxrOh4RdAWpzUWeCckwMjxHbSina0KCxdgDjeq+NHem/idcDCNLdtK2ZWTq9PxTD6JNLk/NijERScGWPbkpP8YwMGp0gHrb4LFKWQ4NwGD16cQy8MX+oQPqFt9SnNINRlUyv9asnLZQy4LS+qyMWbCFTsl89GRtb5ey5ulXhGph22YryuFPIyhKfL64mgRDK940fCIzqCb6+b9Tse+jzymqtm2/tSQLR7roEPsSN0W3hS5dyBIw9jYwuNhzZGpN2xY3EkHfcoohayBMKtWiX9hYhr+0hgvv2gjrnt7EfKO2pMgeZ+Ft8CGBSUWPABZr9TWUOc4d2nGdbIL5Dyw7WQ/za0Ohq1Safog6m2AaCoaErNqrB1k8+xsgn2E3/DeIX984m5ZTrvuKQoBzYi/1tO3/qaglG5WXlm6lbbcwZo4ZUh1NonXiQXecgy6p71Ct8qT6iD0R1KqTDol55kBWbZR2KBEInQ17YQtGlmRz56gleyJeJ4ZFbiKg7TIspcBBcuPArXOEKwIdLCRVboBVRR1gaobZ+JQZAYfZaeWyVr9EO8X4TryMlwinNGDyOBpjB2jTRqAjRoFiUWa+kF9dOaUaDw+gUcD81tHqYpdt9M8RII0GqdM/D9CodT1fmrVycRY+E8lwFfLDOlUi5Fi4ACreilxJqi55TfJYUsVDYR8rtNIbar80Wqjq+36H0yFnoogSaOFMgPLddLe9GOtRY/dQ5dYBFLmuK8UhKAFwY5j49XLrlLW+ZDQCtkb2nJvMMWVwcx6HBZeAOE3iSgO82NAAE+BCwjACt2ym3b/Eh7QIihfvc5z44oIDVSTYWEWAxZgCoLZK5MUcptmHr2FixqHpLkyyiROwHZav1b7r2gGPvjpFWnoboMPT5l7gTruEqTzdObXAwT1SGBNDWK1ohSuQrXvGKjowaWr8pF0vlA3uSGc1fO3Q5rjEff/GLXwTc2u4sDz+5j3sp2+38eKedWpk+48QCZWY6K1kTMPtS53AvrtJ20L6nHSmddloa+Vl4v3bEGKSZLnJ/hNp+bXEsTbGIPdeRhqE155x40fRR15YbP76J14N5oKLi4+FdVTcwtIpTetbnKJ7oCzeNn29s0v4mXEYpRk+TaaKJSu6GodaZKWJFtg10GLXLvJGm3CIWBvQjtyDbK2oVh64miCriFhXBr+59J+ArBCUOS2QApYj3z/7Q0Wo2CnJQszJSNy3lcu8oAJYH3j9OsNdM1Wjjog8swILQX5o5vuVpZzxsW0tNn3qC/mDUGZa+jq/vIBVRjcaUXN/b8vG2bYI9ReszFlVDmzZtA4eW5u0eStOiLwOQTgJLDwMdqX3FREwCwbrnsKX193Ze3+KvW1/o8ZoxImbBWb5rWRprRhtes8hJrIXFA0oWrVOklCa2ZPyUymwxAhbl6SZojr5wLyXFOR3ZvwBULLEdsoOkArVAYSQUM4KPpBSqMXw3DbAbyES0Da9zxrTzSogyRXChV5yNqtIzO7ALi/yracgvcTl8YGsIMfC86/xQMwrnHrFgIDsrBJW8yWZehy6BLAqGpeHX+ExpGtRZrNqim9Ch13lWYBMS6PRFQzukAkGZxNKXQ540rXa0tXAvNog0QzdPAQ30O4ZxE7VdY57f8ufT+OAV9mmYf9WeBqp55qjsPA2PfCfcIH14p0M3sRyx3nCW1GiyILVD4SKp4aknksVCyKo9o7gIuwSFE1MEbdcp9BRhL6qDv2KQ4zTs9C8qeXSzoC20ZhwIT/iPfexjIFtsF5cXLQv4w1Oi1Q3uexG5qSBrBZqylBwzwb0KmwZwI87KlGGsqJV1Bx47huMTn/iE14UStlFVKHdK3CkUV2GNPWOrshq+H2OOD5TrFcOyX523f9RtlWxP0coUdToaNvwNo/3bsj5KNjW0NkI291LWncKx4Z/WOV6ebO/mRohaS/KdcIOJNxKE+0qphMKuAqOkVjet9RaVlsO5eIbguKCF/ByhMJdGhlqhC6UB1mD0ohe9KI31Bje4QbsAOtkMStJzHW4vQ/6S9F+GWtuNXvrSl5IdmXaORlIeQ9G7uEvqsB2GCrrYxS7m/mY3uxk3nXajqgnoVyUJ8CQOZMFQw2s7mrhnKs4kZOuqA0ljwTRcNCUu9K0PtB3oU9+8ItziGoO414RhNBsdy03SHophsc+7xsP6X1PmWHZ0M06fGffxucMPZ+R2it4Ml9h8MfXDd73rXfrYk5/85OTpw41Tmga5d1iNzZGplWjG+cGwb+gmE8uxC4t1FTfsSUpp+IcDrqQ97FV9oAOQ/OJB5mOGbv7u73CRyJ2hKrWUH4i86BAS9G+58eObeD3c4BgDacFOXmh3jHvR0AvCW7cbDLV70PzBD35QzG/wx4eGWdKuISYgEJk7Ot32AQ94gHsw6gaAooc6F0P0XgDNBYeAjD1WPo4ouGOipKEjoGEx6KQjjy6iU8LxVgAGsC4it5TfmPRg3QrIrlMHksofDaLyckOhqKq5Rw6ceG51q1vlzS29rMQ75+jTVm9WZrR1lXEqx3qdDVrE1CeKfmkkqIlWwNbYNz+ZNYchV/WyWcfX+1LpCHmXu/FrfRdGJBzLiCgCvx4xcqBBldXakshSaWhVhfUhn0Vb9wEAx2IR+kzWF2JXN2SaIeAvb6WNXr645aZOiyfUzw1DC1DbstdVqMzlTLvSFpJ3WQH7CrpcqoZeGnyvd7wc8Ofb/uK+ZZ8hevDhw0Bb+qZvQ+elEaMRonQpcTqiTwLXoJ5xgnOg1XoCi521Qxs1p1G6/aU7X/ayl82Cr/fkVCcHnxMx/fznP582BKaNLvD9vOc9DzvxoAc9SLeLfbaRVG50XtmGwmErwOVf+exnPzuocpYPNZmK7TnSQx9FdzSvypyjj06mh9nFpCFS2qX6+Mc/XgNBf8k0zUMZapFwMALB4GfE8aLCm59Ep8vjZ+h3zVuOGjI5kc9eP7C25KoY+MYXtTUrJOpKYQyY0gVyPM9DcfiDD+1GJipJdASoIZ1a1By8mH752pYzoXGKsuI5GI3ppNXLPanFmU9gMce1Vh8LKWLzFsV40gw3lOA1r3nNbW5zG1szIhIt0VLrNnfpLRQgwY+ann30tPt1uTYZpARr/LafsOGjRKSllg51dXTIzbX0tJ5zfV2X8hniJRwRxJ+cjZHWab8QxgOTixLJLl/6LsSCv0960pNAwxvf+EZKK424n6Ak9dZf8sWE6Lgemv+VIr0zv5nyWPk67cIRmXC5auhqSGpww8HDIRGjLKUrjr7AQqgybvAVlGgUB8oFTjkzQu/J8qAUpDbq2ayAW8CEMB6iWRgYqdvMkvz2QHyZ42rQ6FbWBhjG3BPzBEzUHUGk+oyln5+6FyVdyJhFUSx5n8uRS8WyysZa9LCau+lvysuiBIplk3W79KqngW9+85vJ1hPMD7BooTA+VptN9nTVTHEVMuHu6d1NJM4dfuSsyWZ3XeuGN7zheK6ZnSdyiFeVUROzvm6sC/kWauXvRi/qlDGlUOq8MWU1qXTL33UVSq0xXrhaGWjy1NkMxqxEx0o7p955bUIC39TpOkOEquLD2y9Eh33sYx8LgvEJME78FPomUE6/y6UvHVafMMFCWy7VN77xjQG9tZKfIIsOxBUE9lFvoaTPbJeRBaN86OkoFN8VSkIfijAdnB5HjZUn0Izr6KDMkMtbphAGQC+aUdxgq1M5TQxUS/guYFhhywvG1NHF2A/Zwm5G0bT7HBD1PPo4D2690PpA2ylBDp5QloJUgAEzW8QatcuhZ9Gp1TNnmPTlTNu53Ki2v9l4Nd/YIz1jw9FzBNtqw/MqhhYggZyT3JCtb+c5ybQ47WOd0ldyyItUQzRWJDZLHB0vV05XbluHSIaogy/im6qJnu9bGEcdFtPWjM1dFlV6CG8oA1boZzdKd62rRLHuOMta9fLsslb2r+Ep80Uvr/F1jkB/29rB8k28NlXqatRMEIkN0MkgIPXNyDfsrYsRCyx4IUU46J5Zj7KM+cVxGzkMj/wueNFRdbETNukbXQ9+8IMldsYzr2ffG5qY/ME3TRDyIiIEn4W8VGysiF7uqGOZ6A0q8MpXvhK7YmLPnpB7CZW/LTPtr9FpWo4Zw27S0Ato5wLWKmayofjjEymMbIkYHkSKlT6emmbKGZx7CeCWXj01x/xkr415S0R2BFEmvnVdORHLbTB9oNk9dC74X9S8vymV7g379mWRTysSr7dLyNym2hbCYb3LzGTWITrZAg6vHwF/CU0mirxIs6H57lrN1NwKfXydrCzr+lgr5JOX4VAXcgrO0XBzlw7vQ8u/gZkE1lhuEh6y1aOG2aAdbW1AbbIc5OEK0puvnEQCQ2mHU3DNesoTijCMxim79w3gCNSDoQiKsaIv/BVqwmbIQMS/Pp61khcH2wBAvU5rbq1ayo6zGsv2lGhFszpSwFtUZsyMSBnr3Hacd3kIhQF6r8Mv10hgItFyPirqr4a4F7ZNyQC0hphL5GwSUkpZ4etZOM1AQFwFtAWJb25ACCyua/bJhyiUvyBpmNKQ+HI2f5C8eSsnHGIxa7L3Wg0kalLykyNLrAxQ8OaVwEsNAToTbqzUIFXiUth40URluFj/Je+3jQ+pydlgRw/sYS0a3/1w2Rud7VgJF+Rgo5d+a/bKjKECg8RbV6GyjVVrbT3aODioHh63+Ut2uZlsGQl8U782qmmvUIMSBz4AhPOW2PFS9Ky2OHuw8HQ2WjtiMmrpJaDBEkxfyUmDowgVz+pJGjyjJarX7V5p3pDS69nELKyoyW5cxhvtm4nSgkuyThGld+cPn9agPekRhdMzycNrIOt1P6X7SyArvce7msO9BGRrjnt8i+mEyyDqwxM5+1UpVYzntSeUbtZIuSmRpo8EZ9TKnXMtl8rT2fE/IBvbaHJSGXVQIu80T0wPlvkkbwVgQWOok5LjEejXtGwToX/DJuoMG73nrqIPVsO+jq9mEtLeIZy11P+wMklhpD+2bIIa5lqz2nOf+9y+TmsI4l0jebVCY4c3WF4ToZtP0NJnc1darfyTwzC6rqvEsUSTc6vDsHto9Hrg+ArrXY+u8BWO8CvfxGs0BU+P/Eapone4wx1Ac3vJ8vAFfxLw2WhZ2pLHV2zbvnvr01L6cjA6Fi+3kJ57GKrKwRO/AmWqrjEWgvspINbJCuc0hl+ThOd+BUwtx/xlbKQCS6kOA7Cia9hI2T9VQHOQLZgEyeiqcgbTgE89ZajPVWH150dominzPjmCpQ2s6+oBSB5zjItpFA8DcRBHKszj0IqE7g+7Mf4mLXMeTFcxRC0PFq1A0PMvJL3Bd6u5DM2USS/kaoMAweKdtCVKZF31P6x8fJE+VkihUawLBEW3yCcyf7Jo/cOqpHIHXudmOuBs01Xy0Rcdh2Mn1lvoyL+xL/+exEbmUVqhR4B/W6/o1pjbt3zIIqGyxY3vHWMVcawL5kbiPvZKyrYFg4w2CPhpOKuHeiAyY5F7rxhaPufiNx5uZ2DLV8+zuCl6eAHWRYrh0vQQyZuL4Si0vS0wl9re9ic6u8tbMqfs0+6rvHe92NxQqFWty4F3oxdJgmAdvaoiQ2jHGqtojIeTQ5lMIbiZQ22jQTukzldQVQ1JfdYEIsVTa2kH42pRDLj8XTR3RoUc4LZ5v9ZGpT0znxI4YhL4Fl4HZJlEhoKZ7smk0zoo3Mz7QjJPkKfuQQbYDUnhNeyAI02/8Gi4qTUfRDsOo1Cr+3b9w52YFvcp1AFrcB8Z0nSSQh1Yw778TJvYZQL+guOxO1EroH8wp2JNKvKvpRW0Rj36RL2EJDVcodpCjHxU4DIWiIWTQq2SRSxhF+Vd0/JWAp6LiUuLIL6mZZ+0U8m9X/1bixIIvxdi556osQfQqCM2JGZzpgS2VgL/Dq+PrWXsJ0gN18AHL4tFPgTEBOJwhLaY8wNwce+hNb6/jCHMjNAHQlEAZdWVEs3iFxhFoaRfD0D3JC3YJXMV4Fgi8SJHBvtUQ1lNBlbKrHnplYNXqWlZfqCbVkjWErsqHcwXKhJsExvZovV54OQxzZzIzOvMC2yJSrKRaoLn2BuqN9QmqOY2os7nz2yE82Fx9W8zUzMlmgj93XnP2rjlIX0PRvKzlCmBIyCBk+AUuDTgef7abAJoQIb4dmximNb8rCWgYrvxK4cHSAE4IBEQ4Y+BBOdYzSApfQg1dk7DHeALi8VvsqEGbvopZJEMGMEaaMUdUIkVBL/QvhRPLhaAOM+TvoHtMNw5AJnaotof8pCHCJEqvTT8VaI1XXIG67LiSggEkQbu2R65pkgTz77Ri+KP31ArRWsd13XVtunjWte6lnpStOHvXe5yF9Q2t3fuMaxqAJ3GbZfQ0572NLhcQCsNkQOJMUJyGkHjeugTAGv+lITmp2ESKETZvKYEpgROeQksOpGkey667LS/jjMyuxZeFfhih+14BN9MZLb59XrJIA7OgWOJHOiM9goDUL4NnlAPhxuQ/SlygPK26smQbz8XDhDsodgdvJ4XHYbY2QBWSqW/sFtsEDeLOy3hLMy66U1vyp2DcwWnQB7WfDDkz91NDjLPy80cQ12Vof2N/lJm7Q9isYSGi3LY5b66rby/0YRkqWH+y3k8Qh8cq7Ns/Wv1wMwomfZy/U6wHnI3VHm7OjXcu9VwODsSafsbeZgwMw7ntqKzL9m0HT3Bv9uzv7G61ZY+QYdRtMs0N7KeL3aeFRp+ir5CH+JTtJrv5ina5NNmtf+dfr3o/dNEVOxBwGHvIs85N5gHSH3d616XgzasefWrXw0UsmghTKEknZpiaAixd/Flhsg0ZePK3rycnOyB1L1s9IBctEUDDAPr3ABKIhcIGxdp8XJGWVAV3eB2sboAK09qpO0b3vAGyI5ACIXBH2iG15RlQ5rqzXtP3BLIpVzqKjNjHibKol//3M/9HHx3cRphyhOL6sAsctRelaEU45QiNCwyVEOVsiL6CUnihnaspURnEHpoIw+CO+dFzWwhIrciOfgixV2RgD8lCSxG+DvldYrZgCmBKYFvSGAnHxJkLwrHtou2ydh/SGuGepgEmikdFtrmUyV9oW3wDFb3MBcIAlmRVDl0Q0a7V+A1rJGMp53o0rRpKAOnoBI3NQcFyNZxIWCXxg2nJHBiprcgLCoAtFHqkSHyxyoIaBDAKRpbzWlaLBHlZt7EFcAsrs0mBjt9ssVJTP0vppXchHZSBNVbWQBxjU7Wu3StNMQssdRkgGsOq3o5sfRuVt/MBtLkKNKnKQ2KoxtgXRzRbAApHW7ydZFnU9rs7VMCUwJHQAIn4a8NdSOf8cq2EZjIn4HGCmQhrDBJ/JrhJtUPFeuG2gu+OSdATIoe5oSuDUB5E9OpwT3siEstwKnN4jkF0iWFZOI7wdGYrp1YywT7gQOB4yBVzkgM9AWIp07a+QK/IK+c/eQmVzkXTV8OQl3LYThxQ0ZgDcerGD3X7hhZ5b4ywrFu9KPmKDmMt8pqM0WFFjIwnPV3nPJDB8+o68UivSwmDprHxqJ+HRbUTI4bbdQhZl7Tjv17iFXaaNFjPq6UHQTmRouemW+DBE6C10YCdGO+o5nCU6Y5ah0WlX4tzAhGgt5HgwbKyA2Kng0g2Az77mjitHKaLFWX/svIhrKA2mBaJhJglsElQ5/cuGp4Ar5twqZ9I5dhK6ChYOI6pIHF1Hzuxv4lNQjlV1GQYLFJAoKbEgCZZCKiuRTEUieBvyYSGG2m8Zd2jygonJM5A+erCNmCUXzxgXmJbMOHn3U4AhIYDrjG6SJ3fwSaNptwXAmcBK8hYIt3YM3bDErSrNEOOGU4SEVtSwvjId8GwXf4otFqaeLYbXoxvdsTLhCcQEA8zw050KCBvnuELCUdysN994hXzIBd77hpCqZpwByAAbd5RDVUACXNNeVe97oXVgG8AlmGOAp7gaUgL0SuOJGnUOG4FPH/4DIKuJ0yRZ2WrTrgx5UI0FkpZSj/dQULnl1tSmBDEhh05Q5F21jIInIsn7mhmsxsD0UCJ8Hr3ObaKwj+uM2BaTDH7gdwISNFFVBSb2nEbqixfm3xzoIP1rHPklGiy4RqbF873ZyfBiymTcuHMZMaDqCZMbMEYmzpwjgQBkyBNbAf3gWpQvcxYCrIPTXZc4x2x2jieU0bd7zjHXnysV5y+jZJKEtNOldMnuYGLIqc2UJp9Po37xEMT16Gg444lC8xC50SWFICgfUgQzJRuBaJrx2AvmTOM9mWS+Dk+0RAtotiC2TFsrC927ZpgMgG2KyOOS2mYhGgALSHYmdDTFGigKZ/OcyB8vaw5NvAlogbEUxVx+L5h7tAg3henyuoSACqX7bLkf6L4GbD9CI7IcVZ0YqLrdZrTQkqBvcl49Fs5vBihHjEscmGvyAXQ8sC4I6XF+bJdAL6TUW5r8xrSmDLJZASPfadtTUhN9xq7iYFZcsbMqu3VwmcBK87yFwwZcwDoKTJss5xCKEOM9nFlugZ0BAc2+UBKHkTc2pGMoipxJqnQohsei5/jPZGU3IR4uCSkm5XiL4FKM0H/mW65ASC4O4EPN7EArCZGKA5xZzZDa1BMUdryBl8y0o1sC7Sg2awC3+5pujNdHzGRmwJ9iYFRLVtzNGJvSKZ7Ty4Hdo65z+QzYPFZp+9im+mnxI4SAkMUA6yB/sxsLvK+Ddd6iDrNss6AAmcBK/hINoaWNtYSFGlNbv4XDvqkJmOSx/1WQIO1zRopIcQoJzkOq5FGvo492f/shP6ifJr0wd8lBizTH2mazP6Ubrpwjys9TMmx/zP3HMLccoBzgQzDtbhNcAF3zwFwTEsThkH/SC7ACYMm3bf2H7i4sw33JCp4YhvKwB4jbl2MKNZxBwj5DfeRlu4GHbE8LymBE4hCbSvNSNTURwaPsMN6RRqy6zqSSVwErzmYU2ZxRpzz3ASlZ7h9CmezmAavDLrcd4Adnhq3h0oDv0GsUBTZmykw+bn513Pqd6si1BVAgd6FV/JvwyDdGeaOx6DSs45j+2R7mxznYPE0C8UapCKcabas2R6y3Y+4Ktt8c4dTdQmN+COj8aDKws3TWEP+k0MoF+wfyFh8Tm4GjvmzT2oHsBNwTeLiEx9UnnNBFMChyiBRRSG1EU0M3ZoIfq/UeNf1h392a+HWM9Z9IYk8K3z0XcvYEzaG6rH8tkOhaLlXsH56NFYbHR2ztSFeSos8vI575LSeCj4n+JkbuMl3sYaYi2Z755JZqVKrxoRUBstWommWA457LrCCYyGn6jQgg72a5au8W8hywvu2HahbAl7rb98cksHTDI0hVtm8Qq1zargBL7LWr64SkYvKEu7tsrjou9SM9WzEywLdFx4S/c4Q887Ji29e15HRgIntzduW1N3cHMF4eNJ0oYRvXZg9BrjpnemifwDGv8qcWBTCLWJSxHaq7higtcieLeJshbzhAVdhn0dgJB32QKqkl4v7mA6YHsyIeniFqF8zlbbSjpiBhRrt4kzgSDWmqF9eoXux27cVw6ss6LvmFokOEQ7XhULhQnTkhRnyD+VNKxltZ2lxwpyhAvetsE767NPCZx6eL2DmNN3Ox1mCEKCYSjfp3TG65S7wEhZRf32BGosmn02ca8hbTfXTNhUuNQwcaOXAQ8Oirii4Z32tMt+IuubbLwhaQsCF3G1FJBPMFdD9vpdco2XeREZ5SmfPE1HtNhO1VCHznbZ06WNeYUWkFK2ph/1rC+peQ4YK9d/T5XZJXGTx9Cas7uM9EkYkdiUNvd/rUvs25PPKYbXw5wylMEhSk9abqfrtZJdl6Apd7IFW52Pgzcv7tK68j9RPgptKhqK1QEcgqO4jhBTqIYXVTzMPVE92zZVMqpukvFvs4vvIpMB0818e7ry7ATT6dGu1O3FqXo/QbtUzzcdQm5N0Dqg9Y3rAD73MjJZlJ5aMdjYhdAspcJsNrb7TqReRpKnYppTDK+HUgkLvhGO9Fs+p6Sf6u0ytNbbZWkudBZDIrKFupc6Vh02d3VWg/xpkQMuTRubK7GcW1ArcUSVCi536eKdOlQaqm6nQJhdZNLD0BymrKBfezHNOqalU0N95R5Sh5USXitlhTjmHWThXeZxfwefIOfs2KPhKQqHONQHm1Q1oDMVe4C4iOo9J/O1rzIPsdWz6CRw6tkbx5erO57IHNSv60LtYeIzeuXJGZFTIM/CTQ/dWqEUPHLBrIEd8mGEgtpQPzb+tZRBT7xZjupKKUDgiaAWbtJ8d0hbDuBPLBd+7tG+ZjtpVlv3dFxO5lZ/mXydCp29MXcIMskUuZpMMpkSterxynfPXXWxqikHq002q1XpuG8Nu+swRAuhY0uwxJ1xoc75TU174xrFviVZncJ4vUPlCSwW1Z+h2a1F1mn0qYp28XAqP4DRSz9lQWLxB3ZcJ0XKpvGBrU2bvDRWoUxY4gHw3VwSBL01gNt2fxuU7LTyXTjS2Mo0vsJ+vDjGu3w97QkQXNcuLSFrynw/OQN9WOz7AkQUsI0CtshSV9XcBqvWVem2cdxr6VR7zaTpJLqvbY3qTOZYEQK3Q5g0hl16r5nP9NsvgVMMrwdtPdS0+q6/ISlIHfdrlH5GpwFb7mmOGQDXWMqxWWkLHEFQ2ntpB5DwhxoIlZYE0JXrRphZ2ER3kQnddneNfogdEyI+l3rCaBxOwXI7MS6PjtWq1Pom9Rmemi9Fs/Gv70LLttCpD0QxrwBYQzFPewXTY7Or6GOCl9nhRXut8ovOi6s1Z+W3alpG4EXvRjDNwVGcyzYcaMX2EO4rN3a+eKwElsXrKbvDlYDdoS972csMyO1c5LIripdr96kLAUJWgDVS1WQj5iL4ACKFbSn81p7kKTcvpqRbZzzmMY+xf8oEhq4RGsHmLMFtLERijfJ33FP+zU9mF4gvB9HYbd3KENJShnc/Vkc0dvHCqNu7ZB5NYd7CiY/DKDatjwszaYJxWgjBmhTzRFT5dVHYPl/HYWuaeaKgxMTlm9oWN2biphOtzkVnTPN12hYHic5P8hlz8J4+lsRlOBihXl9hdXVsxeQzJm8Ll/yDm6FTGkZjF4mpmLR69WrbC5aUwMTrJQV1yMm2HK8FjRET5lWvepVRZBzq0+QV/OnWkM741Pv9C+yM573iiEzAkIHkAsr8jm18dXiF04hAgNJl6CfuIkaOm72yzMCo/SZwlh7t+AvoLyvZ5tpYi5yR6OAO0RF26Q0GLRZIGAZBK+XWeRSb5q+01zQmVA7MasWpLR76u5aOW56+7MBimQtQ4RNY37j3rYldcXnydExdwOrFxCgT1XNFr3eNlKvVk7QVkQ/Pajn4NL5v9dQ/ZZiqcexWOwnydGri6ZXQeWD3anVY/q2J18vL6jBTbjlexxcxdgknIBoBdNaJ8y0Rmet1r3udYIruU35pynv1SkxtNCo6/wwIokQEgRF7wCQxRhfCnfujIva6ZUaGAYehCHfw1w7ZaPeNalOunakkZhlvOfTOLhDTTxghdI2oZ2P+2I+v4TLdDmBZxwjFA7ZaKAzr7jKvnzQNmcAyUjIDuUkIRcoUvnhsJx6uNTI0wxWwc5Bgi6SWBINWWoFfGgy+fBYNSydtyLEJBntWNfq3BYqOlBtSC4sKguaIvrHh49j1rldqaf77K1Rpt1cGIzxvtlkCGGFL/tZc21nPcXC7A4aMZEFm9FcD4PSnP31KH7Qdf1drQttYOjMexwI12NkaRR0V39/VrhjwXANtxG/MiPTLsMkXaBw5v3vmZSLGDqKmlEZ+fzd6gVGlmK6IIgfE8GVdhdYuV3tW+wrmy9wHd3TLumife1zJYVxeH6e590H3erUZYpcilslw5PANL9ZvhhGv/vWE49aftNO1x/d1k1Fh08PzFPO/XvNkNbNbkwTSeWOB8RVOTxYckcmRewl73dghqTQJ2ja5pwthKpOxa0Y+MjFi40lpMSmwLbSzQ+7p8lZbexQRXUObxo+LCCaGu7hmKYkK7TqR2NKnyAG9W2SbLNKebPRqvcI8YIJsIZ+71LoKHbuHoj7kTOCEHwuR92cyWWQVUn7bHNvMMY5w8npRZfy0GpUhh+aJULLG7rU7V7RP376NlmWyLbe+pqYpInLMv+Yh0h4Cqei6tFfGTjFv1fD1XhOv1yvP02huenCgrK83nvVdcRZFPeQoDezowj13026mPV2QqNcrInI21MgxvL0z7SQCBHvKPGNRkVKMWJD9/Oc/X9RGR9yBJPl72B6c4G8XvA621Apey7PAJusikXfvWyN0MExUYvPiurpj+mPw2o0iiF1743+bOD1chE5ykya/+MC9GTdjwMD6FTaOKtRbuoSiM5Psx0IwAhjETesPMWwBtCa0b6AFQf3QTT5aVT6kDt9TFPy6iU0SE6/X1aVP6/kYq4Gyjqu767L1eLxqLPAwu+VBvKcrLDD+FZFDG1xIp25QGU6U6yaDHUvvZQpKXaJnRVkGB+5TV41nZWXaCo5P9LEbw2gZgYiHLrlCfZap82IahQ5GtU+QL/le8zlR+jArhI3mSuaupBRU7SBzVaOgLv0lEwx7PSHhjKz2OnjqUb5IrqLD+rfXfFKlNa0DweOpxxqluQdMC+DspkWMX/FjzjLsQycT+TSv+9YSBOKbmKcnXu/1E8/0x5GAnj00LEMxfYRO2sBOJdGhde7VDoXImWwUrDgDo9i50NNNim3DeIX1dUpiZxhVz5A31duv7WutDs0Qx71aF9MiXTYcua+GAGWjV743i7sB1Fnp6yo0eI3tDR/TsrvxxH06aZDXk9e85jW//uu/bqcCpyAPBa8X+946IPkEuCuQGF6MnnJkFeh06oj7Fm17HZxjCeJ4KU6ifENH5Ud3csqKEwQdmDU+Pc/aV7ziFVI2D7Xx2D2fIrESZfKxj33MEo0r0V7rc9L0e27hSXOcCTYhgaH4bCLz/ec5Rp1hM44t3qGHhtr5UO8VR8pzLEUHcxpYKDR4HT5Ye81/EeJ3LGNlFXwPONgFF4ay6XsNiA/jNnpF3CeEvsXKqutx65n8c3gY/nNjZeOnoZN2n+JJLWUA8C5RgDOgJqDgYvREVY0b6SKo4diz6OEzQjD2sL9KFzbgVre61VD2e9icDTfLs5kmLaEXx6w2lAAVEx7ZQtCl2v71dziPizCu8g960IO8aOs/pObIaKHghl1azIZIs3e9610OqzIhUb1tsPIvh06ahEUbW46q7oexGSKaeL3RcTQznxI4TAnk9gDFDmDOWGxn5EwoH9ULvNzzbc+J232a7IirHtkN+2AraHOTvU4yuQXZHiJA/HVCIZh2YpSc49/8jXo2Z4PI053udI4AjDSDrTT94TkerwWsucnTmrkzyU22FH8pnRmLG7Gzn5qsRMo76QFl2wv860hYnj/yNPGwQlPJnWNFx1elq13tag411EARyS2t/MsN9Pa3v72jrAROcPzWxOvDHAmz7CmB7ZdAvsODXz7gCoNFAGdFBfugMP0UGo46ZBTtXzc2lDp5lYEa2rbccZSrfz30K1iHm6gVeqvdp96F4IV8gZ6Q3aGytk156CcHybJyx0fT8TkpyQQK54dXvF+o/fKXv1wkA15MYsV84QtfgNrOnvUWhEWA2EwQxPvbDixZ8az/xCc+IYyPUlQYmtsuJPqbBOYJiA+7kSGaqVZK8bpzEBmucUFj3bmfrzD16/1Ib747JXCKSSBibdOVjiqJHYJ3eAYQBiJBKqQbHkSp2JLZUPqSl7wEtLFJZsoTZczDC13oQmgHsdUAotexDTyFkD92clKQZZunCvbDnqxszm4kFqsLjFKTKeD0XH/bSJVdNJ8iAG2/FcdNeMqXyeZVmwZufOMb04UhMsUZ5ppmHPRq/5TqUZ+vec1ryt9fO6eEM9NMHvp2DEmpUKQKld/xsGYp+E7F1hbVs6vIntjI7n1eE6/3KcD5+pTAKSCBRfvHAeA1kIKJ2FsMA3WYgNJVc0v3b7boYeGgOFNyvQKR8QwIYvtXH/zgBwtpe7e73Q3yeoIdBt/c+QWPpXeH/pRlsOtX/pdCyqA13IBvuvC5z31uG5eENxG64AxnOAOIZ5loIlE9yA7HI9OhedR8Usor0Q1N3+u2BYFgRIcKm06cLQ6pRUNUNFYE05JTaZHIlEiXR8W0qb1MXCIojKP19tNdJl7vR3rz3SmBrZbAgOZFA+wKfhR7bST4c733ve+9+MUvLmCA/a6oA7iJxXYW8LAPyzYPDftUwTSVlk8F2AXEsdJ+EiESqiIi3LenSSbXve51abuYYmlE+5KAbwYs/tKXvgQ9xdf1+v3udz9WPuk5zygl35786KV3A9zpzsIG2BiFyMa0YEKgLX3Z/FGkmmYaBEssjUmFvo+2hr+4F7EWgvv2/lD5Kezj/ExpnCZx17ve9SY3ucliyJS9CnMx/cTr/UhvvjslsNUSaPnvSnNsK8cm/IKPlQK8o/YyuNGIqcPIaGG/EAUi4cC1lNnhzwdkMc6/943rXve6lwTwVNBBWAmXz3Wuc8E76cFxR6dKz06IL5YAXmMwcl7EtOCjwahCGf3w2p638za1engQyYfujOhgP6R607WxK6YK0wbAtc9++LG4oUozYMpKWF1vobnf8Y530Lix1TgcKnaZWz2oOYIblPuJu6HzNBDrwjqua+/MxOutHm+zclMC+5FA6Bw1AbzgCIwbOyH3k/Pu7yoRqKGMKZh3vvOdITUFGbSBQkjHuOd1xEgwCtk9ZKajjDP00WGBJp6a4zO9FeoBZYEYUcwvfelLERH+jfQA93AQ0w0WISkV/jznOQ/qAwcN65Xyp3/6p2riCtmJInc9urBk9GhvAXd4bVaA7xRziwDTA48OCVKuQ3mVFM0YS+MVUwJl3E/YHlF9zBNmJvMQ9fyJT3yixUTTpLarHqznBVg19i/widf7l+HGc2hBR6dgZ1/cNrLxgmcBG5ZAdGqgUFF5m42ddT1ZrMWiQ/Gii5gFO0SmnAK1kVV7fCz2Ua4Qx4Ygf+mw4Kw0hdByM3ZjrqXFCsUzcE/GXVBIFUeThcJAUABx4KuUsbPGjR4Odh3tBvgEn8GBULfprdgJZAUGmZJ7u9vdDnONSoaYJh5kCE1W/vC9Y4BgPcjm8oFlBv226nR6A0g1eTBaFs7FJJG0obCr7ayE4HmsetNATofKVT1yU58PfehD6PUb3ehG8keOQ3YsOVdr6rNgtk9/+tMZFbmXWEzYHwSsobmGiwgvjbrlILjfaxgi5s0WSsB4Ltya7VKOVa2GetIWVvUAqpQVKG9ix6no+hQr9xl2tucCiPy3xmeqwie9cgoeyYpatfhWarInUGk8D3BDHBolDwdb9bwLHXpOb4U1FMx2JHroiXCvCAFPKrHniXeXq/qMZAARtu542AcyZwig6J7l7YEPfCAq2X09Gf5CQJ0ZlvlXNfxVDQQ0vfUzn/nMqICfqLF5QI9yYTRML42a0LKTs8TcMMjQPaDEOMPQSuSYgUmXcuQ8QgO2S9ZzbnlQ1U1fIYG4NwUW/hdjLn91vv/976/XKRRqM4HqhKgPr5Bq+SvOzGQFYI70rxwuc5nLmDPo5ruLd5lfp3693wlvo+/rB60ZrbAMufSpqWJvVOYHmTmwaLO7Qml2+R0XKZTq127v/MDgctssjWpKpbciZwsIngmRP1lbS7zb/hSdB3Re4AIX8DyTo4cYAE4Olu35bMhwtU3huwhKtk5s0GNNXTgQGFe/VZZI4rRmynKUdJyv9OgIvnEI7hxIOk6IgoxWHsFJPMdddEadmUBKb+XPJzFOwxOSodFLRv9tpEBb+UiZudJVDAMCHLo2JgSR7ae26hThhFQ7rMd+GSeu8eC2xSY6Xg7WCm4YSDE2XlGrYgB4ERuO79ZS7oBywJOAb27g++9a87yC/ctwszm0s4vXp3MAbLJCrunKjcbT2mVkNuYNJ0ShodL56MbJCjFDNic9VXrKU56C7sxfrQrvUlysCHQA00Y4UIDg7GnesoywxKYt4jRYw2y/hg4UNyhAi0QUwCbvekL1kwMWgkMx+5uH1E++brASZI/d1c0EfsUt0PhA/PLnataQvoIceD5AfMr74sPRXj8N8rdISQryIpmMEseEIU/Q2XfkmxF37KGc8+AegRJlBRDbezLaMgToYdZI0NzBQIPl0OpqXuJmLyW2n2hk5UayjI2GntcrS4YUalNdn9JnMkO0bQfVvqMH+jTjDOi+O41+LS4iU7/e3LBdQ85oEGYW2sEd73hHKIC8w4txD1pD1jOLrZFAnKnqFNEQCQCymc6ocpb/bHHYA14QVDya2sMe9jD4Zf1ueQ7NAbEYHXzmhLnAC2dby50O6NiD52QfOIuQbXt3RdDZnSNBLZUe9EOT8H1dIlFi3ta0WghbKHAFtRdxnDgTLELAFPyo5MC6LeYko7ZNe2oe7gegQWQxvyTzd5HNl8ZbZdsZjFLKcIS6lj7zo3fTi+NGCseYrCxKCsmScHyRivC3MDhR25pWvJF+khWwdkOv8hZAX35GPKn8J16fVESHmcCIte7DSxpReoajbNFkuNHDrNMse30SgK3ZvgBcuVpK09cY5SyfkZ7OFaJoo18pd3ZnUNzwGJx8uRyAOYgAiHkmoJLhMoSyMY/GPVgUOl1aqpyHSxmE6tD6fOAGAu6+CFih0cMpAkCHmK5RjbgLV1Drkixip1BZ0UTwLue/pGQ4VJMqP+JwNUW1LzyGXRoVcF+7+jsOokvvVmho2/bxcpDMv+XQWzIpeFOOImnoTXLqubjRvH03nmuUV5QC9GtXBsx9XhOv9ynAzb5uomZ9zmegCAwmf6b2zZY6cz8oCYDmuIWI6TGkiydnnLPCcXWg2UFwyvXNbnYz8M2XGe4gdml5NGV+C1HegEM+Eugw9nrIkOEr7720P0/CGjfRrPClMHXps+ttdxTEyFPd0pTZQtM66R+pvWqlJprv3hOcD6STXrU9ZHJM92fZw/DkkNcWlcE1qT8ixYoBMno3fmwAffeE6Ua5yaQgtIto20YeXt7tXGfYFDqVCdS/6lzlVS+l21xoPNKfbFVHRjUPqXA6uDS1UW2bGBYDE64s54nXK4vuIF7U41lmdMocs3QC1psoy3kdDQk0pAOUVDPowHRWJH7IYkOgf22WM+zxGzz27NK2MxvaejdWFMEdiAD6zuKRWG7oCMm4ZEATpaS3whQquUgXbGJegSN+GhtJ1iLV/Jpk1V5tl0al9kK3XLMzP8A7nLvSoaeawHevoHq4zVlWqjY66J7///buGEeS41jjuPHORECOdBABMnQBeTIkm5AhCSANeYTuIZMATyDwAjrK+z3958UWh9zZmp7p7p3ZKGNQU52VlRmZ9UXkFxFZf/xjjIfyGMIIEJV3khGtBiQ+xyDI9uhiIjO6oz7krWD2aQJakIhUS4yluijvCGfZ75Yv+ChS4rTkPPDQOgK4i4nUVCeoKtX+5z//sdVqsdUCxg2EntIxhK+PlIF/3fsqm4d4xOL12flp+B/FqHolzMurHuaQYCA70XiKF9IsQVxq8VUfmgnW+9CJ6TgXz8pry52QQPRxMG2svdiwAMcqsDeGVMCcwF46Wxr03//+dyDCfGZmQjQAxNjEkGCubbIBykUiA5Fiq0u8puOR2ugUeydNEIhzoMZUb2Sjj189/jr9ofLCnJ2DTupHnLVvz/vXC8UZw/iA1+JVpryfZNYA6/b75xe1VZ7gPEnqAkiAIyG0FDA/4SMzlpbSKdBJdHQYQxvXL0CbKFo9AFAV0l6SEnu0vBttwzeG16OuSD7lR6lwJPDHqp+o6TxPp2yUJy4dMTRCJ9Ujh1Pl3EsScKyGrQbcnjyHYvLoE9Ph00X+x6Yqny71xZcozL5BNUsMhvMWTVc9Wip69wQbsE24p0XOxrVd9bmwo6k2pn0r6Ne1wp47rWpMr4F3yTbw0hYYTUT06mv557btWB5ogkhZdgORH6OG2+lU+7MfnYASLzz5I0D8JByIcS1PD+kBCzgeYYF4D4abKD02OHc0/zNw4XL0rxgSHBoWO7gnMcSIMjDIih4DjoIAf2xG/kYFAFljquQZGcYwNApoGa2Fp8eLyeFj/dUMu5gKdvJcyEMPQUyEDyvbK6YBRd2xTHkd4TJ4ZQi3/rAmECH317/+Fdy7q0+G+hVl4Y1AYqjcXxdVrrN0AAZZgCD4Fgmjtdz1KlEM8nLbIpSQ/uIOzSX7+TVYmsS+tvhgaLvCBufpZeZroagb8C0XxuMcqrLokSNjgAjZsygkGgKOF3kJ6Mdd+ZLp9JN7zwRpbxkSAJpUdy9VPKD5ZCZd9fAg8xjv5k0zbNJkYzmv+tDWrR159j+TCVDDkv/7yJcxnRriJJyo22zIyaR1GAWD3geFXYfLcwtQ6F6GIaOvIWs9VCKJyeOvYnCwYgkwSc75VPjEWFd4pscT+TIfq0ROCsgTjJyhKgESIwHBGbDCpaFklRNLaSwOmk8X7IwqFYimoZnqch+scfK3v/3t66+/1jZfsge1rsB0G0gxupXxL+RFgPDcCqQB9MIQrUtoAioQvFq/cu0SHbmRMA7k+++/d5crtouiBVnW/jL53V5mVg1gPFkrWOv4lQqhNmQ/0pfFxR8F9YRIn/vT8iGnNF9OdkZNBlEWRBufX/XwIOYPlY62xlRS5q7Q3ld9qMojHx26XErF8iGnJsozCxGsO0a2Wbi5AWFNLqxiSBh0bUZRMBmoynuWVagwU5GVZ+AMWd62/GOlpfjbN19Y36ZuRugYwuq8waZ9HsfCteMoM9kagunKtpWlwr62TrIokVxDAogd8PfnP/9ZiL2+C2bVX4cXwUJBy/2E+ihMUJ3CpRjL9BBQJh9MER3wu9/9zr+FcNB/CiPEbUjtVWL6qB+4W6B4LrmhZeKaERoMcxQT4aCMqE9ZMAxnxchN5Qk2a0mdams4mNjKeKIjsD4O6zMnxVPFF69PCdM0atk4UZYYKy8J1X3VgyFAmZtwJiXItlq8zXNNOJNVDFlvNRR4XX7zlNC/gEIBdE6zupvXC6QC32QOAqhMQ5C/pFBf4MJQLerAYIXFKrEAz9WmBnAWfCvgJL+cJzI8TWZonuXhKW559RTHXxw9W38wVGEfCsLrw5sHpm1v7WLf4dUjk5wj1P5QlhEsXKw9R6JkMS3kBkQM6ou3QJvZ2n7SCwx+31R0O31gX1ZmMoqDwY7TB9CmsQqtMNzlQcUIlqPvCnn6l/5TrUfn+XQlRwKjngpx7hENkxEpVdLjoDawbkTcAg3GuL7G/N38xlNSNdGPExp1xe9heM5Qfqce8JFC6QlPN+FMX2wmBC+F9yXVfvJeVgZ+01NsrnaNzzx/sgG/WMCrRSDQh+TfU36jfgGC4r2MdcHIIBhAF+SQq7kt8LMbcpEFuGX05TlUOBLcr1l5qjp6HZLeiDd+L7NxKv/Y6HRvo6DM0/mNH6uEv9QCArnMdP3mm2+0jS0MQCFvGS6x+Zh6BIh4D/X4lbHiky4CReBj6Y4uCtiAm5qkQqmeiAvQybLBbwSdSqoHmNogkOOHWFjQDG3ndjVBZfDi6oWWeJBvwXB+2pjJ52Nw1uRG4bm3TEXkCQemk5pHFP61qQjdoEcMbZXHjWjVZdP7zF2L12ek9PBKNFqmtU9mmByGfDK1TtXy/EK9vb171mUFonpvr60n2oYCPee9Qh16+rV7ekY27w+vTaf8xgOCI4e2jhmoBT1ZxFQpR5lioMqgAO7+5toKrJ0YMlfGzgj6MSoFtw37cbRCboDXIb79/oW+QVIcAjIEEey7AXjkFAm7W4/ahBp/oke2uMOB2FzJXSCSI7eMwVyUBCVZHwQDa+ICo1y1As/LeVEnE17mER7cioR3mpMQ5V1gO/ud61WojGfxVcJrlr78Bnn/rH7fMBOaRVZEzWPJ3/j73/+e9NpjC6PiJ1Y8vhu1wpZijDunOSwRNPu/yfD/x1a95vFcwvtLLm+cxtllCRare9XDI+C1R5QakLvjBs/NVeXFyMOZM6qLdzzen7+RMMd9124bTbA5Yd/lJ2z083S5mKMy/2Sjk7Oxex+dzH5+HxvBMg8/ObIv9zd6hEALIChMxTlYhKQAznlsz7QBlWEPFv8iNBjaImScg3XYZ5eliiUNcX4MZHjKjclUx3uguftwol+RGwxtGE1Kuv/b3/7WhifdKLaE0BjIbK9cu26hRezI6pwZLvSFzEUKWtQyXNjmmWt+tcJG5tANKBTtQbmAe5pGeLgIEwTmsS+fFOz5Ag/8tUZEnOWATlGnFvQh2n7W4E2mfm3t1nkXu93xKGjXr8eMzM7n3m5s7jovetQxW2q5HnlUY3KCV6beZlbkgji29nixvZMqExPt0JJjF6b9firNbI5JhTp6HbOPrnR4dFGDKerWrY4rPW6qzVjLr0IgWXn5r/Z4XQnMUol4Z17NCSsybrrRLztm8rajUBqd+Tzg2M5zkj3+xAga7teNPBt/dVRPT3fOIwL1bEWNZPACMkiF2bFzC4DJvgZ2bFsmKvP2n//8J5taBDoD1k/QFlAGVh5BGmI2hFqDYBxIn55hWYuoQ4AIX/FrwdrqVxX6G7gL5Xajia1k60gzvE87khhwT8goDjEkikkudYV8hBgqmSsYLqMlYTTZejQ9ofEUD4LeI8S8t2Z63amitge8jguDyNrdk9oGpe1R6oD51PK8oOBwrQwiJ/59hNfFCPuJfIGseppejWXn7g1qC8AIm9QTH9dcrNuDGhqjQDsSUI+5Vrq3jbvSBE5mbahwy8AW9cf1Yy0Z/m6meOhfx49K5dUHYCtcCbw/CQw5M68tBIDODGQxfGxYbDV6Af5iJBALAsZRDbbJBqb8JSAYRmOWoTPrFRkCfP0L6O3FKnybCeytFKKHLKYABJxwNqbYwAK85t5gksNTHAhAYF/zQEZtC/VTTJ4LT6ZUF1CDSFFbxlx5/E7wTtyM+GhsjHgSJnYGq5LWnQrDDffiUjTPdXSNwpQNkl3QN9y/Bmn5wb6Gd4EdmOtJUAy7H+ZSXMfE/ID1OM/GBhz7dPA6iKxwhN2jGx9dCTTDa0I5wmWmcSa2g6O27M8emos2TcA0PnKCqRm/dt18am+XrGwKk3IeT840LxyfxcT7e6+2RyuB60ngaGAygLzRaGI8LzgGr3AWd4yOwC/DOK8wj2JEhOiRwliFZiO7Rf55B8XwwV9ucCGA6gEFDGQRga16GeyuAMpWosBdHj9qgsUJVWUYwXT0NKjFUCugJODmIUS2gPKwTg3wGjQ7wXUIn6VaHAgWhjOTH4woqc30AU1Ax8ATjZTcCM0BN8WDKeWl1/hr2NcPZAIxaeXQKH3nrX9b0RQMpLnJPWt6qDcnw9fk2ajAVOjE9YA1OqVqp4aux9V2V4zt8eRYG6h1b6xTleQEMDyhcHxcYUw/zwWYLIN5Si3UhhihqfbYwukUv3aR+e/1aBQ4XkS2XomJu0B075K/vkAO97rlPH99RIbAwV+Idsy9crF31uvZyfw67+DxTTz22ns6L/Wj+enf0mQc4+/p33nrs0oHNJy4EmKw9ysMANnI81Bh3Z2HEk7GTxCaTcn6cqXjwb4mIOqC2snmx78w760IdINcIj0mR6OYoUfaY0jtMZbD9+MN120AABfASURBVNHeFGarJK4GT2FER4aM9epKgTIx3fRk0J8F7cY4jexuxfgB+CvE2WSPU7Oaak2kPBPbRTrcea0lRBZ0NJmFUvtMuksBDhBslPWROt3VUmAWGREje6wEVgLnJXB8qTuHHt5KRx8jLVs40xgydDJuz2NaiuvBrpOhxb2nk0Yf1MZmhGBtmuqW/E9e/JbR88WAIm2iT10Hza6ETsx/DVaeod1+WB146vH8B1P+eq5HqCoIat1fPWqY1p6X2ydLPuA12pplasWhAxyydrGy0NDERKw/eKUoZp1Jw0C6IWic+HcQcOiUKdBuYfog8gYJxclQf9ylqz+H7DiNCemvGz29cSIUw8AXTM24nmhcTI6KiQSS5mQdhFRCllmweKjyns7t66Mb2qbLVLHVEKKKLQm1JTWp5+hEvQYJ9clR2QIrgTctgfFpeTedZ8OFD5lKpWsC4iIL4jnRm73yXuHIzHCw7BUnRd+D+8IQgv4+TRB57Qp7S7V4ZLdESgiEzVWeBe1Z7ZaXi04NE/nuXD2ul1mqMGAJW+qFw08M2RSAkpOpVNfijTVAsdd14TYfHvBay+yeg4yXAm+bXYSRBvG6cqoi9e3+hethz+qe1rTfUPe3xum8iwWZP9T+/7uPT2qsIbHfChHUn4YwhI11ybBVCZxVrHGa4Rea3va+CVGQDbx2l6pwXtA2FWc3d/9irLiYNUZoJ/pJDDyHg8GjioTEK0YP06Jq002QLUKTH6P2zCqhAP66s8dKYCVwUgIxBlO4lXHoPBEjbK9e7fFvtTO1l66cwyxZV7yDjomVyi6eRIQoCOhUMIIbxXIUHxlGu9FrHuZ61piDPSt0GoagZhe8e4ycgUsRBrCrza/b9M0jnDAf9SvoiCE4KahnFfuA1yGvnnDgMkttsIsVkXHPASo4Bg5i6OMWkojH0HI4B0fqzkUn5WePS1BnaLO2cCQIlUBMvS19CGlexxQT68OKT/WJiJRoxPlrmTOo7XbOYruR2SwGIrOaPVqQJjs634UElhYKeBL8sm0BmNUebaHAV2AGID1oC19BFAHaQ2u2vwZYw7iMBatO9nkT65E79Fny3cIrgS9QArG3Q29mLBdQAT3iJYJmOOAtCyLdwp5zkp2b3OanzCZo4AQQSXiBkh5R7ox7g36v+YS9Rm9GzMYH5NDK8s152CNU4qIKC0xwMQY44K5JcEABABW+t9Avj8ldLL/y2ko3PeaUvuIEeMBrLa7zfK9IA5At7NHurny15KIpsK8WjMbT7e+++44TVmi6rAoA7ZA4xNvbF+xrJbMdniJY7AaJaXFFhUmKnStWRv+htjKYaHDJwKc21GnrLOQJ8FUytRbtZY3zm9/8hmsY5hoD1fqX7Sxk3eZYShIWty8cRy0xxpFQ0FwYkIsep5FC3GOllfSs0nwNhmhNWkqGUr8O9/IScUfHN32r82O1RbL36/hvm8S1R9dGaXfiliTjpFVON1ZJE/145SUd2XvPSCAF3/tf/Kv59j70fZSm3g0tW1yvi4yqWXCbkPEGuaM6OZKKURyOoDloq8BxUXs891OMqxNvazXkb3Nkm0+1A/TDouR+q3Cg3PlcVPkY+HNxivXTkBsT514LJy65LigWml+JR32QXRaltgKCdhQSoC4wBcIitUWGGy2/5uQtMA6SInzFx4h2xJ/QmcLFKTdUgxAcbAYItkOKnRKVEU8umEZVBpglKyjHT1JLBcQ4ZywbDKwFuxj94qHiIu2b5VeURb4FN1oE+dfhJ6htvN3bxjcGCS5rp0YSmagat0hA8qv2aCHOGqzLI8dcQ3aPy0GhQJoTTOsXCojxHhc/eTQXvG+hc1OwWVslrZVC8Ap0sDWyBcoFiNbXsNo2yTJNDg0rzDFXMJknnIZmXB/RSlV1fNaeX08CveT+mqW5Z9pu6a0fOjV2Q3hUcFfGwUBkM/zR3L6etL/Amh+Ea25J/sE2sIv//e9/C5lA6UI0WaHcdABUer68nUCn1Q3UEJ+oJIwTkAgU7AbALgam5iju2CiCSFYzCHZjLkq3s4sFqLOFmeFR/vYKkNcPd1xXIcYDNwJk0RcZKWlIk0NYJfudPlCPyBtJqAIh+0KPHVugPA4nNEQnMdWZ1QqD9XBQM0TpM8ZZ37qsckCZnqec7I3L5LdFr4+Rp4Fcp7pGozZrVfLtt99aWNBJH5sx+WY/BpRZJY/UQJZ4apl2jIybi8aibwuF0WoOtYtq0pFWYbWnc7VpRquTsRpOTvG6SRSSu0yJCzTWyQc9q1gTr7Z9nvs9kbmhsRWyCWYuMU1y9sS8vd2jWdSKUwcNhIlnJzxXLF6btBdMs7crkHu1/IMyxFnDaF+H++GHH2TWAzvOOh5IrAIPpFFhBWe+tTxnuwFKmaNKsouFpoNgxeQs+dVnqxDBWAtqgOuv7jHJ1YBZZmvDYvxDaam0gsQncRqexUY2CXAyNsCDiSbKIJEJATuEA6LUXceW+FZ00wV4wW7sDVt+NAoTXmFmuzecysGq0x9cjm6HyFB4ts7xq/aL81MtiMeMi4H3XGqgLW4H707i9c9NjK4Mm/QIASNk4jfyTbsyKzKvx/gxguD5lVfAwiIgc1fknQEaT07a67mrs8Xrl7yQFDlmjwxp2QIGniv/lzz9GvcWhpHFo1/mG1tB9gpXkFepib14fQ3JP6rzA177ihrQJH0OugxqgCsxxOQTOOELDlCsBMKgB2RIMMUtYDl8XwemM8fQDj7zg5EAnSUFCSzBMABui32QKjEJDYIeYa3LK8WZ8ASKpVMn5kS16mFXAh33CsoxUWKOYD31wPoGQBSDKwx/z6JdMts5J5kzWiiyHVXdapRlDaY1lQIAbRKQADoFA7In+hLGCf7TX/a1Z5mFlgu8nW0CoOaMpgR3Eq8r2dFsrirdiU1Kqfg1mu/RqKD4tVYoqOv5QFIYhEA4yuudpuZpcT09J8SFiKg9VyhXXmLQX8nnzqTF6+dKrPLZFka5r0kZ6IKLrxGKe1kLL7vLy2K57G+vvxlYwLJ1MNtrXpDjm3LZg/auT0ggTDGfOA/Znjxy7FbhGV3nr2Mj4HbteThBM+DPOdsTIoDL/JMgBtRCDf8yzxnR7lVD2fqYaAgu/AP/wLCF1H5Sp6AOWkHMhh22zABQDihNev5J4AtYqQpopXCpjAX81TaQxDsK9RTAWhxTpzyaZe1vnx81q5DyrGlKwlOAflhZtTgWmxX0b9E/rigmtsQ5XqWfOnr6J/MbI6mLEDre/sT5JGXpiK5pUgJs7ekkN/exhkkPc5Ff157uhJmRblzU0Leguv1ZR83e/MZnCa3Cj8Zo5swFVX0+t/S+mG/z4hwn1bx6P+/759OF99GSn+z3VIykoGa8QRYiGwFiAmJWG9VaNAxbLy+KHEiWLIxgt+INZOKzedHf7GI2dbYtCxqOAF9Mi0+0QX+AXmgkXptJDkZdpydEeQsfZHrT26hwH2FjimLDM5/butejNSNHh4OxqT1axa7MF2dKOQTw2VtLk/pODw3B6KaEcNmaDYvz47vRhuXayepPrXm0ixaz4mEoDwx7ARjPPTzlaFaHoRlZnccp9W/6r6QsCkNHEPoUXl9E5RJg8qswF7kCbnG9JWrkPoUEoC07dNyvilnxKGk4lLysC8/t8pZPAmlWh+naKE+48dsVUUvAic1o3jYPj3/fbgffTMtH7eBDhFIgJbqSPQtH5suYFuNjLbYTyFHHmpTdWBkkQ1egxhSbJH3XU9QVNq2nGbN1QI9QoDiN5oeTSc9n/1oQ1M6M2WOdLlaDZtD/uHjeUewBnnoeB8H1rkeHoXMXq9zqAT+u10er4aR9PWZIPS0bnrVLGkUZojva5IRZTb35q4W+PCSMUjGdwkppD0od8sriUd6jXTdMeI/qbzXgEPSCraptGTuJ0VY1QtRHtudP1r4+L6tjyTC6K3N+fo112UNvcNdx8drUau4VOj397U2ZaXmDhn1pj3iwr0Eb6plfG2tsAGgb9ixZsOD6NAOaYqJ2ChFX5hgTPh65yNn5NmUBjynhVPRRlSkMgzJAij4ups2JR5R0kzmspElTgFRaHctsu8WSJAvGyAoYV54bi6ZwiPBDYrA3mczj/BHEgqWpPZNeX9dY5RgGMSptSHKZ+h2DmsmMmZErpE7hKJQErjwrDPjycFIMPlRhwcF/a72CCBLS7sUQmc64xiM5UYOVigUHtzCto0lpApVYPZSXT1CtM2qzoExc1mWN37sukMDRtTjnn0l0zQXdmVuaVB3HeORClbruZEKkX/KsvfcJCTzIujDvdhkdOGueyfoDNLyCzgOg4+CdFK6xhLABKEwp3Ni9Ra2p0MWSlGB0yZ1+9VMw3RNDajW4y+0+2taXpJ9wvqceWpYqzIOHJDnZ5pcUO2qO/E4YIeqBZY3/wQIxooXN6DL7HRsjfFAj7fwLuFExvLhIdgyJNQGAlhOEqbf0UQ8hIP05GwTYOFcDgx07b/tH2E10bQZAJmUxlA/2kr7svSuBlcBnIoEPujF69Ih9relgRBHKjpe8+ZHOJeZU4YQ9tG2eK1ZSUdKUhMJFrRaUgjFIf6RU0uedfNL5XrPdrtqJqLvqABBdT+zEgUkX9+2TRShmfRHXXDxMzLXu21Kdq92vuoPQd6TVxL3Qc1BY+o8KQbNhcm9mjhsJgR2N9wijLYzUr4yVAaaF3d2CaY+VwErgrUvgFzLfooSGdDvCdBbuBf6rtkTxd7gFhGyRwuxEJ+W8DMECd4oZihJBEZSOmHFdG+ZTYU+MQYXzjsZx+/cG+NVzC6mueTrOi4vcQJoLDEfLYKg5YwXJtMjQR5hb1wAuyQBcJ8VLqUqQJRYFbYWzkt3Du0gCVh6Un3UD4pu4yvEpwQeUs+I99LnJMm99Tm/7VwLvVQIPeJ0370jeAwhH8Do5MgM9zxVHZntwz3wWaiZZxrknAm7fM2Y8wpqsbKgNqgAWJiQAQtdiAJwwrjG5GeYFVADfJ/jl43JByYzri/no870OpicXvH8RMnBW1j5yXCSMbsqCA7v6wsr2V/ZQfdQ1LIfGl3euJGsaZyILqX3TUdg//vhjSc9uwcILVRQWWQxPYrRzrMDEG3T2vFi25EpgJfASCfwkDSSMznHX+VQNO2Yvmwv8J8Bo9ioCQBLfRXk78LlgSDAGt5gACTnl8laUZE0DGgyvzEmphm6B9b6i5hzby/kZwe3QmCf463hzxaB/PPIFjb9Avo+8rylC7WQdA2h4rT2im9nOEJkiacd0S41iFgWKgF0XI+5FOgqG4YEEymJ4pIPqlAjLPvuQhuMaJUOQrZsqF+HelliA/oL10AVd3ltWAiuBa0vgAa+PQBa4zIPnbY+N/SRZ/ESLqwobAFO++uorXIe8GPwAmMa6CtzmVeOOg0HFosifBGHyrX3eTQoimGOitr2RxJxQmGX6dJMe/fqS9p8fjFFvrQDKaSQ9se0WCilFkeZMYOfEIl3INizFeLiFm5EFTUHqrOQjJYEvgBZeIt1fJLsCJc6pmRDUJgDGHiwIEFf85R+G7K1OjqN5vgtbciWwEvjcJPDBvp6WxfMO8VpwBRwpV+WynRDgDlMxYxATIgRCRrjIYsamz1/CazDEqERw88gpk6ex7/FIuvEv9tbWUYWvwamy/uA+SHp6q9kQUOPr123w2hM9qFDcUXjOIXIfaycKzRb70cabtBefoRgS16kx0ExEQlmosZCdp1SdkoDISoQlhlq11UMImfPE4oulUd6/+tWvoumjUz63abftWQmsBC6QwIf9VOfmAkUmrPJR9N4Fm1GouQ3k1AxEkCFRK8xA6ZHlT7KyMyddn72KAJCLMA5ygTYHszGk00ItyXJ8GoJn1zpPdxz3frxAXudvoUhiYKYBiXQCEBNsLHxHsJtRPHIOjvv3OC7HQMZqrgwo72R25j3f5i25ElgJfM4SuN3OyGALMW3LbNZfH5EBVaxIWAORATG6FjqzSeFvVrx4CfFtuGypIrhaoWyCKGA31lvJkmgK6/6cRbxtWwmsBFYCryKB2+G15sauCo3ILmYAQlsBbVb9sNueUHL84gf6Gq8gZdEj0BxtgrkWwsw6FiAB8du1LhG8JCr8VYS4lawEVgIrgRtI4EZ4bSEPiJnDNlEStdaSH/KipPtOpZ8EPwgRia+wonf4155H7G6RDzJEyiyH2lHqiGBIzTy/QTz1DUZiH7ESWAmsBJ6WwI3wOngFvuCY/zCLGL8hCk0QCA8b1BaChi3xq5/gMvtaEIjca/v5CQ6RWoIGQWHbiRv02whJsWGEd5hXAiuBlcC7l8CN8DqAZjIjMVAfEvMYxaxsRIfNNOTgicIWVixPr6+rKG8jJJF/XI5scIEigtW4JcE6oxvr/Yc//EGgW5b1O9iv8t3Ps+3gSmAl8HIJ3A6vo5sx1wxtdjHz2Qlr2kdtbFAnNUZwMeSF19CcBe1LN0JKENluFMyHy7YrtO+B2WZPmDbgRqcsUr98BmwNK4GVwFuRwI3wemKEIaxgD1teMJy5H7kNxRrLIuFCdKBBRIMwwG18igyRvW2Hazk1DHBmuIRArIhUEdvXSSfx00S5vRVxbztXAiuBlcDFErjdx+dL80N02JkIakuWYTiL2JOYB7vZ0UJB4K/EkOPXvoUAus7lyMfodgw4AzzOxNHFG6SYWw2kG5j8TnwfnQtUfvzFcv/Mb2wzGZ95k3gpnbJNSFy5gaifkEysWh7mf/zjH7Yl4Nj4y1/+glgzl0r1LKvrMxfvNm8lcJkEbofXpSN6qfoiosBq75iLgW/ZekVS/xwXZntS8M0kLzq7fMXZlOqy/p+/y+OomVpol+p//etfjP3zt7/FkraRsvX5n/70JyoqKLxXLwoESl+aRe2R0scqJYX2jaEii6bkvZq6z10JXE8CN+JDdKCMcCcsaGDtBNQG1u2FNGkvUBh8A0d/u2W2NxGyPQnxwfrkYV5PRtVc5nftsXkezdGO3u/ykJ3Uhw4MioOc2yHgXke62dM1xiiUiG+xBaybP+0G3rep7tXIfe5K4NoSuBFee4sG77x7AfGsskPDttqI4ijUuvTF3kCv4ngXXcmMOuZnX1VSHt1GrKkHphyV07/v8sBQsakNRB/r0+X7bkJSZv9sPNC2iw6Wtb+GIzKk/W0Wsq/6Lmzld5TAjfB6No2CyDEYGartBRjh2A52Y0pXrBfVr95DkKHA7EV1S5rSo7OmGyrNgOB9z/ddHn0y1WClQXV5dmu5y2RNPdeGqLOUJeY6DWo4oPlwJndp5D50JXBtCdwIr/uUTFZ2iOyVi33Ww8ksH266jURaBYcag+9xIEODuB6gXPuo8UFD+58gZ+rL+zviQGwdZV+XIaDuSImMmT8WtMb0geZWXWZO+1uZD/ddClx7Hm79X7IEbudv9F55kYoSIXEMqb/zpa4s6EZiyvx8YI6uyAzbylybxU7ZjMONv1G0uEzLaNN3eUBDHy379a9/7ZMRs2PiHXvamkYDjjtE9n24iRdSRrPn3zu2dh+9EriGBG6H19iDLCCWEfMt5A3E61ghWSHvbAmSPV6BALoCA9bXRup5dM0ABzDalrAy6fXivW5dwkq1wZaMJDFz4vkSwn1DL1qNNdxg2gQA3DM3GOAmkmMiL6/xtmydK4H7SuB2eH3ffu7TVwIrgZXAW5fAjfjrty6mbf9KYCWwEri7BBav7z4E24CVwEpgJXBKAovXp8S0hVYCK4GVwN0lsHh99yHYBqwEVgIrgVMSWLw+JaYttBJYCawE7i6Bxeu7D8E2YCWwElgJnJLA4vUpMW2hlcBKYCVwdwksXt99CLYBK4GVwErglAQWr0+JaQutBFYCK4G7S2Dx+u5DsA1YCawEVgKnJLB4fUpMW2glsBJYCdxdAovXdx+CbcBKYCWwEjglgcXrU2LaQiuBlcBK4O4SWLy++xBsA1YCK4GVwCkJLF6fEtMWWgmsBFYCd5fA4vXdh2AbsBJYCawETklg8fqUmLbQSmAlsBK4uwQWr+8+BNuAlcBKYCVwSgKL16fEtIVWAiuBlcDdJbB4ffch2AasBFYCK4FTEli8PiWmLbQSWAmsBO4ugcXruw/BNmAlsBJYCZySwOL1KTFtoZXASmAlcHcJLF7ffQi2ASuBlcBK4JQE/heGimr0qVDMzAAAAABJRU5ErkJggg=="></p>
+<p>我们首先放上服务器和客户端的代码</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>服务器代码</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;winsock2.h></span></span>
+<span class="token macro property">#<span class="token directive keyword">pragma</span> comment (lib, "ws2_32.lib")  </span><span class="token comment" spellcheck="true">//加载 ws2_32.dll</span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//初始化 DLL</span>
+    WSADATA wsaData<span class="token punctuation">;</span>
+    <span class="token function">WSAStartup</span><span class="token punctuation">(</span><span class="token function">MAKEWORD</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>wsaData<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//创建套接字</span>
+    SOCKET servSock <span class="token operator">=</span> <span class="token function">socket</span><span class="token punctuation">(</span>AF_INET<span class="token punctuation">,</span> SOCK_STREAM<span class="token punctuation">,</span> IPPROTO_TCP<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//绑定套接字</span>
+    sockaddr_in sockAddr<span class="token punctuation">;</span>
+    <span class="token function">memset</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>sockAddr<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>sockAddr<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">//每个字节都用0填充</span>
+    sockAddr<span class="token punctuation">.</span>sin_family <span class="token operator">=</span> PF_INET<span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">//使用IPv4地址</span>
+    sockAddr<span class="token punctuation">.</span>sin_port <span class="token operator">=</span> <span class="token function">htons</span><span class="token punctuation">(</span><span class="token number">1234</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">//端口</span>
+    <span class="token function">bind</span><span class="token punctuation">(</span>servSock<span class="token punctuation">,</span> <span class="token punctuation">(</span>SOCKADDR<span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>sockAddr<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>SOCKADDR<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//进入监听状态</span>
+    <span class="token function">listen</span><span class="token punctuation">(</span>servSock<span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//接收客户端请求</span>
+    SOCKADDR clntAddr<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> nSize <span class="token operator">=</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>SOCKADDR<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    SOCKET clntSock <span class="token operator">=</span> <span class="token function">accept</span><span class="token punctuation">(</span>servSock<span class="token punctuation">,</span> <span class="token operator">&amp;</span>clntAddr<span class="token punctuation">,</span> <span class="token operator">&amp;</span>nSize<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//向客户端发送数据</span>
+    <span class="token keyword">const</span> <span class="token keyword">char</span><span class="token operator">*</span> str <span class="token operator">=</span> <span class="token string">"Hello World!"</span><span class="token punctuation">;</span>
+    <span class="token function">send</span><span class="token punctuation">(</span>clntSock<span class="token punctuation">,</span> str<span class="token punctuation">,</span> <span class="token function">strlen</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//关闭套接字</span>
+    <span class="token function">closesocket</span><span class="token punctuation">(</span>clntSock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">closesocket</span><span class="token punctuation">(</span>servSock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//终止 DLL 的使用</span>
+    <span class="token function">WSACleanup</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>客户端代码</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">define</span> _WINSOCK_DEPRECATED_NO_WARNINGS</span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h></span></span>
+<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;WinSock2.h></span></span>
+<span class="token macro property">#<span class="token directive keyword">pragma</span> comment(lib, "ws2_32.lib")  </span><span class="token comment" spellcheck="true">//加载 ws2_32.dll</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//初始化DLL</span>
+    WSADATA wsaData<span class="token punctuation">;</span>
+    <span class="token function">WSAStartup</span><span class="token punctuation">(</span><span class="token function">MAKEWORD</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>wsaData<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">//创建套接字</span>
+    SOCKET sock <span class="token operator">=</span> <span class="token function">socket</span><span class="token punctuation">(</span>AF_INET<span class="token punctuation">,</span> SOCK_STREAM<span class="token punctuation">,</span> IPPROTO_TCP<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">//向服务器发起请求</span>
+    sockaddr_in sockAddr<span class="token punctuation">;</span>
+    <span class="token function">memset</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>sockAddr<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>sockAddr<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">//每个字节都用0填充</span>
+    sockAddr<span class="token punctuation">.</span>sin_family <span class="token operator">=</span> PF_INET<span class="token punctuation">;</span>
+    sockAddr<span class="token punctuation">.</span>sin_addr<span class="token punctuation">.</span>s_addr <span class="token operator">=</span> <span class="token function">inet_addr</span><span class="token punctuation">(</span><span class="token string">"127.0.0.1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    sockAddr<span class="token punctuation">.</span>sin_port <span class="token operator">=</span> <span class="token function">htons</span><span class="token punctuation">(</span><span class="token number">1234</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">connect</span><span class="token punctuation">(</span>sock<span class="token punctuation">,</span> <span class="token punctuation">(</span>SOCKADDR<span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>sockAddr<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>SOCKADDR<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">//接收服务器传回的数据</span>
+    <span class="token keyword">char</span> szBuffer<span class="token punctuation">[</span>MAXBYTE<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token number">0</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token function">recv</span><span class="token punctuation">(</span>sock<span class="token punctuation">,</span> szBuffer<span class="token punctuation">,</span> MAXBYTE<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">//输出接收到的数据</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Message form server: %s\n"</span><span class="token punctuation">,</span> szBuffer<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">//关闭套接字</span>
+    <span class="token function">closesocket</span><span class="token punctuation">(</span>sock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">//终止使用 DLL</span>
+    <span class="token function">WSACleanup</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">system</span><span class="token punctuation">(</span><span class="token string">"pause"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="代码解析"><a href="#代码解析" class="headerlink" title="代码解析"></a>代码解析</h2><h3 id="关于客户端的第一行的define"><a href="#关于客户端的第一行的define" class="headerlink" title="关于客户端的第一行的define*"></a>关于客户端的第一行的define*</h3><p>客户端第一行代码</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">//客户端</span>
+<span class="token macro property">#<span class="token directive keyword">define</span> _WINSOCK_DEPRECATED_NO_WARNINGS</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>这个是防止报错的，如果在VS中使用了比较老旧落后的函数，就会报错</p>
+<p>编译器会进行SDL检查</p>
+<blockquote>
+<p>安全开发生命周期（SDL）</p>
+</blockquote>
+<p>在SDL检查中发现了inet_addr()这个落后的函数，于是报错，不予通过</p>
+<p>inet_addr()是落后的函数，因为它仅仅支持ipv4</p>
+<p>所以为了能够强行通过编译，我们直接取消掉SDL检查</p>
+<p>所以在首行就写</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">define</span> _WINSOCK_DEPRECATED_NO_WARNINGS</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<blockquote>
+<p>inet_addr()的功能是将一个点分十进制的IP转换成一个长整数型数（u_long类型）</p>
+</blockquote>
+<p>inet_addr()头文件与函数原型</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;WinSock2.h></span></span>
+in_addr_t <span class="token function">inet_addr</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>cp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>函数里面填ipv4地址</p>
+<p>随着ipv6地址的普及inet_addr()函数已经基本废弃，新的函数inet_pton()能够代替之</p>
+<blockquote>
+<p>inet_pton是一个IP地址转换函数，可以在将点分文本的IP地址转换为二进制网络字节序”的IP地址，而且inet_pton能够处理ipv4和ipv6</p>
+</blockquote>
+<p>inet_pton()头文件与函数原型</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;WS2tcpip.h></span></span>
+<span class="token keyword">int</span> <span class="token function">inet_pton</span><span class="token punctuation">(</span><span class="token keyword">int</span> af<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>src<span class="token punctuation">,</span> <span class="token keyword">void</span> <span class="token operator">*</span>dst<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>第一个参数af，这里提供三个比较常用的值</p>
+<ul>
+<li>AF_INET (或者PF_INET) 通过ipv4地址访问(同样可以访问本机)</li>
+<li>AF_INET6 (或者PF_INET6) 通过ipv6地址访问</li>
+<li>PF_UNIX (或者PF_LOCAL) 访问本地(127.0.0.1)</li>
+</ul>
+<p>第二个参数src即ipv4地址或ipv6地址或者本机地址(127.0.0.1)</p>
+<blockquote>
+<p>如果参数af指定的地址族和src格式不对，函数将返回0</p>
+</blockquote>
+<p>第三个参数填入套接字存储ip地址的内存地址</p>
+<p>这里关于套接字的结构后面再说，在此先做点了解</p>
+<p>所以如果想要支持ipv6的话就不是写取消SDL检查这么简单，步骤如下：</p>
+<ul>
+<li>删除首行 #define _WINSOCK_DEPRECATED_NO_WARNINGS</li>
+<li>包含头文件 #include &lt;WS2tcpip.h&gt;</li>
+<li>将旧版函数sockAddr.sin_addr.s_addr = inet_addr(“127.0.0.1”)改为新版函数inet_pton(AF_INET,”127.0.0.1”, &amp;sockAddr.sin_addr)</li>
+</ul>
+<h3 id="头文件与动态链接库"><a href="#头文件与动态链接库" class="headerlink" title="头文件与动态链接库"></a>头文件与动态链接库</h3><ul>
+<li>#include&lt;stdio.h&gt;</li>
+</ul>
+<p>标准输入输出头文件</p>
+<ul>
+<li>#include&lt;stdlib.h&gt;</li>
+</ul>
+<p>很多转换函数都在此头文件中</p>
+<ul>
+<li>#include&lt;winsock2.h&gt;</li>
+</ul>
+<p>套接字必备头文件</p>
+<ul>
+<li>#include &lt;WS2tcpip.h&gt;</li>
+</ul>
+<p>inet_pton()函数所在头文件</p>
+<ul>
+<li>#pragma comment (lib, “ws2_32.lib”)</li>
+</ul>
+<p>链接Ws2_32.lib这个库，加载 ws2_32.dll</p>
+<blockquote>
+<p>动态链接库 Dynamic Link Library （DLL）</p>
+</blockquote>
+<h3 id="启动套接字"><a href="#启动套接字" class="headerlink" title="启动套接字*"></a>启动套接字*</h3><p>然后我们启动套接字，启动函数是</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;WinSock2.h></span></span>
+<span class="token keyword">int</span> <span class="token function">WSAStartup</span><span class="token punctuation">(</span> WORD wVersionRequested<span class="token punctuation">,</span> LPWSADATA lpWSAData<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>第一个参数的含义是版本</p>
+<p>第一个参数的类型是WORD</p>
+<p>WORD是一个双字节型数值，就是把两个字节拼接在一起</p>
+<p>使用MAKEWORD函数把两个数组成WORD类数据</p>
+<p>MAKEWORD(a,b) 最终结果是b在高位，a在低位</p>
+<p>比如MAKEWORD(2,1)            00000010(a) 00000001(b)</p>
+<p>最终的结果是 00000001 00000010</p>
+<p>MAKEWORD(2,2)的意思就是当前使用2.2版本</p>
+<p>第二个参数就是一个一个指针，指向WSADATA类型的数据</p>
+<blockquote>
+<p>WSADATA，一种数据结构。这个结构被用来存储被WSAStartup函数调用后返回的Windows Sockets数据。它包含Winsock.dll 执行的数据。</p>
+</blockquote>
+<p>通过WSAStartup函数启动，再用WSADATA类的数据把启动之后的相关执行数据储存。</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">//服务器</span>
+WSADATA wsaData<span class="token punctuation">;</span>
+<span class="token function">WSAStartup</span><span class="token punctuation">(</span><span class="token function">MAKEWORD</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>wsaData<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>这两句就这么个意思：</p>
+<p>开一个WSADATA的对象wsaData存储启动数据</p>
+<p>以2.2版本的Windows Sockets启动套接字，并且把启动数据传给对象wsaData</p>
+<h3 id="创建套接字"><a href="#创建套接字" class="headerlink" title="创建套接字"></a>创建套接字</h3><pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">//服务器</span>
+SOCKET servSock <span class="token operator">=</span> <span class="token function">socket</span><span class="token punctuation">(</span>AF_INET<span class="token punctuation">,</span> SOCK_STREAM<span class="token punctuation">,</span> IPPROTO_TCP<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>socket函数原型</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp">SOCKET <span class="token function">socket</span><span class="token punctuation">(</span><span class="token keyword">int</span> af<span class="token punctuation">,</span> <span class="token keyword">int</span> type<span class="token punctuation">,</span> <span class="token keyword">int</span> protocol<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>af上文有讲</p>
+<ul>
+<li>ipv4  af=AF_INET  </li>
+<li>ipv6  af=AF_INET6</li>
+</ul>
+<p>后两个个参数具有绑定的关系，一般有以下两种情况：</p>
+<ul>
+<li>type=SOCK_STREAM  protocol=IPPROTO_TCP</li>
+<li>type=SOCK_DGRAM  protocol=IPPROTO_UDP</li>
+</ul>
+<p>第一种传输可靠性高（进行校验，并能够重新发送），但速度慢<br>第二种传输可靠性低（不校验，只发送一次），但速度快</p>
+<p>一般对速度无要求都用第一种，需要实时传输的比如视频通话就要使用第二种</p>
+<p>protocol也可以填写0，会根据type自动匹配protocol</p>
+<h3 id="创建套接字地址"><a href="#创建套接字地址" class="headerlink" title="创建套接字地址"></a>创建套接字地址</h3><p>创建一个套接字的对象</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">//服务器</span>
+sockaddr_in sockAddr<span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>sockaddr_in是一个结构，其成员如下：</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token keyword">struct</span> socketaddr_in
+<span class="token punctuation">{</span>
+    sa_family_t sin_family<span class="token punctuation">;</span><span class="token comment" spellcheck="true">//地址族</span>
+    unit16_t sin port<span class="token punctuation">;</span><span class="token comment" spellcheck="true">//16位TCP/UDP端口号</span>
+    <span class="token keyword">struct</span> in_addr sin_addr<span class="token punctuation">;</span><span class="token comment" spellcheck="true">// 32位IP地址</span>
+    <span class="token keyword">char</span> sin<span class="token operator">-</span>zero<span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//不使用</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>char sin-zero[8]是为了让SOCKADDR与sockaddr_in两个数据结构保持大小相同而保留的空字节（SOCKADDR后面bind函数要用）</p>
+</blockquote>
+<p>其中的in_addr又是一个结构，该结构只有一个成员</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token keyword">struct</span> in_addr
+<span class="token punctuation">{</span>
+    In_addr_t s_addr<span class="token punctuation">;</span><span class="token comment" spellcheck="true">//32位ipv4地址</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>所以sockaddr_in sockAddr意思就是创建套接字，用于存储服务器地址、端口</p>
+<h3 id="服务器套接字的初始化"><a href="#服务器套接字的初始化" class="headerlink" title="服务器套接字的初始化"></a>服务器套接字的初始化</h3><blockquote>
+<p>memset将某一块内存中的内容全部设置为指定的值， 这个函数通常为新申请的内存做初始化工作。</p>
+</blockquote>
+<p>memset(&amp;sockAddr, 0, sizeof(sockAddr));  //每个字节都用0填充</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token operator">*</span><span class="token function">memset</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span>s<span class="token punctuation">,</span> <span class="token keyword">int</span> ch<span class="token punctuation">,</span> size_t n<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>void *s 代表无类型指针，可以指向任意的数据地址</p>
+<p>用n个字节的ch字符填充s指向地址为起点的区域</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">//服务器</span>
+<span class="token function">memset</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>sockAddr<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>sockAddr<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">//每个字节都用0填充</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>这个意思就是把套接字地址结构的对象(sockAddr)内存全部初始化为0</p>
+<p>初始化完成之后开始具体内容的赋值</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">//服务器</span>
+sockAddr<span class="token punctuation">.</span>sin_family <span class="token operator">=</span> PF_INET<span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>前文有讲，地址族主要有以下三个参数</p>
+<ul>
+<li>AF_INET (或者PF_INET) 通过ipv4地址访问(同样可以访问本机)</li>
+<li>AF_INET6 (或者PF_INET6) 通过ipv6地址访问</li>
+<li>PF_UNIX (或者PF_LOCAL) 访问本地(127.0.0.1)</li>
+</ul>
+<p>由于服务器是接收客户端的地址，所以无需在服务器设置某个地址</p>
+<p>关于</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">//服务器</span>
+sockAddr<span class="token punctuation">.</span>sin_port <span class="token operator">=</span> <span class="token function">htons</span><span class="token punctuation">(</span><span class="token number">1234</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>设置端口为1234</p>
+<blockquote>
+<p>uint16_t 的长度为两个字节，理论上端口号的取值范围为 0<del>65536，但 0</del>1023 的端口一般由系统分配给特定的服务程序，例如 Web 服务的端口号为 80，FTP 服务的端口号为 21，所以我们的程序要尽量在 1024~65536 之间分配端口号</p>
+</blockquote>
+<blockquote>
+<p>htons函数将整型变量从主机字节顺序转变成网络字节顺序</p>
+<p>网络字节顺序是TCP/IP中规定好的一种数据表示格式，它与具体的CPU类型、操作系统等无关，从而可以保证数据在不同主机之间传输时能够被正确解释</p>
+</blockquote>
+<h3 id="绑定端口和socket"><a href="#绑定端口和socket" class="headerlink" title="绑定端口和socket"></a>绑定端口和socket</h3><p>上面的sock（套接字）和sockAddr（套接字地址）是分开定义的，需要把他们绑定</p>
+<p>使用bind函数进行绑定</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">bind</span><span class="token punctuation">(</span>SOCKET sock<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">struct</span> sockaddr <span class="token operator">*</span>addr<span class="token punctuation">,</span> <span class="token keyword">int</span> addrlen<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>前面创建了两个东西：套接字servSock和套接字地址sockAddr，对应第一个和第二个参数分别传入</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token function">bind</span><span class="token punctuation">(</span>servSock<span class="token punctuation">,</span> <span class="token punctuation">(</span>SOCKADDR<span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>sockAddr<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>SOCKADDR<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>第二个参数注意把sockaddr_in强制转换为SOCKADDR类型</p>
+<blockquote>
+<p>sockaddr的缺陷是：sa_data把目标地址和端口信息混在一起了</p>
+<p>sockaddr_in解决了sockaddr的缺陷</p>
+</blockquote>
+<p>第三个参数是地址的长度，直接使用sizeof函数取大小</p>
+<p>servSock和sockAddr绑定完成</p>
+<h3 id="服务器进入监听状态"><a href="#服务器进入监听状态" class="headerlink" title="服务器进入监听状态"></a>服务器进入监听状态</h3><p>监听状态使用listen函数</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">listen</span><span class="token punctuation">(</span>SOCKET sockfd<span class="token punctuation">,</span> <span class="token keyword">int</span> backlog<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>第一个参数传入绑定之后的套接字</p>
+<p>第二个是指定队列的长度，在队列中的客户端请求接受，在队列外的拒绝（长度与接受客户端请求数量正相关）</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">//服务器</span>
+<span class="token function">listen</span><span class="token punctuation">(</span>servSock<span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>这里进行监听并且储存在绑定之后的套接字servSock中，指定队列的长度为20</p>
+<h3 id="获取客户端地址"><a href="#获取客户端地址" class="headerlink" title="获取客户端地址"></a>获取客户端地址</h3><pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">//服务器</span>
+SOCKADDR clntAddr<span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>创建一个套接字地址结构的对象clntAddr，把客户端地址相关信息存储进去</p>
+<h3 id="接受客户端信息"><a href="#接受客户端信息" class="headerlink" title="接受客户端信息"></a>接受客户端信息</h3><p>接受信息使用accept函数</p>
+<p>原型如下</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp">SOCKET <span class="token function">accept</span><span class="token punctuation">(</span>SOCKET sock<span class="token punctuation">,</span> <span class="token keyword">struct</span> sockaddr <span class="token operator">*</span>addr<span class="token punctuation">,</span> <span class="token keyword">int</span> <span class="token operator">*</span>addrlen<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>第一个参数sock就是服务器创建的套接字</p>
+<p>当程序运行到accept函数时，程序会阻塞，不会继续运行，直到有客户端的请求时才会继续运行</p>
+<p>当accepot函数接受到了客户端的请求，会把客户端地址的相关信息存储在addr指向的内存中</p>
+<p>所以第二个参数就是传入一个套接字地址SOACADDR指针用于存储</p>
+<p>第三个参数是地址的长度，直接把SOACADDR的长度传入即可</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">//服务器</span>
+<span class="token keyword">int</span> nSize <span class="token operator">=</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>SOCKADDR<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//SOCKADDR长度</span>
+SOCKET clntSock <span class="token operator">=</span> <span class="token function">accept</span><span class="token punctuation">(</span>servSock<span class="token punctuation">,</span> <span class="token operator">&amp;</span>clntAddr<span class="token punctuation">,</span> <span class="token operator">&amp;</span>nSize<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>新建一个套接字对象clntSock，给它通过accept函数加入服务器套接字信息servSock和客户端地址clntAddr</p>
+<p>也就是说clntSock具备了服务器套接字和客户端地址的信息，目前就剩一个发送内容</p>
+<h3 id="给客户端发送消息"><a href="#给客户端发送消息" class="headerlink" title="给客户端发送消息"></a>给客户端发送消息</h3><p>发送消息使用send函数</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">//服务器</span>
+<span class="token keyword">int</span> <span class="token function">send</span><span class="token punctuation">(</span>SOCKET sock<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span>buf<span class="token punctuation">,</span> <span class="token keyword">int</span> len<span class="token punctuation">,</span> <span class="token keyword">int</span> flags<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>第一个参数是客户端的套接字地址，第二个参数是发送的内容，第三个是发送的长度，第四个flag是数据选项，一般设置为0或NULL</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">//服务器</span>
+<span class="token function">send</span><span class="token punctuation">(</span>clntSock<span class="token punctuation">,</span> str<span class="token punctuation">,</span> <span class="token function">strlen</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>意思就是通过客户端套接字把str字符串中str长度+1的内容发送给客户端</p>
+<p>str长度+1是把结束符“\0”也发送，避免不必要的错误</p>
+<h3 id="关闭套接字"><a href="#关闭套接字" class="headerlink" title="关闭套接字"></a>关闭套接字</h3><p>使用closesocket函数</p>
+<p>直接把要关闭的套接字当参数传入即可</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">//服务器</span>
+<span class="token function">closesocket</span><span class="token punctuation">(</span>clntSock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">closesocket</span><span class="token punctuation">(</span>servSock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>这里把客户端和服务器套接字都关闭</p>
+<p>注意：这个客户端套接字是在服务器创建的（理解为面向客户端的在服务器的套接字），和客户端上的套接字独立</p>
+<h3 id="终止DLL的调用"><a href="#终止DLL的调用" class="headerlink" title="终止DLL的调用"></a>终止DLL的调用</h3><pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">//服务器</span>
+<span class="token function">WSACleanup</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>DLL启用后也要关闭，用WSACleanup函数终止DLL的调用</p>
+<h2 id="客户端在接收之前的操作"><a href="#客户端在接收之前的操作" class="headerlink" title="客户端在接收之前的操作"></a>客户端在接收之前的操作</h2><pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">//客户端</span>
+    <span class="token comment" spellcheck="true">//初始化DLL</span>
+    WSADATA wsaData<span class="token punctuation">;</span>
+    <span class="token function">WSAStartup</span><span class="token punctuation">(</span><span class="token function">MAKEWORD</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>wsaData<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">//创建套接字</span>
+    SOCKET sock <span class="token operator">=</span> <span class="token function">socket</span><span class="token punctuation">(</span>AF_INET<span class="token punctuation">,</span> SOCK_STREAM<span class="token punctuation">,</span> IPPROTO_TCP<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">//向服务器发起请求</span>
+    sockaddr_in sockAddr<span class="token punctuation">;</span>
+    <span class="token function">memset</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>sockAddr<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>sockAddr<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">//每个字节都用0填充</span>
+    sockAddr<span class="token punctuation">.</span>sin_family <span class="token operator">=</span> PF_INET<span class="token punctuation">;</span><span class="token comment" spellcheck="true">//指定为ipv4地址类型</span>
+    sockAddr<span class="token punctuation">.</span>sin_addr<span class="token punctuation">.</span>s_addr <span class="token operator">=</span> <span class="token function">inet_addr</span><span class="token punctuation">(</span><span class="token string">"127.0.0.1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//填写ipv4地址</span>
+    sockAddr<span class="token punctuation">.</span>sin_port <span class="token operator">=</span> <span class="token function">htons</span><span class="token punctuation">(</span><span class="token number">1234</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//填写端口</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>和服务器一样</p>
+<p>客户端比服务器多填写一个ip地址</p>
+<h2 id="和服务器建立连接"><a href="#和服务器建立连接" class="headerlink" title="和服务器建立连接"></a>和服务器建立连接</h2><p>使用connect函数</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">connect</span><span class="token punctuation">(</span>SOCKET sock<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">struct</span> sockaddr <span class="token operator">*</span>serv_addr<span class="token punctuation">,</span> <span class="token keyword">int</span> addrlen<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">//客户端</span>
+<span class="token function">connect</span><span class="token punctuation">(</span>sock<span class="token punctuation">,</span> <span class="token punctuation">(</span>SOCKADDR<span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>sockAddr<span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>SOCKADDR<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>connect函数用于和服务器建立链接，各个参数和bind函数一样</p>
+<p>注意：connect函数和bind函数的区别</p>
+<ul>
+<li>connect用于远程连接（填写本机地址也可以）</li>
+<li>bind用于本地连接</li>
+</ul>
+<h2 id="接受服务器返回数据"><a href="#接受服务器返回数据" class="headerlink" title="接受服务器返回数据"></a>接受服务器返回数据</h2><p>使用recv函数接收服务器返回数据</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token keyword">int</span> <span class="token function">recv</span><span class="token punctuation">(</span>SOCKET s<span class="token punctuation">,</span> <span class="token keyword">char</span><span class="token operator">*</span> buf<span class="token punctuation">,</span> <span class="token keyword">int</span> len<span class="token punctuation">,</span> <span class="token keyword">int</span> flags<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>receive函数和send函数参数同理</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">//客户端</span>
+<span class="token keyword">char</span> szBuffer<span class="token punctuation">[</span>MAXBYTE<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token number">0</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token function">recv</span><span class="token punctuation">(</span>sock<span class="token punctuation">,</span> szBuffer<span class="token punctuation">,</span> MAXBYTE<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>注意MAXBYTE的定义</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token macro property">#<span class="token directive keyword">define</span> MAXBYTE 0xff</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>MAXBYTE就是十进制的255</p>
+<p>这段意思就是开个255大小的char数组全部初始化为0</p>
+<p>然后再从服务器接受字符填入szBuffer所指向的数组中</p>
+<h2 id="接受完服务器数据之后"><a href="#接受完服务器数据之后" class="headerlink" title="接受完服务器数据之后"></a>接受完服务器数据之后</h2><pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token comment" spellcheck="true">//关闭套接字</span>
+    <span class="token function">closesocket</span><span class="token punctuation">(</span>clntSock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">closesocket</span><span class="token punctuation">(</span>servSock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//终止 DLL 的使用</span>
+    <span class="token function">WSACleanup</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p> 和服务器一样</p>
+<!-- #region pic-->
+<!-- #endregion pic-->
+
+
+                
+            </div>
+            <hr/>
+
+            
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E5%AD%A6%E4%B9%A0/">
+                                    <span class="chip bg-color">学习</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+        <style>
+    .valine-card {
+        margin: 1.5rem auto;
+    }
+
+    .valine-card .card-content {
+        padding: 20px 20px 5px 20px;
+    }
+
+    #vcomments textarea {
+        box-sizing: border-box;
+        background: url("/medias/comment_bg.png") 100% 100% no-repeat;
+    }
+
+    #vcomments p {
+        margin: 2px 2px 10px;
+        font-size: 1.05rem;
+        line-height: 1.78rem;
+    }
+
+    #vcomments blockquote p {
+        text-indent: 0.2rem;
+    }
+
+    #vcomments a {
+        padding: 0 2px;
+        color: #4cbf30;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    #vcomments img {
+        max-width: 100%;
+        height: auto;
+        cursor: pointer;
+    }
+
+    #vcomments ol li {
+        list-style-type: decimal;
+    }
+
+    #vcomments ol,
+    ul {
+        display: block;
+        padding-left: 2em;
+        word-spacing: 0.05rem;
+    }
+
+    #vcomments ul li,
+    ol li {
+        display: list-item;
+        line-height: 1.8rem;
+        font-size: 1rem;
+    }
+
+    #vcomments ul li {
+        list-style-type: disc;
+    }
+
+    #vcomments ul ul li {
+        list-style-type: circle;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    #vcomments table, th, td {
+        border: 0;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments h1 {
+        font-size: 1.85rem;
+        font-weight: bold;
+        line-height: 2.2rem;
+    }
+
+    #vcomments h2 {
+        font-size: 1.65rem;
+        font-weight: bold;
+        line-height: 1.9rem;
+    }
+
+    #vcomments h3 {
+        font-size: 1.45rem;
+        font-weight: bold;
+        line-height: 1.7rem;
+    }
+
+    #vcomments h4 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    #vcomments h5 {
+        font-size: 1.1rem;
+        font-weight: bold;
+        line-height: 1.4rem;
+    }
+
+    #vcomments h6 {
+        font-size: 1rem;
+        line-height: 1.3rem;
+    }
+
+    #vcomments p {
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+
+    #vcomments hr {
+        margin: 12px 0;
+        border: 0;
+        border-top: 1px solid #ccc;
+    }
+
+    #vcomments blockquote {
+        margin: 15px 0;
+        border-left: 5px solid #42b983;
+        padding: 1rem 0.8rem 0.3rem 0.8rem;
+        color: #666;
+        background-color: rgba(66, 185, 131, .1);
+    }
+
+    #vcomments pre {
+        font-family: monospace, monospace;
+        padding: 1.2em;
+        margin: .5em 0;
+        background: #272822;
+        overflow: auto;
+        border-radius: 0.3em;
+        tab-size: 4;
+    }
+
+    #vcomments code {
+        font-family: monospace, monospace;
+        padding: 1px 3px;
+        font-size: 0.92rem;
+        color: #e96900;
+        background-color: #f8f8f8;
+        border-radius: 2px;
+    }
+
+    #vcomments pre code {
+        font-family: monospace, monospace;
+        padding: 0;
+        color: #e8eaf6;
+        background-color: #272822;
+    }
+
+    #vcomments pre[class*="language-"] {
+        padding: 1.2em;
+        margin: .5em 0;
+    }
+
+    #vcomments code[class*="language-"],
+    pre[class*="language-"] {
+        color: #e8eaf6;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+
+    #vcomments b,
+    strong {
+        font-weight: bold;
+    }
+
+    #vcomments dfn {
+        font-style: italic;
+    }
+
+    #vcomments small {
+        font-size: 85%;
+    }
+
+    #vcomments cite {
+        font-style: normal;
+    }
+
+    #vcomments mark {
+        background-color: #fcf8e3;
+        padding: .2em;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+</style>
+
+<div class="card valine-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="vcomments" class="card-content" style="display: grid">
+    </div>
+</div>
+
+<script src="/libs/valine/av-min.js"></script>
+<script src="/libs/valine/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#vcomments',
+        appId: 'sR2kSVyVvIasEuQCh9chCje3-gzGzoHsz',
+        appKey: 'O1Qi0NgU0xSwleHFBfIc7Ro8',
+        notify: 'false' === 'true',
+        verify: 'false' === 'true',
+        visitor: 'true' === 'true',
+        avatar: 'mm',
+        pageSize: '10',
+        lang: 'zh-cn',
+        placeholder: 'just go go'
+    });
+</script>
+
+<!--酷Q推送-->
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2022/07/13/tao-jie-zi-shi-xian-xin-xi-jiao-liu-c/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="套接字实现信息交流C++">
+                        
+                        <span class="card-title">套接字实现信息交流C++</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            在c++中利用套接字实现计算机通信
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-07-13
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            JIE
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%AD%A6%E4%B9%A0/">
+                        <span class="chip bg-color">学习</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2022/07/12/qt-vs-kai-fa-huan-jing-da-jian/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="Qt+vs开发环境搭建">
+                        
+                        <span class="card-title">Qt+vs开发环境搭建</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            Qt+VS 2019开发环境搭建
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-07-12
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            JIE
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%AD%A6%E4%B9%A0/">
+                        <span class="chip bg-color">学习</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFunction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('4'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+
+    
+
+</main>
+
+
+
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+<!-- 代码语言 -->
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+<!-- 代码块复制 -->
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/clipboard.min.js"></script>
+<!-- 代码块收缩 -->
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script> 
+<!-- 代码块折行 -->
+<style type="text/css">code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }</style>
+
+    <footer class="page-footer bg-color">
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2022</span>
+            
+            <a href="/about" target="_blank">JIE</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+                &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                        class="white-color">44.9k</span>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+
+    <!-- 雪花特效 -->
+     
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/snow.js"><\/script>');
+            }
+        </script>
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+    
+    <script type="text/javascript" size="150" alpha='0.6'
+        zIndex="-1" src="/libs/background/ribbon.min.js" async="async"></script>
+    
+
+    
+    <script type="text/javascript" src="/libs/background/ribbon-dynamic.js" async="async"></script>
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+
+</html>
