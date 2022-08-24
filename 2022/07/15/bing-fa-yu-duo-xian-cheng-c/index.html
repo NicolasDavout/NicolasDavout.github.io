@@ -330,14 +330,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    671
+                    1.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    4 分
                 </div>
                 
 
@@ -382,44 +382,12 @@
 <h3 id="thread的构造函数"><a href="#thread的构造函数" class="headerlink" title="thread的构造函数"></a>thread的构造函数</h3><p>对于传入的函数func有参数para1,para2只要把参数依次放入thread中</p>
 <pre class="line-numbers language-cpp"><code class="language-cpp">thread <span class="token function">obj</span><span class="token punctuation">(</span>func<span class="token punctuation">,</span>para1<span class="token punctuation">,</span>para2<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h3 id="ref引用函数"><a href="#ref引用函数" class="headerlink" title="ref引用函数"></a>ref引用函数</h3><p>当thread构造函数传入的参数需要引用时</p>
-<p>比如</p>
-<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">func</span><span class="token punctuation">(</span><span class="token keyword">int</span> <span class="token operator">&amp;</span>para1<span class="token punctuation">,</span><span class="token keyword">int</span> para2<span class="token punctuation">)</span>
-<span class="token punctuation">{</span>
-    a<span class="token operator">++</span><span class="token punctuation">;</span>
-    b<span class="token operator">++</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">{</span>
-    <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
-    <span class="token keyword">int</span> b <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
-    thread <span class="token function">obj</span><span class="token punctuation">(</span>func<span class="token punctuation">,</span>a<span class="token punctuation">,</span>b<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    obj<span class="token punctuation">.</span>join<span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>上述程序运行的</p>
-<p>在新的线程中传入参数a和b，无论是否用“&amp;”，都会额外复制一份到新的线程中，所以无法实现在其他线程去修改a</p>
-<p>如果要在其他线程修改a，需要用ref()函数</p>
-<blockquote>
-<p>ref即reference引用</p>
-</blockquote>
-<p>修改a为ref(a)</p>
-<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">func</span><span class="token punctuation">(</span><span class="token keyword">int</span> <span class="token operator">&amp;</span>para1<span class="token punctuation">,</span><span class="token keyword">int</span> para2<span class="token punctuation">)</span>
-<span class="token punctuation">{</span>
-    a<span class="token operator">++</span><span class="token punctuation">;</span>
-    b<span class="token operator">++</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">{</span>
-    <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
-    <span class="token keyword">int</span> b <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
-    thread <span class="token function">obj</span><span class="token punctuation">(</span>func<span class="token punctuation">,</span><span class="token function">ref</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">,</span>b<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    obj<span class="token punctuation">.</span>join<span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>注意：para1要有&amp;，且传入ref(a)才能修改原值</p>
+<p>对于类X的成员函数fun</p>
+<p>参数顺序是</p>
+<p>函数名，对象名，参数</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp">X a<span class="token punctuation">;</span>
+thread <span class="token function">obj</span><span class="token punctuation">(</span>X<span class="token operator">::</span><span class="token function">fun</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>a<span class="token punctuation">,</span>para1<span class="token punctuation">,</span>para2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <h3 id="join"><a href="#join" class="headerlink" title="join()"></a>join()</h3><pre class="line-numbers language-cpp"><code class="language-cpp">obj<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>一般来说主线程结束会强行结束其他线程，但是join函数会让即将结束的主线程等待此线程结束后再结束</p>
@@ -431,9 +399,101 @@
 <h3 id="joinable"><a href="#joinable" class="headerlink" title="joinable()"></a>joinable()</h3><pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token keyword">bool</span> flag <span class="token operator">=</span> obj<span class="token punctuation">.</span><span class="token function">joinable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>判断线程能否join（或者detach）</p>
+<h3 id="把隐式转换改为显式转换"><a href="#把隐式转换改为显式转换" class="headerlink" title="把隐式转换改为显式转换"></a>把隐式转换改为显式转换</h3><p>参数传递过程中的隐式转换发生在子线程中</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">func</span><span class="token punctuation">(</span>string str<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    cout<span class="token operator">&lt;&lt;</span>str<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">char</span> a<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">=</span><span class="token string">"Hello World!"</span><span class="token punctuation">;</span>
+    thread <span class="token function">obj</span><span class="token punctuation">(</span>func<span class="token punctuation">,</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   obj<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里传入char[],通过函数参数传入隐式转化为string</p>
+<p>如果隐式转化还没开始，但是主线程已经结束，char[]释放，参数传入一片无效的地址</p>
+<p>即使使用了join()和detach()也可能出问题</p>
+<p>所以不能让转化发生在子线程中，在参数传入时显式转化，发生在主线程，确保char[]传入之后主线程才允许继续运行</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">func</span><span class="token punctuation">(</span>string str<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    cout<span class="token operator">&lt;&lt;</span>str<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">char</span> a<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">=</span><span class="token string">"Hello World!"</span><span class="token punctuation">;</span>
+    thread <span class="token function">obj</span><span class="token punctuation">(</span>func<span class="token punctuation">,</span><span class="token function">string</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   obj<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="引用传递参数-ref函数"><a href="#引用传递参数-ref函数" class="headerlink" title="引用传递参数(ref函数)"></a>引用传递参数(ref函数)</h3><p>当thread构造函数传入的参数需要引用时</p>
+<p>比如</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">func</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token operator">&amp;</span> para<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    para<span class="token operator">++</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    thread <span class="token function">obj</span><span class="token punctuation">(</span>func<span class="token punctuation">,</span> a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    obj<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    cout <span class="token operator">&lt;&lt;</span> a <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上述程序运行，编译器报错</p>
+<p>在新的线程中传入参数a，和普通的函数不一样，被引用的值需要加ref()</p>
+<p>如果要在其他线程修改a，需要用ref()函数</p>
+<blockquote>
+<p>ref即reference引用</p>
+</blockquote>
+<p>修改a为ref(a)</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">func</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token operator">&amp;</span> para<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    para<span class="token operator">++</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    thread <span class="token function">obj</span><span class="token punctuation">(</span>func<span class="token punctuation">,</span> <span class="token function">ref</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    obj<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    cout <span class="token operator">&lt;&lt;</span> a <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>运行结果是a=2</p>
+<p>注意：para1要有&amp;，且传入ref(a)才能修改原值</p>
+<h3 id="指针传递参数"><a href="#指针传递参数" class="headerlink" title="指针传递参数"></a>指针传递参数</h3><p>这种情况下传入指针，指针指向同一地址，所以两个线程共享一个字符串a</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">func</span><span class="token punctuation">(</span>string<span class="token operator">*</span> str<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token operator">*</span>str <span class="token operator">=</span> <span class="token string">"修改后"</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    string <span class="token operator">*</span>a<span class="token operator">=</span><span class="token keyword">new</span> string<span class="token punctuation">;</span>
+    <span class="token operator">*</span>a <span class="token operator">=</span> <span class="token string">"修改前"</span><span class="token punctuation">;</span>
+    thread <span class="token function">obj</span><span class="token punctuation">(</span>func<span class="token punctuation">,</span> a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    obj<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    cout <span class="token operator">&lt;&lt;</span> <span class="token operator">*</span>a<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="线程的id"><a href="#线程的id" class="headerlink" title="线程的id"></a>线程的id</h2><p>每个线程都有一个id（数字）是它自己的编号</p>
 <h3 id="捕获线程的id"><a href="#捕获线程的id" class="headerlink" title="捕获线程的id"></a>捕获线程的id</h3><pre class="line-numbers language-cpp"><code class="language-cpp">this_thread<span class="token operator">::</span><span class="token function">get_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="vector容器存储线程"><a href="#vector容器存储线程" class="headerlink" title="vector容器存储线程"></a>vector容器存储线程</h2><p>对于需要大量创建线程的工程</p>
+<pre class="line-numbers language-cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">func</span><span class="token punctuation">(</span><span class="token keyword">int</span> para<span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token comment" spellcheck="true">//放入线程的函数</span>
+vector<span class="token operator">&lt;</span>thread<span class="token operator">></span> bucket<span class="token punctuation">;</span>
+vector<span class="token operator">&lt;</span>thread<span class="token operator">></span><span class="token operator">::</span>iterator ite<span class="token punctuation">;</span>
+<span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span>i<span class="token operator">&lt;</span><span class="token number">5</span><span class="token punctuation">;</span>i<span class="token operator">++</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    bucket<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span><span class="token function">thread</span><span class="token punctuation">(</span>func<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//匿名对象存入容器</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">for</span><span class="token punctuation">(</span>ite<span class="token operator">=</span>bucket<span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>ite<span class="token operator">!=</span>bucket<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>ite<span class="token operator">++</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    ite<span class="token operator">-</span><span class="token operator">></span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>创建一个容器，存入5个线程，每个线程放入func函数，并且主线程等待其他线程完成后再结束</p>
+<h2 id="数据共享问题"><a href="#数据共享问题" class="headerlink" title="数据共享问题"></a>数据共享问题</h2><h3 id="数据读"><a href="#数据读" class="headerlink" title="数据读"></a>数据读</h3><p>允许多个线程同时读取内容</p>
+<h3 id="数据写"><a href="#数据写" class="headerlink" title="数据写"></a>数据写</h3><p>多个线程同时写同一块内存</p>
 
                 
             </div>
@@ -1010,7 +1070,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">46.3k</span>
+                        class="white-color">46.8k</span>
             
             
             
